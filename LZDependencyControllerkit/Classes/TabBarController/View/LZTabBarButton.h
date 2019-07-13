@@ -6,7 +6,7 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import <LZDependencyControlkit/LZBottomTitleButton.h>
 
 @interface LZTabBarButton : LZBottomTitleButton
 
