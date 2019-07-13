@@ -7,8 +7,6 @@
 //
 
 #import "LZTabBarButton.h"
-#import "LZBadgeButton.h"
-#import "UIView+LZExtension.h"
 
 @interface LZTabBarButton()
 
