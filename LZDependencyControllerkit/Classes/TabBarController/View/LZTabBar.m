@@ -8,8 +8,6 @@
 
 #import "LZTabBar.h"
 #import "LZTabBarButton.h"
-#import <LZDependencyToolkit/UIView+LZExtension.h>
-#import <LZDependencyControlkit/LZBottomTitleButton1.h>
 
 #define LZMargin 10
 

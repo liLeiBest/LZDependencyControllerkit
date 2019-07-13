@@ -6,9 +6,9 @@
 //
 //
 
-#import <LZDependencyControlkit/LZBottomTitleButton.h>
+#import <UIKit/UIKit.h>
 
-@interface LZTabBarButton : LZBottomTitleButton
+@interface LZTabBarButton : UIButton
 
 /** 控件器的TabBarItem */
 @property (nonatomic, strong) UITabBarItem *item;
