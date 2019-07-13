@@ -16,4 +16,4 @@
 #endif
 
 #import <LZDependencyToolkit/LZDependencyToolkit.h>
-#import <LZDependencyControllerkit/LZDependencyControllerkit.h>
+#import "LZDependencyControllerkit.h"
