@@ -1,0 +1,11 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'LZDependencyControllerkit_Example' do
+  pod 'LZDependencyControllerkit', :path => '../'
+
+  target 'LZDependencyControllerkit_Tests' do
+    inherit! :search_paths
+  end
+end

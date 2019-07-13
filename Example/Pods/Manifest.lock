@@ -1,0 +1,56 @@
+PODS:
+  - LZDependencyControlkit (0.1.0):
+    - LZDependencyToolkit
+  - LZDependencyControllerkit (0.1.0):
+    - LZDependencyControlkit
+    - LZDependencyControllerkit/TabBarController (= 0.1.0)
+    - LZDependencyControllerkit/WebViewController (= 0.1.0)
+    - LZDependencyToolkit
+  - LZDependencyControllerkit/TabBarController (0.1.0):
+    - LZDependencyControlkit
+    - LZDependencyToolkit
+  - LZDependencyControllerkit/WebViewController (0.1.0):
+    - LZDependencyControlkit
+    - LZDependencyToolkit
+  - LZDependencyToolkit (1.2.6.3):
+    - LZDependencyToolkit/Category (= 1.2.6.3)
+    - LZDependencyToolkit/Define (= 1.2.6.3)
+    - LZDependencyToolkit/Object (= 1.2.6.3)
+    - LZDependencyToolkit/Struct (= 1.2.6.3)
+  - LZDependencyToolkit/Category (1.2.6.3):
+    - MJRefresh
+  - LZDependencyToolkit/Define (1.2.6.3)
+  - LZDependencyToolkit/Object (1.2.6.3)
+  - LZDependencyToolkit/Struct (1.2.6.3):
+    - LZDependencyToolkit/Struct/AppUnit (= 1.2.6.3)
+    - LZDependencyToolkit/Struct/CryptoUnit (= 1.2.6.3)
+    - LZDependencyToolkit/Struct/DeviceUnit (= 1.2.6.3)
+    - LZDependencyToolkit/Struct/QuickUnit (= 1.2.6.3)
+  - LZDependencyToolkit/Struct/AppUnit (1.2.6.3)
+  - LZDependencyToolkit/Struct/CryptoUnit (1.2.6.3)
+  - LZDependencyToolkit/Struct/DeviceUnit (1.2.6.3)
+  - LZDependencyToolkit/Struct/QuickUnit (1.2.6.3)
+  - MJRefresh (3.2.0)
+
+DEPENDENCIES:
+  - LZDependencyControllerkit (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - LZDependencyControlkit
+    - LZDependencyToolkit
+    - MJRefresh
+
+EXTERNAL SOURCES:
+  LZDependencyControllerkit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  LZDependencyControlkit: 7d03e4291db1eb4faaa152af9e3c64aa3ab17083
+  LZDependencyControllerkit: e9c3e7249359e6676e0e63a0095e5d5bbdb2bc6d
+  LZDependencyToolkit: 4e37e1a2fcde55d6a438370b49c196354acd3a70
+  MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
+
+PODFILE CHECKSUM: 0ceb49917254b402a4dc60a163ffa0170b68dd2a
+
+COCOAPODS: 1.7.0.rc.1

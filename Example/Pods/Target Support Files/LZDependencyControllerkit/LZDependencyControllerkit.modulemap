@@ -1,0 +1,6 @@
+framework module LZDependencyControllerkit {
+  umbrella header "LZDependencyControllerkit-umbrella.h"
+
+  export *
+  module * { export * }
+}
