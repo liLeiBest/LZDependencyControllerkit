@@ -24,8 +24,8 @@ TODO: Add long description of the pod here.
   end
   
   s.subspec 'WebViewController' do |webViewController|
-	  webViewController.source_files		= 'LZDependencyControllerkit/Classes/WebViewController/WKWebView/*.{h,m}'
-	  webViewController.public_header_files = 'LZDependencyControllerkit/Classes/WebViewController/WKWebView/*.h'
+	  webViewController.source_files		= 'LZDependencyControllerkit/Classes/WebViewController/**/*.{h,m}'
+	  webViewController.public_header_files = 'LZDependencyControllerkit/Classes/WebViewController/**/*.h'
 	  webViewController.frameworks = 'WebKit'
   end
 

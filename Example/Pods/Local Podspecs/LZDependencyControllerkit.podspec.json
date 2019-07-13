@@ -41,8 +41,8 @@
     },
     {
       "name": "WebViewController",
-      "source_files": "LZDependencyControllerkit/Classes/WebViewController/WKWebView/*.{h,m}",
-      "public_header_files": "LZDependencyControllerkit/Classes/WebViewController/WKWebView/*.h",
+      "source_files": "LZDependencyControllerkit/Classes/WebViewController/**/*.{h,m}",
+      "public_header_files": "LZDependencyControllerkit/Classes/WebViewController/**/*.h",
       "frameworks": "WebKit"
     }
   ]
