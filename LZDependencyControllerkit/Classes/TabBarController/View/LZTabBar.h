@@ -25,6 +25,7 @@ typedef void(^LZTabBarPlusClickBlock)(LZTabBar *myTabBar);
 /** 加号按钮点击事件 */
 @property (nonatomic, copy)  LZTabBarPlusClickBlock tabBarPulsBtnDidClickBlock;
 
+
 /**
  @author Lilei
  

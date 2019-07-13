@@ -7,6 +7,8 @@
 //
 
 #import "LZTabBarButton.h"
+#import <LZDependencyControlkit/LZBadgeButton.h>
+#import <LZDependencyToolkit/UIView+LZExtension.h>
 
 @interface LZTabBarButton()
 
@@ -19,6 +21,7 @@
 
 /** 引用小红点  */
 @property (nonatomic, weak) LZBadgeButton *badgeBtn;
+
 @end
 @implementation LZTabBarButton
 
