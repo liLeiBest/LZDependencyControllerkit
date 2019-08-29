@@ -9,10 +9,23 @@
 #import "UIScrollView+LZRefreshControl.h"
 #import "MJRefresh.h"
 
+static NSDictionary *RefreshTextAttributes = nil;
 @implementation UIScrollView (LZRefreshControl)
 
-- (BOOL)isRefreshing {
+- (void)configTextAttibutes:(NSDictionary *)attributes {
+	RefreshTextAttributes = attributes;
+}
+
+- (BOOL)isHeaderRefreshing {
 	return [self.mj_header isRefreshing];
+}
+
+- (BOOL)isFooterRefreshing {
+	return [self.mj_footer isRefreshing];
+}
+
+- (BOOL)isRefreshing {
+	return [self isHeaderRefreshing] || [self isFooterRefreshing];
 }
 
 - (void)beginHeaderRefresh {
@@ -71,16 +84,18 @@
 - (void)headerWithRefreshingBlock:(LZRefreshingBlock)refreshingBlock {
 	
 	MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-		
 		if (self.mj_footer.state == MJRefreshStateNoMoreData) {
 			[self.mj_footer resetNoMoreData];
 		}
-		
 		if (refreshingBlock) {
 			refreshingBlock();
 		}
 	}];
-	
+	if (nil != RefreshTextAttributes) {
+		
+		header.stateLabel.textColor = RefreshTextAttributes[NSForegroundColorAttributeName];
+		header.lastUpdatedTimeLabel.textColor = RefreshTextAttributes[NSForegroundColorAttributeName];
+	}
 	self.mj_header = header;
 }
 
@@ -90,11 +105,15 @@
 	[MJRefreshNormalHeader headerWithRefreshingTarget:target
 									 refreshingAction:action];
 	header.refreshingBlock = ^{
-		
 		if (self.mj_footer.state == MJRefreshStateNoMoreData) {
 			[self.mj_footer resetNoMoreData];
 		}
 	};
+	if (nil != RefreshTextAttributes) {
+		
+		header.stateLabel.textColor = RefreshTextAttributes[NSForegroundColorAttributeName];
+		header.lastUpdatedTimeLabel.textColor = RefreshTextAttributes[NSForegroundColorAttributeName];
+	}
 	self.mj_header = header;
 }
 
@@ -104,6 +123,9 @@
 	[MJRefreshAutoNormalFooter footerWithRefreshingBlock:refreshingBlock];
 	[footer setTitle:@"" forState:MJRefreshStateIdle];
 	[footer setTitle:@"已经没有更多了" forState:MJRefreshStateNoMoreData];
+	if (nil != RefreshTextAttributes) {
+		footer.stateLabel.textColor = RefreshTextAttributes[NSForegroundColorAttributeName];
+	}
 	self.mj_footer = footer;
 }
 
@@ -115,6 +137,9 @@
 										 refreshingAction:action];
 	[footer setTitle:@"" forState:MJRefreshStateIdle];
 	[footer setTitle:@"已经没有更多了" forState:MJRefreshStateNoMoreData];
+	if (nil != RefreshTextAttributes) {
+		footer.stateLabel.textColor = RefreshTextAttributes[NSForegroundColorAttributeName];
+	}
 	self.mj_footer = footer;
 }
 

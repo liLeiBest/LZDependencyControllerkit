@@ -8,8 +8,8 @@
 
 #import "LZLoadingButton.h"
 
-@interface LZLoadingButton()
-{
+@interface LZLoadingButton() {
+	
     /** 遮盖层 */
     CAShapeLayer *maskLayer;
     /** 白色层 */
@@ -20,132 +20,111 @@
     CAShapeLayer *circleLayer;
     /** 按钮 */
     UIButton *button;
-    
-    /** 标题 */
-    NSString *btnTitle;
-    /** 标题颜色 */
-    UIColor *btnTitleColor;
+	
     /** 按钮事件 Target */
-    id btnActionTarget;
+    __weak id btnActionTarget;
     /** 按钮点击事件 */
     SEL btnClickSelector;
 }
 @end
 @implementation LZLoadingButton
 
-#pragma mark - - View Init
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder])
-    {
-        [self setupDefaultValue];
-        [self setupSubViews];
-    }
-    
-    return self;
+// MARK: - Initialization
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	
+	[self setupSubViews];
+	[self setupDefaultValue];
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
-    
+	
+	button.frame = self.bounds;
+	
+	shapeLayer.frame = self.bounds;
     shapeLayer.strokeColor = self.shapeColor.CGColor;
-    
     shapeLayer.path = [self drawBezierPath:self.frame.size.height * 0.5f].CGPath;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     shapeLayer.strokeColor = self.shapeColor.CGColor;
     shapeLayer.lineWidth = 1.0f;
 }
 
-#pragma mark - - UI Event
-- (void)clickBtn
-{
-    [self clickAnimation];
+// MARK: - Public
+- (void)setAttributedTitle:(NSAttributedString *)attributedTitle {
+	_attributedTitle = attributedTitle;
+	
+	[button setAttributedTitle:attributedTitle forState:UIControlStateNormal];
 }
 
-#pragma mark - - Public
-- (instancetype)initWithTitle:(NSString *)title
-                   titleColor:(UIColor *)titleColor
-                  borderColor:(UIColor *)borderColor
-                        frame:(CGRect)frame
-{
-    if (self = [super init])
-    {
-        btnTitle = title;
-        btnTitleColor = titleColor;
-        self.shapeColor = borderColor;
-        self.circleColor = borderColor;
-        self.maskColor = borderColor;
-        self.loadColor = borderColor;
-        self.frame = frame;
-        
-        [self setupSubViews];
+- (instancetype)initWithTitle:(NSAttributedString *)title
+				  	shapColor:(UIColor *)shapColor
+						frame:(CGRect)frame {
+	
+    if (self = [super init]) {
+		
+		self.frame = frame;
+		self.attributedTitle = title;
+        self.shapeColor = shapColor;
+        self.circleColor = shapColor;
+        self.maskColor = shapColor;
+        self.loadColor = shapColor;
+		[self setupSubViews];
     }
-    
     return self;
 }
 
 - (void)addTarget:(id)target
-           action:(SEL)action
-{
+           action:(SEL)action {
+	
     btnClickSelector = action;
     btnActionTarget = target;
-    [button addTarget:self
-               action:@selector(clickAnimation)
-     forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(clickAnimation) forControlEvents:UIControlEventTouchDown];
 }
 
-- (void)animationFinish
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^
-    {
+- (void)animationFinish {
+	
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+		
         [self removeSubViews];
         [self setupSubViews];
-		if ([self->btnActionTarget respondsToSelector:self->btnClickSelector])
-			[self addTarget:self->btnActionTarget
-					 action:self->btnClickSelector];
+		if ([self->btnActionTarget respondsToSelector:self->btnClickSelector]) {
+			[self addTarget:self->btnActionTarget action:self->btnClickSelector];
+		}
     });
 }
 
-#pragma mark - - Private
-/**
- 设置默认值
- */
-- (void)setupDefaultValue
-{
-    btnTitle = @"Button";
-    self.shapeColor = [UIColor whiteColor];
-    self.circleColor = [UIColor whiteColor];
-    self.maskColor = [UIColor whiteColor];
-    self.loadColor = [UIColor whiteColor];
-    self.minAnimationTime = 3.0f;
+// MARK: - UI Event
+- (void)clickBtn {
+	[self clickAnimation];
 }
 
-/**
- 设置子控件
- */
-- (void)setupSubViews
-{
+// MARK: - Private
+- (void)setupDefaultValue {
+	
+    self.shapeColor = [UIColor blackColor];
+    self.circleColor = [UIColor blackColor];
+    self.maskColor = [UIColor blackColor];
+    self.loadColor = [UIColor blackColor];
+    self.minAnimationTime = 0.0f;
+}
+
+- (void)setupSubViews {
+	
     shapeLayer = [CAShapeLayer layer];
-    shapeLayer.frame = self.bounds;
+	shapeLayer.frame = self.bounds;
     [self.layer addSublayer:shapeLayer];
-    
+	
     button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = self.bounds;
-    [button setTitle:btnTitle forState:UIControlStateNormal];
-    [button setTitleColor:btnTitleColor forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:13.f];
+	button.frame = self.bounds;
+	[button setAttributedTitle:self.attributedTitle forState:UIControlStateNormal];
     [self addSubview:button];
 }
 
-/**
- 按钮动画，小白圈
- */
-- (void)clickAnimation
-{
+- (void)clickAnimation {
+	
     circleLayer = [CAShapeLayer layer];
-    circleLayer.position = CGPointMake(self.bounds.size.width * 0.5f,
-                                            self.bounds.size.height * 0.5f);
+    circleLayer.position = CGPointMake(self.bounds.size.width * 0.5f, self.bounds.size.height * 0.5f);
     circleLayer.fillColor = self.circleColor.CGColor;
     circleLayer.path = [self drawCircleBezierPath:0].CGPath;
     [self.layer addSublayer:circleLayer];
@@ -157,16 +136,11 @@
     basicAnimation.fillMode = kCAFillModeForwards;
     [circleLayer addAnimation:basicAnimation forKey:@"clickCicrleAnimation"];
     
-    [self performSelector:@selector(clickNextAnimation)
-               withObject:self
-               afterDelay:basicAnimation.duration];
+    [self performSelector:@selector(clickNextAnimation) withObject:self afterDelay:basicAnimation.duration];
 }
 
-/**
- 按钮动画，小白圈消失
- */
-- (void)clickNextAnimation
-{
+- (void)clickNextAnimation {
+	
     circleLayer.fillColor = [UIColor clearColor].CGColor;
     circleLayer.strokeColor = self.circleColor.CGColor;
     circleLayer.lineWidth = 10.0f;
@@ -193,16 +167,11 @@
     
     [circleLayer addAnimation:animationGroup forKey:@"clickCicrleAnimation"];
     
-    [self performSelector:@selector(startMaskAnimation)
-               withObject:self
-               afterDelay:animationGroup.duration];
+    [self performSelector:@selector(startMaskAnimation) withObject:self afterDelay:animationGroup.duration];
 }
 
-/**
- 遮盖动画
- */
-- (void)startMaskAnimation
-{
+- (void)startMaskAnimation {
+	
     maskLayer = [CAShapeLayer layer];
     maskLayer.opacity = 0.15f;
     maskLayer.fillColor = self.maskColor.CGColor;
@@ -216,16 +185,11 @@
     basicAnimaton.fillMode = kCAFillModeForwards;
     [maskLayer addAnimation:basicAnimaton forKey:@"maskAnimation"];
     
-    [self performSelector:@selector(dismissAnimation)
-               withObject:self
-               afterDelay:basicAnimaton.duration + 0.2f];
+    [self performSelector:@selector(dismissAnimation) withObject:self afterDelay:basicAnimaton.duration + 0.2f];
 }
 
-/**
- 移除按钮动画
- */
-- (void)dismissAnimation
-{
+- (void)dismissAnimation {
+	
     [self removeSubViews];
     
     CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
@@ -249,19 +213,13 @@
     animationGroup.fillMode = kCAFillModeForwards;
     [shapeLayer addAnimation:animationGroup forKey:@"dismisAnimation"];
     
-    [self performSelector:@selector(loadingAnimation)
-               withObject:self
-               afterDelay:animationGroup.duration];
+    [self performSelector:@selector(loadingAnimation) withObject:self afterDelay:animationGroup.duration];
 }
 
-/**
- 加载中动画
- */
-- (void)loadingAnimation
-{
+- (void)loadingAnimation {
+	
     loadingLayer = [CAShapeLayer layer];
-    loadingLayer.position = CGPointMake(self.bounds.size.width * 0.5f,
-                                        self.bounds.size.height * 0.5f);
+    loadingLayer.position = CGPointMake(self.bounds.size.width * 0.5f, self.bounds.size.height * 0.5f);
     loadingLayer.fillColor = [UIColor clearColor].CGColor;
     loadingLayer.strokeColor = self.loadColor.CGColor;
     loadingLayer.lineWidth = 2.0f;
@@ -275,38 +233,31 @@
     basicAnimation.repeatCount = LONG_MAX;
     [loadingLayer addAnimation:basicAnimation forKey:@"loadingAnimation"];
     
-    if (0.0f < self.minAnimationTime)
-    {
-        [self performSelector:@selector(removeAllAnimation)
-                   withObject:self
-                   afterDelay:self.minAnimationTime];
-    }
-    else
-    {
-        if ([btnActionTarget respondsToSelector:btnClickSelector])
+    if (0.0f < self.minAnimationTime) {
+        [self performSelector:@selector(removeAllAnimation) withObject:self afterDelay:self.minAnimationTime];
+    } else {
+		if ([btnActionTarget respondsToSelector:btnClickSelector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            [btnActionTarget performSelector:btnClickSelector];
+			[btnActionTarget performSelector:btnClickSelector];
 #pragma clang disagnostic pop
+		}
     }
 }
 
-- (void)removeAllAnimation
-{
+- (void)removeAllAnimation {
+	
     [self removeSubViews];
-   
-    if ([btnActionTarget respondsToSelector:btnClickSelector])
+	if ([btnActionTarget respondsToSelector:btnClickSelector]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [btnActionTarget performSelector:btnClickSelector];
+		[btnActionTarget performSelector:btnClickSelector];
 #pragma clang disagnostic pop
+	}
 }
 
-/**
- UIBezierPath
- */
-- (UIBezierPath *)drawLoadingBezierPath
-{
+- (UIBezierPath *)drawLoadingBezierPath {
+	
     CGFloat radius = self.bounds.size.height * 0.5f - 3.0f;
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     [bezierPath addArcWithCenter:CGPointMake(0, 0)
@@ -314,12 +265,11 @@
                       startAngle:M_PI_2
                         endAngle:M_PI
                        clockwise:YES];
-    
     return bezierPath;
 }
 
-- (void)removeSubViews
-{
+- (void)removeSubViews {
+	
     [button removeFromSuperview];
     [shapeLayer removeFromSuperlayer];
     [maskLayer removeFromSuperlayer];
@@ -327,8 +277,8 @@
     [circleLayer removeFromSuperlayer];
 }
 
-- (UIBezierPath *)drawCircleBezierPath:(CGFloat)radius
-{
+- (UIBezierPath *)drawCircleBezierPath:(CGFloat)radius {
+	
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     [bezierPath addArcWithCenter:CGPointMake(0, 0)
                           radius:radius
@@ -339,8 +289,8 @@
     return bezierPath;
 }
 
-- (UIBezierPath *)drawBezierPath:(CGFloat)x
-{
+- (UIBezierPath *)drawBezierPath:(CGFloat)x {
+	
     CGFloat radius = self.bounds.size.height * 0.5f - 3.0f;
     CGFloat right = self.bounds.size.width - x;
     CGFloat left = x;
@@ -359,7 +309,6 @@
                         endAngle:-M_PI_2
                        clockwise:YES];
     [bezierPath closePath];
-    
     return bezierPath;
 }
 

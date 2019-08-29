@@ -8,7 +8,8 @@
 #ifndef LZLabel_h
 #define LZLabel_h
 
-#import "LZVerticalAlignmentLabel.h"
 #import "LZCopyLabel.h"
+#import "LZVerticalAlignmentLabel.h"
+#import "LZStrikethroughLabel.h"
 
 #endif /* LZLabel_h */

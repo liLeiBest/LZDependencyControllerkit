@@ -11,6 +11,9 @@
 #import "LZButton.h"
 #import "LZLabel.h"
 #import "LZImageView.h"
+#import "LZSegmentControl.h"
 #import "LZTextView.h"
+
+#import "LZCollectionViewFlowLayout.h"
 
 #endif /* LZDependencyControlkit_h */

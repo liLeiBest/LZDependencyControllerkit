@@ -12,14 +12,14 @@
 // MARK: - Initializaiton
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		[self longPressAGestureRecognizer];
+		[self setup];
 	}
 	return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		[self longPressAGestureRecognizer];
+		[self setup];
 	}
 	return self;
 }
@@ -41,7 +41,7 @@
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	if (self.text) {
 		pasteboard.string = self.text;
-	}else{
+	} else {
 		pasteboard.string = self.attributedText.string;
 	}
 }
@@ -50,19 +50,67 @@
 - (void)longPressAction:(UILongPressGestureRecognizer *)gesture {
 	
 	[self becomeFirstResponder];
-	UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:@"拷贝" action:@selector(custCopy:)];
+	
+	NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
+	NSRange range = NSMakeRange(0, self.text.length);
+	NSDictionary *textAttributes = @{NSBackgroundColorAttributeName : [UIColor colorWithRed:59.0 green:126.0 blue:251.0 alpha:255.0]};
+	[attributedString addAttributes:textAttributes range:range];
+	self.attributedText = attributedString;
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(showMenuController)
+	 name:UIMenuControllerWillShowMenuNotification
+	 object:nil];
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(hideMenuController)
+	 name:UIMenuControllerWillHideMenuNotification
+	 object:nil];
+	
+	UIMenuItem *copyItem = [[UIMenuItem alloc] initWithTitle:self.menuTitle action:@selector(custCopy:)];
 	[[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObjects:copyItem, nil]];
-	[[UIMenuController sharedMenuController] setTargetRect:self.frame inView:self.superview];
+	NSDictionary *copyAttributes = @{NSFontAttributeName : self.font};
+	CGRect textFrame =
+	[self.text boundingRectWithSize:self.frame.size
+							options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+						 attributes:copyAttributes
+							context:nil];
+	[[UIMenuController sharedMenuController] setTargetRect:textFrame inView:self];
 	[[UIMenuController sharedMenuController] setMenuVisible:YES animated:YES];
 }
 
 // MARK: - Private
-- (void)longPressAGestureRecognizer {
+- (void)setup {
+	
+	self.selectedBgColor = [UIColor colorWithRed:59/255.0 green:126/255.0 blue:1 alpha:1];
+	self.menuTitle = @"拷贝";
 	
 	self.userInteractionEnabled = YES;
 	UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
-	longPress.minimumPressDuration = 1;
+	longPress.minimumPressDuration = 0.25f;
 	[self addGestureRecognizer:longPress];
+}
+
+// MARK: - Observer
+- (void)showMenuController {
+	
+	NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
+	NSRange range = NSMakeRange(0, self.text.length);
+	UIColor *bgColor = self.selectedBgColor;
+	NSDictionary *textAttributes = @{NSBackgroundColorAttributeName : bgColor,
+									 };
+	[attributedString addAttributes:textAttributes range:range];
+	self.attributedText = attributedString;
+}
+
+- (void)hideMenuController {
+	
+	NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
+	NSDictionary *attributes = @{NSBackgroundColorAttributeName : [UIColor clearColor]};
+	[attributedString addAttributes:attributes range:NSMakeRange(0, self.text.length)];
+	self.attributedText = attributedString;
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
