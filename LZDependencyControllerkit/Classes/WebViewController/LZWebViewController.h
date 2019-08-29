@@ -52,6 +52,14 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 挂载完成回调 */
 @property (nonatomic, copy) void (^extractSubLinkCompletionHander)(NSURL *linkURL);
 
+/** 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认为 NO，本地的全屏控制。YES，video 元素必须包含webkit-playsinline属性 */
+@property (nonatomic, assign) BOOL allowsInlineMediaPlayback;
+/** HTML5 视频需要用户去触发播放还是自动播放，默认为 YES */
+@property (nonatomic, assign) BOOL mediaPlaybackRequiresUserAction;
+
+/** 是否允许横屏，默认 NO */
+@property (nonatomic, assign) BOOL rotationLandscape;
+
 
 /**
  @author Lilei
@@ -81,7 +89,6 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
  */
 - (void)JSInvokeNative:(NSString *)scriptMessage
      completionHandler:(void (^)(id message))handler;
-
 
 /**
  @author Lilei

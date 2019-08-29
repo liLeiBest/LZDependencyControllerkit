@@ -7,6 +7,7 @@
 //
 
 #import "LZWebViewController.h"
+#import <objc/runtime.h>
 
 /**
  @author Lilei
@@ -89,15 +90,15 @@ static NSString * const LZWebTitle = @"title";
     if (nil == _webView) {
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
 		// 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认：NO，本地的全屏控制。YES，video 元素必须包含webkit-playsinline属性
-		config.allowsInlineMediaPlayback = YES;
+		config.allowsInlineMediaPlayback = self.allowsInlineMediaPlayback;
 		// HTML5 视频可以自动播放还是需要用户去启动播放，默认为YES
 		if (@available(iOS 10.0, *)) {
-			config.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAll;
+			config.mediaTypesRequiringUserActionForPlayback = self.mediaPlaybackRequiresUserAction ? WKAudiovisualMediaTypeNone : WKAudiovisualMediaTypeAll;
 		} else if (@available(iOS 9, *)) {
-			config.requiresUserActionForMediaPlayback = YES;
+			config.requiresUserActionForMediaPlayback = self.mediaPlaybackRequiresUserAction;
 		} else {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
-			config.mediaPlaybackRequiresUserAction = YES;
+			config.mediaPlaybackRequiresUserAction = self.mediaPlaybackRequiresUserAction;
 #endif
 		}
 		config.allowsAirPlayForMediaPlayback = YES;
@@ -189,6 +190,8 @@ static NSString * const LZWebTitle = @"title";
 	 ^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [userCC removeScriptMessageHandlerForName:key];
     }];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -291,6 +294,11 @@ static NSString * const LZWebTitle = @"title";
 	
 	self.disappearToRefresh = NO;
 	
+	self.allowsInlineMediaPlayback = NO;
+	self.mediaPlaybackRequiresUserAction = YES;
+	
+	self.rotationLandscape = NO;
+	
 	self.subWeb = NO;
 }
 
@@ -317,6 +325,17 @@ static NSString * const LZWebTitle = @"title";
 				   forKeyPath:LZWebTitle
 					  options:NSKeyValueObservingOptionNew
 					  context:NULL];
+	
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(beginFullScreen:)
+	 name:UIWindowDidBecomeVisibleNotification
+	 object:nil];
+	[[NSNotificationCenter defaultCenter]
+	 addObserver:self
+	 selector:@selector(endFullScreen:)
+	 name:UIWindowDidBecomeHiddenNotification
+	 object:nil];
 }
 
 - (void)configRefreshControl {
@@ -393,16 +412,51 @@ static NSString * const LZWebTitle = @"title";
 	[self.webView.scrollView endHeaderRefresh];
 }
 
-// MARK: - NSKeyValueObserving
+- (void)isNeedRotation:(BOOL)needRotation {
+	
+	id appDelegate = [UIApplication sharedApplication].delegate;
+	
+	__weak __typeof(self) weakSelf = self;
+	Class destClass = [appDelegate class];
+	SEL originalSEL = @selector(application:supportedInterfaceOrientationsForWindow:);
+	const char *originalMethodType = method_getTypeEncoding(class_getInstanceMethod(destClass, originalSEL));
+	IMP originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
+	IMP newIMP = imp_implementationWithBlock(^(id obj, UIApplication *application, UIWindow *window) {
+		
+		if (!weakSelf) {
+			class_replaceMethod(destClass, originalSEL, originalIMP, originalMethodType);
+		}
+		if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
+			[weakSelf forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
+		}
+		return needRotation ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskPortrait;
+	});
+	class_replaceMethod(destClass, originalSEL, newIMP, originalMethodType);
+}
+
+- (void)forceChangeOrientation:(UIInterfaceOrientation)orientation {
+	
+	SEL selector = NSSelectorFromString(@"setOrientation:");
+	if ([[UIDevice currentDevice] respondsToSelector:selector]) {
+		
+		NSInvocation *invocation =
+		[NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+		[invocation setSelector:selector];
+		[invocation setTarget:[UIDevice currentDevice]];
+		int val = orientation;
+		[invocation setArgument:&val atIndex:2];
+		[invocation invoke];
+	}
+}
+
+// MARK: - Observer
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
 	
-    if ([keyPath isEqual: @"estimatedProgress"] && object == self.webView) {
-#if DEBUG
-		NSLog(@"Web load progress:%f", self.webView.estimatedProgress);
-#endif
+    if ([keyPath isEqual:LZWebProgress] && object == self.webView) {
+		LZLog(@"Web load progress:%f", self.webView.estimatedProgress);
 		if (self.displayProgress) {
 			if (nil == self.progressView) {
 				
@@ -416,23 +470,61 @@ static NSString * const LZWebTitle = @"title";
 			[self.progressView setAlpha:1.0f];
 			[self.progressView setProgress:self.webView.estimatedProgress animated:YES];
 			if (self.webView.estimatedProgress >= 1.0f) {
-				
-				[UIView animateWithDuration:0.3
-									  delay:0.3
-									options:UIViewAnimationOptionCurveEaseOut animations:^{
-										[self.progressView setAlpha:0.0f];
-									} completion:^(BOOL finished) {
-										[self.progressView setProgress:0.0f animated:NO];
-									}];
+				[UIView animateWithDuration:0.3 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+					[self.progressView setAlpha:0.0f];
+				} completion:^(BOOL finished) {
+					[self.progressView setProgress:0.0f animated:NO];
+				}];
 			}
 		}
-    } else if ([keyPath isEqualToString:@"title"] && object == self.webView) {
+    } else if ([keyPath isEqualToString:LZWebTitle] && object == self.webView) {
 		if (self.showWebTitle) {
 			if (self.showWebTitle) self.title = self.webView.title;
 		}
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void)beginFullScreen:(NSNotification *)notifi {
+	
+	if (YES == self.rotationLandscape) {
+		[self isNeedRotation:YES];
+	}
+}
+
+- (void)endFullScreen:(NSNotification *)notifi {
+	
+	if (YES == self.rotationLandscape) {
+		if (@available(iOS 12, *)) {
+			
+			UIWindow * window = (UIWindow *)notifi.object;
+			if(window){
+				
+				UIViewController *rootViewController = window.rootViewController;
+				NSArray<__kindof UIViewController *> *viewVCArray = rootViewController.childViewControllers;
+				if ([viewVCArray.firstObject isKindOfClass:NSClassFromString(@"AVPlayerViewController")]) {
+					
+					SEL selector = @selector(setStatusBarHidden:withAnimation:);
+					if ([[UIApplication sharedApplication] respondsToSelector:selector]) {
+						
+						NSMethodSignature *signature = [UIApplication instanceMethodSignatureForSelector:selector];
+						NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+						[invocation setSelector:selector];
+						[invocation setTarget:[UIApplication sharedApplication]];
+						BOOL hidden = NO;
+						NSInteger animation = UIStatusBarAnimationNone;
+						[invocation setArgument:&hidden atIndex:2];
+						[invocation setArgument:&animation atIndex:3];
+						[invocation invoke];
+					}
+				}
+			}
+		}
+		
+		[self isNeedRotation:NO];
+		[self forceChangeOrientation:UIInterfaceOrientationPortrait];
+	}
 }
 
 // MARK: - Delegate

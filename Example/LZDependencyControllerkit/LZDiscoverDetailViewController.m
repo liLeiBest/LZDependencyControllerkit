@@ -22,6 +22,7 @@
     self.progressTrackColor = [UIColor redColor];
 	self.displayRefresh = YES;
 	self.displayEmptyPage = YES;
+	self.rotationLandscape = YES;
 	
 //    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
 //    NSURL *baseURL = [[NSBundle mainBundle] bundleURL];

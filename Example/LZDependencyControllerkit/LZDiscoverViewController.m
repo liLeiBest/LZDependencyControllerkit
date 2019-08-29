@@ -22,7 +22,7 @@
 	NSString *urlString = @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
     NSURL *URL = [NSURL URLWithString:urlString];
     self.URL = URL;
-	self.navAutoAddClose = YES;
+	self.rotationLandscape = YES;
     __weak typeof(self) weakSelf = self;
     self.extractSubLinkCompletionHander = ^(NSURL *linkURL)
     {

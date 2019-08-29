@@ -69,7 +69,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="WlR-s4-j2f">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="uDg-kh-rXP" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="uDg-kh-rXP" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="jIc-di-lA1">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
