@@ -21,12 +21,12 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 
 /** 返回按钮标题，默认 返回 */
 @property (nonatomic, copy) NSString *navBackTitle;
-/** 返回按钮图标 */
-@property (nonatomic, copy) NSString *navBackIcon;
+/** 返回按钮图标，UIImage、NSString */
+@property (nonatomic, strong) id navBackIcon;
 /** 关闭按钮标题，默认 关闭 */
 @property (nonatomic, copy) NSString *navCloseTitle;
-/** 关闭按钮图标 */
-@property (nonatomic, copy) NSString *navCloseIcon;
+/** 关闭按钮图标 ，UIImage、NSString */
+@property (nonatomic, strong) id navCloseIcon;
 /** 自动添加关闭，默认：NO  */
 @property (nonatomic, assign) BOOL navAutoAddClose;
 
