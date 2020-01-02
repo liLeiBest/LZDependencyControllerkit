@@ -108,6 +108,9 @@ LZDeviceGeneration _generation(void) {
 	if ([deviceIdentifier isEqualToString:@"iPhone11,2"]) return LZDeviceGenerationiPhoneXS;
 	if ([deviceIdentifier isEqualToString:@"iPhone11,4"] ||
 		[deviceIdentifier isEqualToString:@"iPhone11,6"]) return LZDeviceGenerationiPhoneXS_max;
+    if ([deviceIdentifier isEqualToString:@"iPhone12,1"]) return LZDeviceGenerationiPhone11;
+    if ([deviceIdentifier isEqualToString:@"iPhone12,3"]) return LZDeviceGenerationiPhone11_pro;
+    if ([deviceIdentifier isEqualToString:@"iPhone12,5"]) return LZDeviceGenerationiPhone11_pro_max;
     // iPod 型号
     if ([deviceIdentifier isEqualToString:@"iPod1,1"]) return LZDeviceGenerationiPodtouch1st;
     if ([deviceIdentifier isEqualToString:@"iPod2,1"]) return LZDeviceGenerationiPodtouch2nd;
@@ -147,6 +150,8 @@ LZDeviceGeneration _generation(void) {
         [deviceIdentifier isEqualToString:@"iPad6,12"]) return LZDeviceGenerationiPad5;
 	if ([deviceIdentifier isEqualToString:@"iPad7,5"] ||
 		[deviceIdentifier isEqualToString:@"iPad7,6"]) return LZDeviceGenerationiPad6;
+    if ([deviceIdentifier isEqualToString:@"iPad7,11"] ||
+        [deviceIdentifier isEqualToString:@"iPad7,12"]) return LZDeviceGenerationiPad7;
     if ([deviceIdentifier isEqualToString:@"iPad4,1"] ||
         [deviceIdentifier isEqualToString:@"iPad4,2"] ||
         [deviceIdentifier isEqualToString:@"iPad4,3"]) return LZDeviceGenerationiPad_air;
@@ -265,6 +270,15 @@ NSString * _generation_desc(void) {
 		case LZDeviceGenerationiPhoneXS_max:
 			return @"iPhone XS Max";
 			break;
+        case LZDeviceGenerationiPhone11:
+            return @"iPhone 11";
+            break;
+        case LZDeviceGenerationiPhone11_pro:
+            return @"iPhone 11 Pro";
+            break;
+        case LZDeviceGenerationiPhone11_pro_max:
+            return @"iPhone 11 Pro Max";
+            break;
             // iPod 型号
         case LZDeviceGenerationiPodtouch1st:
             return @"iPod touch";
@@ -283,6 +297,9 @@ NSString * _generation_desc(void) {
             break;
         case LZDeviceGenerationiPodtouch6th:
             return @"iPod touch (6th generation)";
+            break;
+        case LZDeviceGenerationiPodtouch7th:
+            return @"iPod touch (7th generation)";
             break;
             // iWatch 型号
         case LZDeviceGenerationiWatch1st:
@@ -316,11 +333,20 @@ NSString * _generation_desc(void) {
         case LZDeviceGenerationiPad5:
             return @"iPad (5th generation)";
             break;
+        case LZDeviceGenerationiPad6:
+            return @"iPad (6th generation)";
+            break;
+        case LZDeviceGenerationiPad7:
+            return @"iPad (7th generation)";
+            break;
         case LZDeviceGenerationiPad_air:
             return @"iPad Air 1";
             break;
         case LZDeviceGenerationiPad_air2:
             return @"iPad Air 2";
+            break;
+        case LZDeviceGenerationiPad_air3:
+            return @"iPad Air 3";
             break;
         case LZDeviceGenerationiPad_pro_inch_9__7:
             return @"iPad Pro (9.7-inch)";
@@ -334,6 +360,12 @@ NSString * _generation_desc(void) {
         case LZDeviceGenerationiPad_pro_inch_10__5:
             return @"iPad Pro (10.5-inch)";
             break;
+        case LZDeviceGenerationiPad_pro_inch_11:
+            return @"iPad Pro (11.0-inch)";
+            break;
+        case LZDeviceGenerationiPad_pro_inch_12__9_3nd:
+            return @"iPad Pro (12.9-inch, 3nd generation)";
+            break;
         case LZDeviceGenerationiPad_mini:
             return @"iPad mini 1";
             break;
@@ -345,6 +377,9 @@ NSString * _generation_desc(void) {
             break;
         case LZDeviceGenerationiPad_mini4:
             return @"iPad mini 4";
+            break;
+        case LZDeviceGenerationiPad_mini5:
+            return @"iPad mini 5";
             break;
             // iTV 型号
         case LZDeviceGenerationiTV2nd:
@@ -359,6 +394,7 @@ NSString * _generation_desc(void) {
         case LZDeviceGenerationiTV4K:
             return @"Apple TV 4K";
             break;
+        case LZDeviceGenerationUnspecified:
         default:
             return @"设备类型未知";
             break;
@@ -803,7 +839,19 @@ BOOL _screen_retina(void) {
 
 /** 屏幕是否是齐刘海 */
 BOOL _is_notch(void) {
-	return _is_iPhone() && _generation() >= LZDeviceGenerationiPhoneX;
+    
+    BOOL isNotch = NO;
+    if (NO == _is_iPhone()) {
+        return isNotch;
+    }
+    if (@available(iOS 11.0, *)) {
+        
+        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+        if (mainWindow.safeAreaInsets.bottom > 0.0) {
+            isNotch = YES;
+        }
+    }
+	return isNotch;
 }
 
 // MARK: - 运营商

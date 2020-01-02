@@ -7,7 +7,7 @@
 
 #import "LZQuickUnit.h"
 
-// MARK: - Format
+// MARK: Format
 CGFloat toRadian(CGFloat degree) {
 	return (M_PI * (degree) / 180.0);
 }
@@ -34,11 +34,15 @@ NSString * toString(id object) {
 		[mutStr replaceOccurrencesOfString:@" " withString:@"" options:NSLiteralSearch range:range];
 		NSRange range2 = {0, mutStr.length};
 		[mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range2];
-		return mutStr;
+		return [mutStr copy];
 	} else if ([object isKindOfClass:[NSArray class]]) {
 		
 		NSArray *array = object;
-		return [array componentsJoinedByString:@","];
+        NSString *string = [array componentsJoinedByString:@","];
+        NSMutableString *stringM = [NSMutableString stringWithString:string];
+        [stringM insertString:@"[" atIndex:0];
+        [stringM appendFormat:@"]"];
+		return [stringM copy];
 	}
 	if ([object isKindOfClass:[NSNumber class]]) {
 		
@@ -51,69 +55,7 @@ NSString * toString(id object) {
 	}
 }
 
-// MARK: - Path
-NSString * cacheDir(void) {
-	
-	static NSString *cachePath = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)
-					 lastObject];
-	});
-	return cachePath;
-}
-
-NSString * documentDir(void) {
-	
-	static NSString *documentPath = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
-						lastObject];
-	});
-	return documentPath;
-}
-
-NSString * searchDir(NSSearchPathDirectory searchPathDir) {
-	
-	static NSString *searchPath = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		searchPath = [NSSearchPathForDirectoriesInDomains(searchPathDir, NSUserDomainMask, YES)
-					  lastObject];
-	});
-	return searchPath;
-}
-
-BOOL createDir(NSString *dirPath) {
-	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSError *error;
-	BOOL successful = [fileManager createDirectoryAtPath:dirPath
-						  withIntermediateDirectories:YES
-										   attributes:nil
-												error:&error];
-	if (!successful) {
-		NSLog(@"Failed to create folder:%@", error.localizedDescription);
-	}
-	return successful;
-}
-
-BOOL createCacheSubDir(NSString *subPath) {
-	
-	NSString *cachePath = cacheDir();
-	NSString *destPath = [cachePath stringByAppendingPathComponent:subPath];
-	return createDir(destPath);
-}
-
-BOOL createDocumentSubDir(NSString *subPath) {
-	
-	NSString *documentPath = documentDir();
-	NSString *destPath = [documentPath stringByAppendingPathComponent:subPath];
-	return createDir(destPath);
-}
-
-// MARK: - Font
+// MARK: Font
 NSArray * installedFontNames(void) {
 	
 	NSMutableArray *destArrayM = [NSMutableArray array];
@@ -150,6 +92,7 @@ UIFont * fontName(NSString *fontName, CGFloat fontSize) {
 	return [UIFont fontWithName:fontName size:fontSize];
 }
 
+// MARK: Alert
 void alert(NSString *title, NSString *message, NSArray<UIAlertAction *> *actions) {
 	
 	UIAlertController *alertCtr = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -157,6 +100,15 @@ void alert(NSString *title, NSString *message, NSArray<UIAlertAction *> *actions
 		[alertCtr addAction:action];
 	}
 	[[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertCtr animated:YES completion:nil];
+}
+
+void sheet(NSString *title, NSString *message, NSArray<UIAlertAction *> *actions) {
+    
+    UIAlertController *sheetCtr = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
+    for (UIAlertAction *action in actions) {
+        [sheetCtr addAction:action];
+    }
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:sheetCtr animated:YES completion:nil];
 }
 
 NSNotificationCenter * notificationCenter(void) {
@@ -185,13 +137,6 @@ struct LZQuickUnit_type LZQuickUnit = {
 	.toRadian = toRadian,
 	.toDegree = toDegree,
 	.toString = toString,
-	
-	.cacheDir = cacheDir,
-	.documentDir = documentDir,
-	.searchDir = searchDir,
-	.createDir = createDir,
-	.createCacheSubDir = createCacheSubDir,
-	.createDocumentSubDir = createDocumentSubDir,
 	
 	.installedFontNames = installedFontNames,
 	.font = font,
