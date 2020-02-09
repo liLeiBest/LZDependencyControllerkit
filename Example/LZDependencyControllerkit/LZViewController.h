@@ -8,6 +8,6 @@
 
 @import UIKit;
 
-@interface LZViewController : UIViewController
+@interface LZViewController : LZTabBarViewController
 
 @end

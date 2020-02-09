@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 @class LZTabBar;
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void(^LZTabBarBtnClickBlock)(LZTabBar *myTabBar, NSInteger from, NSInteger to);
 typedef void(^LZTabBarPlusClickBlock)(LZTabBar *myTabBar);
 
@@ -20,10 +22,12 @@ typedef void(^LZTabBarPlusClickBlock)(LZTabBar *myTabBar);
 @property (nonatomic, strong) UIColor *tabBarBtnSelectedColor;
 /** TabBar按钮的字体 */
 @property (nonatomic, strong) UIFont *tabBarBtnFont;
+/** 默认选中索引下标 */
+@property (nonatomic, assign) NSUInteger defaultSelectedIndex;
 /** TaBBar按钮点击事件 */
 @property (nonatomic, copy) LZTabBarBtnClickBlock tabBarBtnDidClickBlock;
 /** 加号按钮点击事件 */
-@property (nonatomic, copy)  LZTabBarPlusClickBlock tabBarPulsBtnDidClickBlock;
+@property (nonatomic, copy) LZTabBarPlusClickBlock tabBarPulsBtnDidClickBlock;
 
 
 /**
@@ -98,3 +102,5 @@ typedef void(^LZTabBarPlusClickBlock)(LZTabBar *myTabBar);
 - (void)updateSelectedIndex:(NSInteger)selectedIndex;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -30,7 +30,7 @@
  */
 - (void)addChildViewController:(UIViewController *)childController
                          title:(NSString *)title
-                     normalImg:(NSString *)normalImg
-                   selectedImg:(NSString *)selectedImg;
+                     normalImg:(UIImage *)normalImg
+                   selectedImg:(UIImage *)selectedImg;
 
 @end

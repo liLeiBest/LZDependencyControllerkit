@@ -29,92 +29,76 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 
 @implementation LZTabBarViewController
 
-#pragma mark - init
-- (instancetype)init
-{
-    if (self = [super init])
-    {    
+// MARK: - Initialization
+- (instancetype)init {
+    if (self = [super init]) {
         _showPlusBtn = NO;
     }
-    
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self setupTabBar];
 }
 
-- (void)viewDidLayoutSubviews
-{
+- (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
     [self removeSysTabarButton];
 }
 
-/** Setter */
-- (void)setSelectedIndex:(NSUInteger)selectedIndex
-{
+#pragma mark - Public
+- (void)setSelectedIndex:(NSUInteger)selectedIndex {
     [super setSelectedIndex:selectedIndex];
     
     [self.myTabBar updateSelectedIndex:selectedIndex];
 }
 
-#pragma mark - Public
-/** 添加子控制器 */
 - (void)addChildViewController:(UIViewController *)childController
                          title:(NSString *)title
-                     normalImg:(NSString *)normalImg
-                   selectedImg:(NSString *)selectedImg
-{
+                     normalImg:(UIImage *)normalImg
+                   selectedImg:(UIImage *)selectedImg {
+    
 	[self addChildViewController:childController];
 	
 	UIViewController *viewController = childController;
-	if ([childController respondsToSelector:@selector(topViewController)])
-	{
+	if ([childController respondsToSelector:@selector(topViewController)]) {
 		viewController = [(UINavigationController *)childController topViewController];
 	}
-	
 	viewController.title = title;
-	viewController.tabBarItem.image = [UIImage imageNamed:normalImg];
-	UIImage *selectedImage = [UIImage imageNamed:selectedImg];
-	selectedImage = [selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-	viewController.tabBarItem.selectedImage = selectedImage;
+	viewController.tabBarItem.image = normalImg;
+    if (UIImageRenderingModeAlwaysOriginal != selectedImg.renderingMode) {
+        selectedImg = [selectedImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+	viewController.tabBarItem.selectedImage = selectedImg;
 	[self.myTabBar addTabBarBtn:viewController.tabBarItem];
 }
 
-#pragma mark - Private
-/**
- @author Lilei
- 
- @brief 设置TabBar
- */
-- (void)setupTabBar
-{
+// MARK: - Private
+- (void)setupTabBar {
+    
     // 实例LZTabBar
     LZTabBar *tabBar = nil;
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToShowPlusBtn)])
-    {
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToShowPlusBtn)]) {
         self.showPlusBtn = [self.tabBarDataSource tabBarWhetherToShowPlusBtn];
     }
-    if (self.isShowPlusBtn)
-    {
+    if (self.isShowPlusBtn) {
+        
         tabBar = [[LZTabBar alloc] initWithPlusBtn];
         tabBar.frame = self.tabBar.bounds;
-    }
-    else
-    {
+    } else {
         tabBar = [[LZTabBar alloc] initWithFrame:self.tabBar.bounds];
     }
     self.myTabBar = tabBar;
+    [self.tabBar addSubview:tabBar];
     
     // 设置TabBarButton
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarBtnAttributes:)])
-    {
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarBtnAttributes:)]) {
+        
         NSDictionary *attributes = [self.tabBarDataSource tabBarBtnAttributes:self.myTabBar];
         tabBar.tabBarBtnNormalColor = [attributes objectForKey:LZTabBarTitleNormalColor];
         tabBar.tabBarBtnSelectedColor = [attributes objectForKey:LZTabBarTitleSelectedColor];
@@ -124,8 +108,8 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     // 设置加号按钮
     if (self.isShowPlusBtn &&
         [self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarPlusAttributes:)])
-    {
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarPlusAttributes:)]) {
+        
         NSDictionary *plusAttributes = [self.tabBarDataSource tabBarPlusAttributes:self.myTabBar];
         [tabBar setupPlusBtnBackgroundImage:[plusAttributes objectForKey:LZTabBarPlusBtnBackgroundImage]
                                    forState:UIControlStateNormal];
@@ -139,71 +123,62 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
                                    forState:UIControlStateNormal];
     }
     
-    // TabBarBtn点击事件
-    __weak typeof(self) weakSelf = self;
-    tabBar.tabBarBtnDidClickBlock = ^(LZTabBar *myTabBar,
-                                      NSInteger from,
-                                      NSInteger to)
-    {
-        if ([weakSelf conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
-            [weakSelf.tabBarDelegate respondsToSelector:@selector(tabBarBtnDidClick:from:to:)])
-        {
-            [weakSelf.tabBarDelegate tabBarBtnDidClick:myTabBar
-                                            from:from
-                                              to:to];
-        }
-    };
-    
-    // 加号按钮点击事件
-    tabBar.tabBarPulsBtnDidClickBlock = ^(LZTabBar *myTabBar)
-    {
-        if ([weakSelf conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
-            [weakSelf.tabBarDelegate respondsToSelector:@selector(plusBtnDidCilck:)])
-        {
-            [weakSelf.tabBarDelegate plusBtnDidCilck:myTabBar];
-        }
-    };
-    [self.tabBar addSubview:tabBar];
-    
-    // TabBar 背景
+    // TabBar背景
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)])
-    {
-        UIImage *backgroundImage = [[self.tabBarDataSource tabBarBackgroundImage:self.myTabBar] middleStretch];
-        [self.tabBar setBackgroundImage:backgroundImage];
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)]) {
+        
+        UIImage *backgroundImage =
+        [[self.tabBarDataSource tabBarBackgroundImage:self.myTabBar] middleStretch];
+        [[UITabBar appearance] setBackgroundImage:backgroundImage];
     }
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)])
-    {
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
+        
         UIColor *backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
-        [self.tabBar setBackgroundColor:backgroundColor];
-        UIImage *backgroundImage = [UIImage imageWithColor:backgroundColor
-                                                      size:CGSizeMake(self.view.frame.size.width, 1.0)];
-        [self.tabBar setBackgroundImage:backgroundImage];
+        [[UITabBar appearance] setBarTintColor:backgroundColor];
     }
     
     // 去掉TabBar上面黑线
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)])
-    {
-        UIImage *clearImage = [UIImage imageWithColor:[UIColor clearColor]
-                                                 size:CGSizeMake(self.view.frame.size.width, 1.0)];
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
+        
+        UIImage *clearImage =
+        [UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(1.0, 1.0)];
         if (![self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)] &&
-            ![self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)])
-            [self.tabBar setBackgroundImage:clearImage];
-        [self.tabBar setShadowImage:clearImage];
+            ![self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
+            [[UITabBar appearance] setBackgroundImage:clearImage];
+        }
+        [[UITabBar appearance] setShadowImage:clearImage];
+        // 添加的图片大小不匹配的话，加上此句，屏蔽掉tabbar多余部分
+//         [UITabBar appearance].clipsToBounds = YES;
+    }
+    
+    // TabBarBtn点击事件
+    __weak typeof(self) weakSelf = self;
+    tabBar.tabBarBtnDidClickBlock = ^(LZTabBar *myTabBar, NSInteger from, NSInteger to) {
+        if ([weakSelf conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
+            [weakSelf.tabBarDelegate respondsToSelector:@selector(tabBarBtnDidClick:from:to:)]) {
+            [weakSelf.tabBarDelegate tabBarBtnDidClick:myTabBar from:from to:to];
+        }
+    };
+    
+    // 加号按钮点击事件
+    tabBar.tabBarPulsBtnDidClickBlock = ^(LZTabBar *myTabBar) {
+        if ([weakSelf conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
+            [weakSelf.tabBarDelegate respondsToSelector:@selector(plusBtnDidCilck:)]) {
+            [weakSelf.tabBarDelegate plusBtnDidCilck:myTabBar];
+        }
+    };
+    
+    // TabBar 默认选中
+    if ([self conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
+        [self.tabBarDelegate respondsToSelector:@selector(tabBarDefaultSelectedIndex:)]) {
+        tabBar.defaultSelectedIndex = [self.tabBarDelegate tabBarDefaultSelectedIndex:tabBar];
     }
 }
 
-/**
- @author Lilei
- 
- @brief 移除系统TabBarBtn
- */
-- (void)removeSysTabarButton
-{
-    [self.tabBar.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
+- (void)removeSysTabarButton {
+    [self.tabBar.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
          if ([obj isKindOfClass:NSClassFromString(@"UITabBarButton")]) [obj removeFromSuperview];
      }];
 }
