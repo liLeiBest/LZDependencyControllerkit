@@ -2,7 +2,6 @@ PODS:
   - LZDependencyControlkit (0.1.4):
     - LZDependencyToolkit
   - LZDependencyControllerkit (0.1.2):
-    - LZDependencyControlkit
     - LZDependencyControllerkit/TabBarController (= 0.1.2)
     - LZDependencyControllerkit/WebViewController (= 0.1.2)
     - LZDependencyToolkit
@@ -10,7 +9,6 @@ PODS:
     - LZDependencyControlkit
     - LZDependencyToolkit
   - LZDependencyControllerkit/WebViewController (0.1.2):
-    - LZDependencyControlkit
     - LZDependencyToolkit
   - LZDependencyToolkit (1.4.3):
     - LZDependencyToolkit/Category (= 1.4.3)
@@ -47,7 +45,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   LZDependencyControlkit: 8cf92da7c3a5e9572be3ca7005f1d385ea8463e4
-  LZDependencyControllerkit: 6dccbd646e8fd5887e031f92664342077311803e
+  LZDependencyControllerkit: 25b7209c6c37a42deaa70a07a961eea0e12e0b2a
   LZDependencyToolkit: 740565d96e92cdb12f361b180dd41ad1ade5de38
   MJRefresh: eeda70fbf0ad277f3178cef1cd0c3532591d6237
 

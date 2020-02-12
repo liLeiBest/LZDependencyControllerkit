@@ -27,9 +27,6 @@
   "dependencies": {
     "LZDependencyToolkit": [
 
-    ],
-    "LZDependencyControlkit": [
-
     ]
   },
   "prefix_header_contents": "static NSString * const LZDependencyControllerkitBundle = @\"LZDependencyControllerkitResourceBundle\";\n\n#import <LZDependencyToolkit/LZDependencyToolkit.h>\n#import <LZDependencyControlkit/LZDependencyControlkit.h>",
@@ -37,7 +34,12 @@
     {
       "name": "TabBarController",
       "source_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.{h,m}",
-      "public_header_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.h"
+      "public_header_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.h",
+      "dependencies": {
+        "LZDependencyControlkit": [
+
+        ]
+      }
     },
     {
       "name": "WebViewController",

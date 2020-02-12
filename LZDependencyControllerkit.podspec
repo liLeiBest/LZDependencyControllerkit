@@ -15,12 +15,13 @@ TODO: Add long description of the pod here.
   s.frameworks 				= 'UIKit', 'Foundation'
   s.source_files 			= 'LZDependencyControllerkit/Classes/LZDependencyControllerkit.h'
   s.public_header_files		= 'LZDependencyControllerkit/Classes/LZDependencyControllerkit.h'
+  
   s.dependency 'LZDependencyToolkit'
-  s.dependency 'LZDependencyControlkit'
   
   s.subspec 'TabBarController' do |tabBarController|
 	  tabBarController.source_files			= 'LZDependencyControllerkit/Classes/TabBarController/**/*.{h,m}'
 	  tabBarController.public_header_files 	= 'LZDependencyControllerkit/Classes/TabBarController/**/*.h'
+      tabBarController.dependency 'LZDependencyControlkit'
   end
   
   s.subspec 'WebViewController' do |webViewController|

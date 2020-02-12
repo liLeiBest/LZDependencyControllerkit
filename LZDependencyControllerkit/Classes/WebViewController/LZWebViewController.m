@@ -533,7 +533,7 @@ static NSString * const LZWebTitle = @"title";
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 	
-    if (self.extractSubLinkCompletionHander && navigationAction.navigationType == WKNavigationTypeLinkActivated) {
+    if (self.extractSubLinkCompletionHander && (navigationAction.navigationType == WKNavigationTypeLinkActivated || (navigationAction.navigationType == WKNavigationTypeOther && nil != navigationAction.sourceFrame))) {
         self.subWeb = YES;
     }
     decisionHandler(WKNavigationActionPolicyAllow);
@@ -543,14 +543,17 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse
 decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 	
-    WKNavigationResponsePolicy rspPolicy = WKNavigationResponsePolicyAllow;
     if (self.subWeb && self.extractSubLinkCompletionHander) {
 		
         NSURL *url = webView.URL;
         self.extractSubLinkCompletionHander(url);
-        rspPolicy = WKNavigationResponsePolicyCancel;
+        decisionHandler(WKNavigationResponsePolicyCancel);
+        if ([webView canGoBack]) {
+            [webView goBack];
+        }
+    } else {
+        decisionHandler(WKNavigationResponsePolicyAllow);
     }
-    decisionHandler(rspPolicy);
 }
 
 - (void)webView:(WKWebView *)webView
