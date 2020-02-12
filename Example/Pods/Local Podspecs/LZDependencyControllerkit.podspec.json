@@ -29,7 +29,7 @@
 
     ]
   },
-  "prefix_header_contents": "static NSString * const LZDependencyControllerkitBundle = @\"LZDependencyControllerkitResourceBundle\";\n\n#import <LZDependencyToolkit/LZDependencyToolkit.h>\n#import <LZDependencyControlkit/LZDependencyControlkit.h>",
+  "prefix_header_contents": "static NSString * const LZDependencyControllerkitBundle = @\"LZDependencyControllerkitResourceBundle\";\n\n#import <LZDependencyToolkit/LZDependencyToolkit.h>",
   "subspecs": [
     {
       "name": "TabBarController",

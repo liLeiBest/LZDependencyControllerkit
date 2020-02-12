@@ -35,7 +35,6 @@ TODO: Add long description of the pod here.
   static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";
   
   #import <LZDependencyToolkit/LZDependencyToolkit.h>
-  #import <LZDependencyControlkit/LZDependencyControlkit.h>
   
   EOS
   s.prefix_header_contents = pch_AF

@@ -8,6 +8,7 @@
 
 #import "LZTabBar.h"
 #import "LZTabBarButton.h"
+#import <LZDependencyControlkit/LZDependencyControlkit.h>
 
 @interface LZTabBar()
 
