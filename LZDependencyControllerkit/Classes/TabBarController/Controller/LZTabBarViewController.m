@@ -65,7 +65,18 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 	
 	UIViewController *viewController = childController;
 	if ([childController respondsToSelector:@selector(topViewController)]) {
+        
 		viewController = [(UINavigationController *)childController topViewController];
+        if ([viewController isKindOfClass:NSClassFromString(@"RTContainerController")]) {
+            
+            SEL selector = NSSelectorFromString(@"contentViewController");
+            if ([viewController respondsToSelector:selector]) {
+                
+                IMP imp = [viewController methodForSelector:selector];
+                UIViewController * (*func)(id, SEL) = (void *)imp;
+                viewController = func(viewController, selector);
+            }
+        }
 	}
 	viewController.title = title;
 	viewController.tabBarItem.image = normalImg;

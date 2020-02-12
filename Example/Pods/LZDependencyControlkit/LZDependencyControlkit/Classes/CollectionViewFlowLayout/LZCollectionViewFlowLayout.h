@@ -10,5 +10,6 @@
 
 #import "LZCollectionViewAlignCellFlowLayout.h"
 #import "LZCollectionViewWaterfallFlowLayout.h"
+#import "LZCollectionViewZoomHeaderFlowLayout.h"
 
 #endif /* LZCollectionViewFlowLayout_h */
