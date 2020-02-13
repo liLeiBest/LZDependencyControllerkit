@@ -15,17 +15,22 @@
 
 @implementation LZDiscoverViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
+// MARK: - Initialization
+- (void)loadView {
+    [super loadView];
+    
     [self setupUI];
 }
 
-// MARK: - UI Action
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	
+}
+
 // MARK: - UI Action
 - (void)leftDidClick {
     
+    [self configURL];
 }
 
 - (void)rightDidClick {
@@ -55,18 +60,26 @@
 
 - (void)configWebView {
     
-    NSString *urlString = @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
-    NSURL *URL = [NSURL URLWithString:urlString];
-    self.URL = URL;
+    [self configURL];
     self.rotationLandscape = NO;
     self.showWebTitle = NO;
     __weak typeof(self) weakSelf = self;
     self.extractSubLinkCompletionHander = ^(NSURL *linkURL) {
-        
+
         LZDiscoverDetailViewController *detail = [[LZDiscoverDetailViewController alloc] init];
         detail.URL = linkURL;
         [weakSelf.navigationController pushViewController:detail animated:YES];
     };
+}
+
+- (void)configURL {
+    
+    // @"https://www.baidu.com";
+    // @"https://www.sina.cn";
+    // @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
+    NSString *urlString = @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
+    NSURL *URL = [NSURL URLWithString:urlString];
+    self.URL = URL;
 }
 
 @end

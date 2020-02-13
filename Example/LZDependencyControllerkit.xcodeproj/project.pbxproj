@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		284C9AAD23F54B4100B505B3 /* LZTestWebJSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284C9AAC23F54B4100B505B3 /* LZTestWebJSViewController.m */; };
 		285D736123F03A67007E5E25 /* LZTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D736023F03A67007E5E25 /* LZTestViewController.m */; };
 		2863220922D988DD00B8EA82 /* LZDiscoverDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2863220522D988DD00B8EA82 /* LZDiscoverDetailViewController.m */; };
 		2863220A22D988DD00B8EA82 /* LZDiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2863220822D988DD00B8EA82 /* LZDiscoverViewController.m */; };
@@ -42,6 +43,8 @@
 
 /* Begin PBXFileReference section */
 		25CB20AE92FAB89D01B3A800 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		284C9AAB23F54B4100B505B3 /* LZTestWebJSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LZTestWebJSViewController.h; sourceTree = "<group>"; };
+		284C9AAC23F54B4100B505B3 /* LZTestWebJSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LZTestWebJSViewController.m; sourceTree = "<group>"; };
 		285D735F23F03A67007E5E25 /* LZTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LZTestViewController.h; sourceTree = "<group>"; };
 		285D736023F03A67007E5E25 /* LZTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LZTestViewController.m; sourceTree = "<group>"; };
 		2863220522D988DD00B8EA82 /* LZDiscoverDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZDiscoverDetailViewController.m; sourceTree = "<group>"; };
@@ -150,6 +153,8 @@
 				6003F5A6195388D20070C39A /* LZViewController.m */,
 				285D735F23F03A67007E5E25 /* LZTestViewController.h */,
 				285D736023F03A67007E5E25 /* LZTestViewController.m */,
+				284C9AAB23F54B4100B505B3 /* LZTestWebJSViewController.h */,
+				284C9AAC23F54B4100B505B3 /* LZTestWebJSViewController.m */,
 				2863220722D988DD00B8EA82 /* LZDiscoverDetailViewController.h */,
 				2863220522D988DD00B8EA82 /* LZDiscoverDetailViewController.m */,
 				2863220622D988DD00B8EA82 /* LZDiscoverViewController.h */,
@@ -392,6 +397,7 @@
 				2863220922D988DD00B8EA82 /* LZDiscoverDetailViewController.m in Sources */,
 				6003F59E195388D20070C39A /* LZAppDelegate.m in Sources */,
 				285D736123F03A67007E5E25 /* LZTestViewController.m in Sources */,
+				284C9AAD23F54B4100B505B3 /* LZTestWebJSViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* LZViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				2863220A22D988DD00B8EA82 /* LZDiscoverViewController.m in Sources */,

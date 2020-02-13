@@ -533,7 +533,13 @@ static NSString * const LZWebTitle = @"title";
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 	
-    if (self.extractSubLinkCompletionHander && (navigationAction.navigationType == WKNavigationTypeLinkActivated || (navigationAction.navigationType == WKNavigationTypeOther && nil != navigationAction.sourceFrame))) {
+    if (self.extractSubLinkCompletionHander &&
+        (navigationAction.navigationType == WKNavigationTypeLinkActivated
+         || (navigationAction.navigationType == WKNavigationTypeOther
+             && nil != navigationAction.sourceFrame
+             && nil != navigationAction.request
+             && nil != navigationAction.targetFrame.request
+             && NO == [[[[navigationAction.targetFrame request] URL] absoluteString] isEqualToString:LZWebEmptyURL]))) {
         self.subWeb = YES;
     }
     decisionHandler(WKNavigationActionPolicyAllow);
@@ -545,9 +551,11 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 	
     if (self.subWeb && self.extractSubLinkCompletionHander) {
 		
+        self.subWeb = NO;
         NSURL *url = webView.URL;
         self.extractSubLinkCompletionHander(url);
         decisionHandler(WKNavigationResponsePolicyCancel);
+        [webView stopLoading];
         if ([webView canGoBack]) {
             [webView goBack];
         }
@@ -584,7 +592,8 @@ didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
 
 - (void)webView:(WKWebView *)webView
 didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
-	NSLog(@"Web Recirect");
+    LZLog(@"Web Recirect");
+    self.subWeb = NO;
 }
 
 #if 0

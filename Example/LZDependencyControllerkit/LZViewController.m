@@ -8,7 +8,7 @@
 
 #import "LZViewController.h"
 #import "LZDiscoverViewController.h"
-#import "LZDiscoverDetailViewController.h"
+#import "LZTestWebJSViewController.h"
 #import "LZTestViewController.h"
 
 @interface LZViewController ()<LZTabBarControllerDataSource, LZTabBarControllerDelegate>
@@ -48,7 +48,7 @@
         NSFontAttributeName : [UIFont systemFontOfSize:10 weight:UIFontWeightSemibold],
     } forState:UIControlStateSelected];
     
-    LZDiscoverDetailViewController *ctr = [[LZDiscoverDetailViewController alloc] init];
+    LZTestViewController *ctr = [[LZTestViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:ctr];
     [self addChildViewController:nav title:@"测试" normalImg:nil selectedImg:nil];
     
@@ -59,7 +59,7 @@
     [self addChildViewController:nav1 title:nil normalImg:civilizationImg selectedImg:civilizationImg];
     ctr1.title = @"无标题";
     
-    LZTestViewController *ctr2 = [[LZTestViewController alloc] init];
+    LZTestWebJSViewController *ctr2 = [[LZTestWebJSViewController alloc] init];
     ctr2.view.backgroundColor = [UIColor orangeColor];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:ctr2];
     UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
