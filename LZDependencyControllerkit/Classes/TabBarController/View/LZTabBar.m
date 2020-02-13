@@ -8,14 +8,13 @@
 
 #import "LZTabBar.h"
 #import "LZTabBarButton.h"
-#import <LZDependencyControlkit/LZDependencyControlkit.h>
 
 @interface LZTabBar()
 
 /** 保存规则菜单按钮 */
 @property (nonatomic, strong) NSMutableArray *normalBtnArrM;
 /** Plus按钮 */
-@property (nonatomic, weak) LZBottomTitleButton1 *plusBtn;
+@property (nonatomic, weak) LZTabBarButton *plusBtn;
 /** TabBar按钮 */
 @property (nonatomic, strong) LZTabBarButton *currentSelectedButton;
 
@@ -32,7 +31,9 @@
 // MARK: - Initialization
 - (instancetype)init {
     if (self = [super init]) {
+        
         self.defaultSelectedIndex = 0;
+        self.plusBtnOffsetY = 0;
     }
     return self;
 }
@@ -87,6 +88,12 @@
 /** 设置加号按钮背景图 */
 - (void)setupPlusBtnBackgroundImage:(UIImage *)backgroundImage
                            forState:(UIControlState)state {
+    
+    CGFloat top = (backgroundImage.size.height - self.plusBtnOffsetY) * 0.5;
+    CGFloat left = backgroundImage.size.width * 0.5;
+    CGFloat bottom = top;
+    CGFloat right = left;
+    backgroundImage  = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(top, left, bottom, right) resizingMode:UIImageResizingModeStretch];
     [self.plusBtn setBackgroundImage:backgroundImage forState:state];
 }
 
@@ -99,13 +106,17 @@
 /** 设置加号按钮标题 */
 - (void)setupPlusBtnTitle:(NSString *)title
                  forState:(UIControlState)state {
+    
     [self.plusBtn setTitle:title forState:state];
+    [self.plusBtn updateProportionOfTitleAndImage];
 }
 
 /** 设置加号按钮标题 */
 - (void)setupPlusBtnAttributedTitle:(NSAttributedString *)title
                            forState:(UIControlState)state {
+    
     [self.plusBtn setAttributedTitle:title forState:state];
+    [self.plusBtn updateProportionOfTitleAndImage];
 }
 
 /** 添加TabBarButton */
@@ -113,6 +124,7 @@
     
     // 实例TabBarBtn
     LZTabBarButton *tabBarBtn = [[LZTabBarButton alloc] init];
+    tabBarBtn.tabBarBtnType = LZTabBarButtonTypeNormal;
     [self.normalBtnArrM addObject:tabBarBtn];
     NSDictionary *normalAttrs = [[UITabBarItem appearance] titleTextAttributesForState:UIControlStateNormal];
     NSDictionary *selectedAttrs = [[UITabBarItem appearance] titleTextAttributesForState:UIControlStateSelected];
@@ -138,7 +150,7 @@
     [tabBarBtn setImage:tabBarItem.selectedImage forState:UIControlStateSelected];
     
     tabBarBtn.item = tabBarItem;
-    tabBarBtn.tag = self.subviews.count;
+    tabBarBtn.tag = nil == self.plusBtn ? self.subviews.count : self.subviews.count - 1;
     [tabBarBtn addTarget:self action:@selector(tabBarButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:tabBarBtn];
     
@@ -172,11 +184,10 @@
  */
 - (void)setupPlusbtn {
     
-    LZBottomTitleButton1 *plusBtn = [[LZBottomTitleButton1 alloc] init];
+    LZTabBarButton *plusBtn = [[LZTabBarButton alloc] init];
+    plusBtn.tabBarBtnType = LZTabBarButtonTypePlus;
     self.plusBtn = plusBtn;
-    [plusBtn addTarget:self
-                action:@selector(plusBtnDidClick)
-      forControlEvents:UIControlEventTouchUpInside];
+    [plusBtn addTarget:self action:@selector(plusBtnDidClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:plusBtn];
 }
 
@@ -189,12 +200,12 @@
     
     NSUInteger count = self.subviews.count;
     CGFloat btnW = self.width / count;
-    UIImage *image = self.plusBtn.currentBackgroundImage ?: self.plusBtn.currentImage;
-    CGSize imageSize =  image.size;
+//    UIImage *image = self.plusBtn.currentBackgroundImage ?: self.plusBtn.currentImage;
+//    CGSize imageSize = image.size;
     self.plusBtn.width = btnW;
-    self.plusBtn.height = imageSize.height;
+    self.plusBtn.height = self.height + self.plusBtnOffsetY; // imageSize.height;
     self.plusBtn.centerX = self.width * 0.5;
-    self.plusBtn.centerY = self.height * 0.5 - 8.5;
+    self.plusBtn.centerY = self.height * 0.5;
 }
 
 /**
@@ -209,9 +220,10 @@
     CGFloat btnH = self.height;
     
     __block CGFloat btnY = 0;
-    [self.subviews enumerateObjectsUsingBlock:^(UIButton *obj, NSUInteger idx, BOOL *stop) {
+    [self.subviews enumerateObjectsUsingBlock:^(LZTabBarButton *obj, NSUInteger idx, BOOL *stop) {
         
-        if ([obj isKindOfClass:[LZTabBarButton class]]) {
+        if ([obj isKindOfClass:[LZTabBarButton class]]
+            && obj.tabBarBtnType == LZTabBarButtonTypeNormal) {
             
             CGFloat btnX = nil == self.plusBtn ? idx * btnW : (idx - 1) * btnW;
             if (idx >= count * 0.5) btnX = idx * btnW;

@@ -124,12 +124,8 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         NSDictionary *plusAttributes = [self.tabBarDataSource tabBarPlusAttributes:self.myTabBar];
         [tabBar setupPlusBtnBackgroundImage:[plusAttributes objectForKey:LZTabBarPlusBtnBackgroundImage]
                                    forState:UIControlStateNormal];
-        [tabBar setupPlusBtnBackgroundImage:[plusAttributes objectForKey:LZTabBarPlusBtnBackgroundImage]
-                                   forState:UIControlStateHighlighted];
         [tabBar setupPlusBtnImage:[plusAttributes objectForKey:LZTabBarPlusBtnImage]
                          forState:UIControlStateNormal];
-        [tabBar setupPlusBtnImage:[plusAttributes objectForKey:LZTabBarPlusBtnImage]
-                         forState:UIControlStateHighlighted];
         [tabBar setupPlusBtnAttributedTitle:[plusAttributes objectForKey:LZTabBarPlusBtnAttributedTitle]
                                    forState:UIControlStateNormal];
     }
@@ -163,6 +159,14 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         // 添加的图片大小不匹配的话，加上此句，屏蔽掉tabbar多余部分
 //         [UITabBar appearance].clipsToBounds = YES;
     }
+    
+    // 加号按钮偏移量
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarPlusBtnOffsetY:)]) {
+            
+            CGFloat offsetY = [self.tabBarDataSource tabBarPlusBtnOffsetY:self.myTabBar];
+            self.myTabBar.plusBtnOffsetY = offsetY;
+        }
     
     // TabBarBtn点击事件
     __weak typeof(self) weakSelf = self;

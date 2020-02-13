@@ -34,12 +34,7 @@
     {
       "name": "TabBarController",
       "source_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.{h,m}",
-      "public_header_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.h",
-      "dependencies": {
-        "LZDependencyControlkit": [
-
-        ]
-      }
+      "public_header_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.h"
     },
     {
       "name": "WebViewController",

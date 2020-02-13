@@ -161,13 +161,11 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/LZDependencyControlkit/LZDependencyControlkit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LZDependencyControllerkit/LZDependencyControllerkit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LZDependencyToolkit/LZDependencyToolkit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/LZDependencyControlkit/LZDependencyControlkit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LZDependencyControllerkit/LZDependencyControllerkit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/LZDependencyToolkit/LZDependencyToolkit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework"

@@ -1,19 +1,15 @@
 //
-//  LZBadgeButton.m
-//  Pods
+//  LZTabBarBadgeButton.m
+//  LZDependencyControlkit
 //
-//  Created by Dear.Q on 16/8/12.
-//
+//  Created by Dear.Q on 2020/2/13.
 //
 
-#import "LZBadgeButton.h"
-#import "UIColor+LZExtension.h"
-#import "UIView+LZExtension.h"
-#import "UIImage+LZInstance.h"
+#import "LZTabBarBadgeButton.h"
 
 NSString * const LZBADGE_NONENUMBER = @"badge_noneNumber";
 
-@interface LZBadgeButton()
+@interface LZTabBarBadgeButton()
 
 /** 默认小红点的大小 */
 @property (nonatomic, assign) CGFloat dotSize;
@@ -23,12 +19,13 @@ NSString * const LZBADGE_NONENUMBER = @"badge_noneNumber";
 @property (nonatomic, strong) UIColor *backgroundColor;
 
 @end
-@implementation LZBadgeButton
+@implementation LZTabBarBadgeButton
 
-- (instancetype)init
-{
-    if (self = [super init])
-    {
+// MARK: - Initialziation
+- (instancetype)init {
+    
+    if (self = [super init]) {
+        
         self.userInteractionEnabled = NO;
         
         // 设置默认值
@@ -49,52 +46,51 @@ NSString * const LZBADGE_NONENUMBER = @"badge_noneNumber";
     return self;
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     
     self.layer.cornerRadius = self.height * 0.5;
     self.layer.masksToBounds = YES;
 }
 
-- (void)setBadgeValue:(NSString *)badgeValue
-{
+- (void)setHighlighted:(BOOL)highlighted {}
+
+// MARK: - Public
+- (void)setBadgeValue:(NSString *)badgeValue {
     _badgeValue = badgeValue;
     
     self.hidden = NO;
     
     // 不显示数字
-    if ([badgeValue isEqualToString:LZBADGE_NONENUMBER])
-    {
+    if ([badgeValue isEqualToString:LZBADGE_NONENUMBER]) {
+        
         self.size = CGSizeMake(_dotSize, _dotSize);
         self.layer.cornerRadius = _dotSize * 0.5;
         return;
     }
     
     // 等于“0”，隐藏小红点
-    if (0 == _badgeValue.intValue)
-    {
+    if (0 == _badgeValue.intValue) {
         self.hidden = YES;
         return;
     }
     
     // 显示数字
-    switch (_badgeValue.length)
-    {
-        case 1:
-        {
+    switch (_badgeValue.length) {
+        case 1: {
+            
             [self setTitle:badgeValue forState:UIControlStateNormal];
             self.width = _dotSize + 7;
         }
             break;
-        case 2:
-        {
+        case 2: {
+            
             [self setTitle:badgeValue forState:UIControlStateNormal];
             self.width = _dotSize + 10;
         }
             break;
-        case 3:
-        {
+        case 3: {
+            
             [self setTitle:@"99+" forState:UIControlStateNormal];
             self.width = _dotSize + 13;
         }
@@ -102,7 +98,6 @@ NSString * const LZBADGE_NONENUMBER = @"badge_noneNumber";
         default:
             break;
     }
-    
     self.height = _dotSize + 7;
 }
 

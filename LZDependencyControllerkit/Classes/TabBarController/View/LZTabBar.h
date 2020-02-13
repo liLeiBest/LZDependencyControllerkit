@@ -24,6 +24,8 @@ typedef void(^LZTabBarPlusClickBlock)(LZTabBar *myTabBar);
 @property (nonatomic, strong) UIFont *tabBarBtnFont;
 /** 默认选中索引下标 */
 @property (nonatomic, assign) NSUInteger defaultSelectedIndex;
+/** 加号按钮偏移量 */
+@property (nonatomic, assign) NSUInteger plusBtnOffsetY;
 /** TaBBar按钮点击事件 */
 @property (nonatomic, copy) LZTabBarBtnClickBlock tabBarBtnDidClickBlock;
 /** 加号按钮点击事件 */

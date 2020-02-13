@@ -41,11 +41,11 @@
     
     [[UITabBarItem appearance] setTitleTextAttributes:@{
         NSForegroundColorAttributeName : [UIColor blackColor],
-        NSFontAttributeName : [UIFont systemFontOfSize:13 weight:UIFontWeightThin],
+        NSFontAttributeName : [UIFont systemFontOfSize:10 weight:UIFontWeightThin],
     } forState:UIControlStateNormal];
     [[UITabBarItem appearance] setTitleTextAttributes:@{
         NSForegroundColorAttributeName : [UIColor redColor],
-        NSFontAttributeName : [UIFont systemFontOfSize:16 weight:UIFontWeightSemibold],
+        NSFontAttributeName : [UIFont systemFontOfSize:10 weight:UIFontWeightSemibold],
     } forState:UIControlStateSelected];
     
     LZDiscoverDetailViewController *ctr = [[LZDiscoverDetailViewController alloc] init];
@@ -57,36 +57,37 @@
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:ctr1];
     UIImage *civilizationImg = [UIImage imageNamed:@"apple-worm"];
     [self addChildViewController:nav1 title:nil normalImg:civilizationImg selectedImg:civilizationImg];
+    ctr1.title = @"无标题";
     
     LZTestViewController *ctr2 = [[LZTestViewController alloc] init];
     ctr2.view.backgroundColor = [UIColor orangeColor];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:ctr2];
-    UIImage *wormImg = [UIImage imageNamed:@"apple-worm"];
-    [self addChildViewController:nav2 title:@"哈哈" normalImg:wormImg selectedImg:wormImg];
+    UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
+    UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];
+    [self addChildViewController:nav2 title:@"哈哈" normalImg:norImg selectedImg:selImg];
     
     LZDiscoverViewController *ctr3 = [[LZDiscoverViewController alloc] init];
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:ctr3];
-    UIImage *discoverImg = [UIImage imageNamed:@"tab_civilization_icon"];
-    [self addChildViewController:nav3 title:@"发现" normalImg:discoverImg selectedImg:discoverImg];
+    [self addChildViewController:nav3 title:nil normalImg:norImg selectedImg:selImg];
 }
 
 // MARK: - LZTabBarViewController
 // MARK: <LZTabBarControllerDataSource>
-//- (BOOL)tabBarWhetherToShowPlusBtn {
-//    return YES;
-//}
-//
-//- (NSDictionary *)tabBarPlusAttributes:(LZTabBar *)myTabBar {
-//    return @{LZTabBarPlusBtnImage : [UIImage imageNamed:@"apple-worm"],
-//    };
-//}
+- (BOOL)tabBarWhetherToShowPlusBtn {
+    return YES;
+}
 
-- (NSDictionary *)tabBarBtnAttributes:(LZTabBar *)myTabBar {
-    return @{LZTabBarTitleNormalColor : [UIColor blackColor],
-             LZTabBarTitleSelectedColor : [UIColor redColor],
-             LZTabBarTitleFont : [UIFont systemFontOfSize:16],
+- (NSDictionary *)tabBarPlusAttributes:(LZTabBar *)myTabBar {
+    return @{LZTabBarPlusBtnImage : [UIImage imageNamed:@"apple-worm"],
     };
 }
+
+//- (NSDictionary *)tabBarBtnAttributes:(LZTabBar *)myTabBar {
+//    return @{LZTabBarTitleNormalColor : [UIColor blackColor],
+//             LZTabBarTitleSelectedColor : [UIColor redColor],
+//             LZTabBarTitleFont : [UIFont systemFontOfSize:16],
+//    };
+//}
 
 - (UIColor *)tabBarBackgroundColor:(LZTabBar *)myTabBar {
     return [UIColor whiteColor];
@@ -99,6 +100,10 @@
 - (BOOL)tabBarWhetherToshowTopBlackLine {
     return NO;
 }
+
+//- (NSUInteger)tabBarPlusBtnOffsetY:(LZTabBar *)myTabBar {
+//    return 30;
+//}
 
 // MARK: <LZTabBarControllerDelegate>
 - (void)tabBarBtnDidClick:(LZTabBar *)myTabBar
@@ -120,8 +125,8 @@
     NSLog(@"=======");
 }
 
-- (NSUInteger)tabBarDefaultSelectedIndex:(LZTabBar *)myTabBar {
-    return 1;
-}
+//- (NSUInteger)tabBarDefaultSelectedIndex:(LZTabBar *)myTabBar {
+//    return 0;
+//}
 
 @end

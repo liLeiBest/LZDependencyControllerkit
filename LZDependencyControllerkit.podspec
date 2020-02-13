@@ -21,7 +21,6 @@ TODO: Add long description of the pod here.
   s.subspec 'TabBarController' do |tabBarController|
 	  tabBarController.source_files			= 'LZDependencyControllerkit/Classes/TabBarController/**/*.{h,m}'
 	  tabBarController.public_header_files 	= 'LZDependencyControllerkit/Classes/TabBarController/**/*.h'
-      tabBarController.dependency 'LZDependencyControlkit'
   end
   
   s.subspec 'WebViewController' do |webViewController|

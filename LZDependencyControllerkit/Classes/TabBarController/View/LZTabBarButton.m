@@ -7,7 +7,7 @@
 //
 
 #import "LZTabBarButton.h"
-#import <LZDependencyControlkit/LZBadgeButton.h>
+#import "LZTabBarBadgeButton.h"
 
 @interface LZTabBarButton()
 
@@ -21,7 +21,7 @@
 @property (nonatomic, assign) CGFloat imageProportion;
 
 /** 引用小红点  */
-@property (nonatomic, weak) LZBadgeButton *badgeBtn;
+@property (nonatomic, weak) LZTabBarBadgeButton *badgeBtn;
 
 @end
 @implementation LZTabBarButton
@@ -35,6 +35,7 @@
         _margin = 10.0f;
         _titleNormalColor = [UIColor grayColor];
         _titleSelectedColor = [UIColor blueColor];
+        _imageProportion = 1.0f;
         self.titleLabel.font = [UIFont systemFontOfSize:10];
         [self setTitleColor:_titleNormalColor forState:UIControlStateNormal];
         [self setTitleColor:_titleSelectedColor forState:UIControlStateSelected];
@@ -43,9 +44,10 @@
         self.adjustsImageWhenDisabled = NO;
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.contentMode = UIViewContentModeScaleAspectFit;
         
         // 添加小红点提示
-        LZBadgeButton *badgeBtn = [[LZBadgeButton alloc] init];
+        LZTabBarBadgeButton *badgeBtn = [[LZTabBarBadgeButton alloc] init];
         self.badgeBtn = badgeBtn;
         [self addSubview:badgeBtn];
     }
@@ -87,24 +89,47 @@
 - (void)setItem:(UITabBarItem *)item {
     _item = item;
     
-    self.imageProportion = 0.5f;
-    if (nil == item.title || 0 == item.title.length) {
-        if (item.image) {
-            self.imageProportion = 1.0f;
-        }
-    } else {
-        if (item.image) {
-            self.imageProportion = 0.7f;
-        } else {
-            self.imageProportion = 0.0f;
-        }
-    }
-    
+    [self updateProportionOfTitleAndImage];
     // 注册监听
     [_item addObserver:self
             forKeyPath:@"badgeValue"
                options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
                context:nil];
+}
+
+- (void)updateProportionOfTitleAndImage {
+    
+    self.imageProportion = 0.5f;
+    if (NO == [self hasTitle]) {
+        if (YES == [self hasImage]) {
+            self.imageProportion = 1.0f;
+        } else {
+            if (YES == [self hasBgImage]) {
+                self.imageProportion = 1.0f;
+            }
+        }
+    } else {
+        if (YES == [self hasImage]) {
+            
+            self.imageProportion = 0.7f;
+            self.imageView.contentMode = UIViewContentModeBottom;
+        } else {
+            self.imageProportion = 0.0f;
+        }
+    }
+}
+
+- (BOOL)hasTitle {
+    return (nil != self.currentTitle && 0 < self.currentTitle.length)
+    || nil != self.currentAttributedTitle;
+}
+
+- (BOOL)hasImage {
+    return nil != self.currentImage;
+}
+
+- (BOOL)hasBgImage {
+    return nil != self.currentBackgroundImage;
 }
 
 // MARK: - Observer

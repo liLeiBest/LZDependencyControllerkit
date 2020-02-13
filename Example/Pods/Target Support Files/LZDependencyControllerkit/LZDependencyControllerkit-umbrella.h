@@ -15,6 +15,7 @@
 #import "LZTabBarControllerDelegate.h"
 #import "LZTabBarViewController.h"
 #import "LZTabBar.h"
+#import "LZTabBarBadgeButton.h"
 #import "LZTabBarButton.h"
 #import "LZWebViewController.h"
 

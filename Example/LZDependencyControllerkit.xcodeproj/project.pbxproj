@@ -345,14 +345,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-LZDependencyControllerkit_Example/Pods-LZDependencyControllerkit_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/LZDependencyControlkit/LZDependencyControlkit.framework",
 				"${BUILT_PRODUCTS_DIR}/LZDependencyControllerkit/LZDependencyControllerkit.framework",
 				"${BUILT_PRODUCTS_DIR}/LZDependencyToolkit/LZDependencyToolkit.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LZDependencyControlkit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LZDependencyControllerkit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LZDependencyToolkit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",

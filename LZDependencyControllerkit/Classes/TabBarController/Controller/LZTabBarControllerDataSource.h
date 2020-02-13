@@ -89,4 +89,16 @@ UIKIT_EXTERN NSString * const LZTabBarTitleFont;
  */
 - (BOOL)tabBarWhetherToshowTopBlackLine;
 
+
+/**
+@author Lilei
+
+@brief 加号按钮向上偏移量，图景图也会在相应位置进行拉伸
+
+@param myTabBar LZTabBar
+ 
+@return NSUInteger
+*/
+- (NSUInteger)tabBarPlusBtnOffsetY:(LZTabBar *)myTabBar;
+
 @end

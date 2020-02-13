@@ -1,12 +1,9 @@
 PODS:
-  - LZDependencyControlkit (0.1.4):
-    - LZDependencyToolkit
   - LZDependencyControllerkit (0.1.3):
     - LZDependencyControllerkit/TabBarController (= 0.1.3)
     - LZDependencyControllerkit/WebViewController (= 0.1.3)
     - LZDependencyToolkit
   - LZDependencyControllerkit/TabBarController (0.1.3):
-    - LZDependencyControlkit
     - LZDependencyToolkit
   - LZDependencyControllerkit/WebViewController (0.1.3):
     - LZDependencyToolkit
@@ -35,7 +32,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - LZDependencyControlkit
     - LZDependencyToolkit
     - MJRefresh
 
@@ -44,8 +40,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LZDependencyControlkit: 8cf92da7c3a5e9572be3ca7005f1d385ea8463e4
-  LZDependencyControllerkit: 22f9fa5eb4456c6f58a21e1d660d631b38b68061
+  LZDependencyControllerkit: 95320de108e3115a13378f3f5949f1fff5cb0ff9
   LZDependencyToolkit: 740565d96e92cdb12f361b180dd41ad1ade5de38
   MJRefresh: eeda70fbf0ad277f3178cef1cd0c3532591d6237
 
