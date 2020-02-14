@@ -77,10 +77,12 @@
     
     if (self.tabBarBtnDidClickBlock) {
         
-        self.tabBarBtnDidClickBlock(self, self.currentSelectedButton.tag, tabBarButton.tag);
+        NSUInteger fromIndex = self.currentSelectedButton.tag;
+        NSUInteger toIndex = tabBarButton.tag;
         self.currentSelectedButton.selected = NO;
         tabBarButton.selected = YES;
         self.currentSelectedButton = tabBarButton;
+        self.tabBarBtnDidClickBlock(self, fromIndex, toIndex);
     }
 }
 
