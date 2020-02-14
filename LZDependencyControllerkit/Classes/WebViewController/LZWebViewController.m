@@ -144,11 +144,6 @@ static NSString * const LZWebTitle = @"title";
 	if (self.displayRefresh) {
 		[self configRefreshControl];
 	}
-	
-	if (self.displayEmptyPage) {
-		self.emptyDataSetTitle = @"加载失败了~";
-		self.emptyDataSetDetail = @"请稍后重试";
-	}
 }
 
 - (void)viewWillLayoutSubviews {
@@ -219,8 +214,14 @@ static NSString * const LZWebTitle = @"title";
     return self;
 }
 
-- (void)reload {
+- (void)reloadPage {
 	[self.webView reloadFromOrigin];
+}
+
+- (void)reloadRequest {
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
+    [self.webView loadRequest:request];
 }
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
@@ -291,6 +292,8 @@ static NSString * const LZWebTitle = @"title";
 	self.displayRefresh = NO;
 	
 	self.displayEmptyPage = NO;
+    self.emptyDataSetTitle = @"加载失败了~";
+    self.emptyDataSetDetail = @"请稍后重试";
 	
 	self.disappearToRefresh = NO;
 	
@@ -342,7 +345,7 @@ static NSString * const LZWebTitle = @"title";
 	
 	__weak typeof(self) weakSelf = self;
 	[self.webView.scrollView headerWithRefreshingBlock:^{
-		[weakSelf reload];
+		[weakSelf reloadRequest];
 	}];
 }
 

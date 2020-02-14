@@ -75,9 +75,16 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /**
  @author Lilei
  
- @brief 重新加载
+ @brief 重新加载页面
  */
-- (void)reload;
+- (void)reloadPage;
+
+/**
+@author Lilei
+
+@brief 重新加载请求
+*/
+- (void)reloadRequest;
 
 /**
  @author Lilei

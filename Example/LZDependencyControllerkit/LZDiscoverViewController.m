@@ -34,7 +34,7 @@
 }
 
 - (void)rightDidClick {
-    [self reload];
+    [self reloadRequest];
 }
 
 // MARK: - Private
