@@ -79,6 +79,8 @@ static NSString * const LZWebTitle = @"title";
 @property (nonatomic, weak) UIView *attachView;
 /** ScriptMessage 容器 */
 @property (nonatomic, strong) NSMutableDictionary *scriptMessageContainer;
+/** 用于判断是否是同一个 webpage */
+@property (nonatomic, strong) WKNavigation *webNavigation;
 
 @end
 
@@ -201,7 +203,7 @@ static NSString * const LZWebTitle = @"title";
     _URL = URL;
     
     NSURLRequest *request = [NSURLRequest requestWithURL:_URL];
-    [self.webView loadRequest:request];
+    self.webNavigation = [self.webView loadRequest:request];
 }
 
 // MARK: - Public
@@ -221,7 +223,7 @@ static NSString * const LZWebTitle = @"title";
 - (void)reloadRequest {
     
     NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
-    [self.webView loadRequest:request];
+    self.webNavigation = [self.webView loadRequest:request];
 }
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
@@ -588,7 +590,7 @@ didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
 	}
     if (self.subWeb) return;
 	[self correctNavigationButton];
-	if (self.displayEmptyPage) {
+	if (self.displayEmptyPage && self.webNavigation == navigation) {
 		[self showEmptyDataSet:self.webView.scrollView];
 	}
 }
