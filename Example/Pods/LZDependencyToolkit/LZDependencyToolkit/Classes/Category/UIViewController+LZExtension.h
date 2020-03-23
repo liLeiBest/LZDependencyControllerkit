@@ -20,11 +20,11 @@
 /**
  @author Lilei
  
- @brief 获取当前活动的视图控制器
+ @brief 关闭当前控制器，指定是否动画
  
- @return 活动控制器
+ @param animated 是否动画
  */
-- (nullable UIViewController *)currentActivityViewController;
+- (void)dismissAnimated:(BOOL)animated;
 
 /**
  @author Lilei
