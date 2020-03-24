@@ -227,19 +227,27 @@ static NSString * const LZWebTitle = @"title";
 }
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
-     completionHandler:(void (^)(id))handler {
-	
+    completionCallback:(void (^)(WKScriptMessage *))handler {
+    
     NSAssert(nil != scriptMessage && scriptMessage.length, @"scriptMessage 不能空");
     if (handler) [self.scriptMessageContainer setObject:handler forKey:scriptMessage];
-    
     // JS 调用 OC，添加处理脚本
     WKUserContentController *userCC = self.webView.configuration.userContentController;
     LZWeakScriptMessageDelegate *scriptMessageDelegate =
     [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self
                                         completionHandler:^(WKScriptMessage *message) {
-											if (handler) handler(message.body);
-										}];
+                                            if (handler) handler(message);
+                                        }];
     [userCC addScriptMessageHandler:scriptMessageDelegate name:scriptMessage];
+}
+
+- (void)JSInvokeNative:(NSString *)scriptMessage
+     completionHandler:(void (^)(id))handler {
+    [self JSInvokeNative:scriptMessage completionCallback:^(WKScriptMessage *message) {
+        if (handler) {
+            handler(message.body);
+        }
+    }];
 }
 
 - (void)nativeInvokeJS:(NSString *)script

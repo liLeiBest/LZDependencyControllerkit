@@ -95,6 +95,17 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
  @param handler 回调
  */
 - (void)JSInvokeNative:(NSString *)scriptMessage
+    completionCallback:(void (^)(WKScriptMessage *message))handler;
+
+/**
+ @author Lilei
+ 
+ @brief JS 调用 OC
+
+ @param scriptMessage 消息
+ @param handler 回调
+ */
+- (void)JSInvokeNative:(NSString *)scriptMessage
      completionHandler:(void (^)(id message))handler;
 
 /**
