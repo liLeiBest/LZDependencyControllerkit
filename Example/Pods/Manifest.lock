@@ -1,15 +1,15 @@
 PODS:
-  - LZDependencyControllerkit (0.1.8):
-    - LZDependencyControllerkit/StartPageController (= 0.1.8)
-    - LZDependencyControllerkit/TabBarController (= 0.1.8)
-    - LZDependencyControllerkit/WebViewController (= 0.1.8)
+  - LZDependencyControllerkit (0.1.9):
+    - LZDependencyControllerkit/StartPageController (= 0.1.9)
+    - LZDependencyControllerkit/TabBarController (= 0.1.9)
+    - LZDependencyControllerkit/WebViewController (= 0.1.9)
     - LZDependencyToolkit
-  - LZDependencyControllerkit/StartPageController (0.1.8):
+  - LZDependencyControllerkit/StartPageController (0.1.9):
     - LZDependencyToolkit
     - SDWebImage
-  - LZDependencyControllerkit/TabBarController (0.1.8):
+  - LZDependencyControllerkit/TabBarController (0.1.9):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/WebViewController (0.1.8):
+  - LZDependencyControllerkit/WebViewController (0.1.9):
     - LZDependencyToolkit
   - LZDependencyToolkit (1.6.3.1):
     - LZDependencyToolkit/Category (= 1.6.3.1)
@@ -48,7 +48,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LZDependencyControllerkit: bf3638a6b98e9146c2a32b5dfb859108d1553a62
+  LZDependencyControllerkit: 2f357184865d61cd45ce2c93d9e766954e211c86
   LZDependencyToolkit: b83e3a6cad9384d5bb7b2c40c23b3a05b8261fa6
   MJRefresh: eeda70fbf0ad277f3178cef1cd0c3532591d6237
   SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120

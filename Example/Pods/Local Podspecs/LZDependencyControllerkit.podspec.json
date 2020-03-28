@@ -1,8 +1,8 @@
 {
   "name": "LZDependencyControllerkit",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "summary": "A short description of LZDependencyControllerkit.",
-  "description": "TODO: Add long description of the pod here.",
+  "description": "1.TabBarController\n2.WebViewController\n3.StartPageController",
   "homepage": "https://github.com/liLeiBest",
   "license": {
     "type": "MIT",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/liLeiBest/LZDependencyControllerkit.git",
-    "tag": "0.1.8"
+    "tag": "0.1.9"
   },
   "platforms": {
     "ios": "9.0"

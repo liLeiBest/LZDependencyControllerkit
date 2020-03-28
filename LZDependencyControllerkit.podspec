@@ -1,10 +1,12 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LZDependencyControllerkit'
-  s.version          = '0.1.8'
+  s.version          = '0.1.9'
   s.summary          = 'A short description of LZDependencyControllerkit.'
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  1.TabBarController
+  2.WebViewController
+  3.StartPageController
                        DESC
   s.homepage         = 'https://github.com/liLeiBest'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
