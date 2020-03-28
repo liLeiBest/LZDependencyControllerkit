@@ -29,6 +29,16 @@ TODO: Add long description of the pod here.
 	  webViewController.frameworks = 'WebKit'
   end
 
+  s.subspec 'StartPageController' do |startPageController|
+      startPageController.source_files        =
+      'LZDependencyControllerkit/Classes/StartPageController/**/*.{h,m}',
+#      'LZDependencyControllerkit/Classes/StartPageController/Controller/**/*.{storyboard}',
+      ''
+      startPageController.public_header_files = 'LZDependencyControllerkit/Classes/StartPageController/**/*.h'
+      startPageController.dependency 'SDWebImage'
+      startPageController.resource                 = 'LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle'
+  end
+  
   pch_AF = <<-EOS
   
   static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";

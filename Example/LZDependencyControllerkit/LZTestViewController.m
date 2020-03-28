@@ -7,21 +7,102 @@
 //
 
 #import "LZTestViewController.h"
+#import "LZGuideOneViewController.h"
+#import "LZGuideTwoViewController.h"
+#import "LZGuideThreeViewController.h"
 
-@interface LZTestViewController ()
+@interface LZTestViewController ()<LZGuidePageDelegate, LZAdvertisingPageDelegate>
 
 @end
 
 @implementation LZTestViewController
 
+// MARK: - Initialization
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setupUI];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (LZGuideViewController.needGuide()) {
+        
+        LZGuideOneViewController *one = [LZGuideOneViewController instance];
+        LZGuideTwoViewController *two = [LZGuideTwoViewController instance];
+        LZGuideThreeViewController *three = [LZGuideThreeViewController instance];
+        LZGuideViewController *ctr = LZGuideViewController
+        .instance()
+        .delegate(self)
+        .guideViewControllers(@[one, two, three])
+        .showTheEntranceControl(NO)
+        .showPageControl(NO);
+        ctr.modalPresentationStyle = UIModalPresentationFullScreen;
+        ctr.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [self presentViewController:ctr animated:YES completion:nil];
+    }
+}
+
+// MARK: - UI Action
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    LZAdvertisingViewController *ctr =
+    LZAdvertisingViewController.instance()
+    .delegate(self)
+    .skipWaitSeconds(5)
+    .skipTitlel(@"广告");
+    ctr.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:ctr animated:YES completion:nil];
+}
+
+// MARK: - Private
+- (void)setupUI {
     
     self.view.backgroundColor = [UIColor lightGrayColor];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    LZLog(@"---------");
+// MARK: - Delegate
+// MARK: <LZGuidePageDelegate>
+- (void)guideViewController:(LZGuideViewController *)guideViewController
+               currentIndex:(NSUInteger)currentIndex
+            didCloseTrigger:(LZStartPageCloseTrigger)closeTrigger {
+    
+    NSLog(@"当前第 %@ 页", LZQuickUnit.toString(@(currentIndex)));
+    switch (closeTrigger) {
+        case LZStartPageCloseTriggerSkip:
+            NSLog(@"点击了跳过");
+            break;
+        case LZStartPageCloseTriggerEnter:
+            NSLog(@"点击了查看详情");
+            break;
+        default:
+            NSLog(@"点击了未知");
+            break;
+    }
+}
+
+// MARK: <LZAdvertisingPageDelegate>
+- (void)advertisingViewController:(LZAdvertisingViewController *)advertisingViewController
+                  didCloseTrigger:(LZStartPageCloseTrigger)closeTrigger {
+    switch (closeTrigger) {
+        case LZStartPageCloseTriggerSkip:
+            NSLog(@"点击了跳过");
+            break;
+        case LZStartPageCloseTriggerEnter:
+            NSLog(@"点击了查看详情");
+            LZGuideViewController.clearTrigger();
+            break;
+        default:
+            NSLog(@"点击了未知");
+            break;
+    }
+}
+- (NSURL *)advertisingViewControllerForCoverAd:(LZAdvertisingViewController *)advertisingViewController {
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"5" ofType:@"jpg"];
+    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+    return fileURL;
 }
 
 @end

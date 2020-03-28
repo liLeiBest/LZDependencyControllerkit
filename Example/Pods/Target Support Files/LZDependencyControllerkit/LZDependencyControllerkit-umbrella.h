@@ -11,6 +11,12 @@
 #endif
 
 #import "LZDependencyControllerkit.h"
+#import "LZAdvertisingViewController.h"
+#import "LZGuideViewController.h"
+#import "LZAdvertisingPageDelegate.h"
+#import "LZGuidePageDelegate.h"
+#import "LZStartPageConst.h"
+#import "LZStartPageController.h"
 #import "LZTabBarControllerDataSource.h"
 #import "LZTabBarControllerDelegate.h"
 #import "LZTabBarViewController.h"

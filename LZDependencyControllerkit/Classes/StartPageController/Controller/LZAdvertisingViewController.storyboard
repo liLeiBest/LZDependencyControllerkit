@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9bW-bC-EXB">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Advertising View Controller-->
+        <scene sceneID="nQF-r5-ZmG">
+            <objects>
+                <viewController id="9bW-bC-EXB" customClass="LZAdvertisingViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="tXc-xl-86Y">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GB5-hz-0Kz">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="8aC-Lt-9C6" appends="YES" id="gKB-dq-Tw9"/>
+                                </connections>
+                            </imageView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="di3-db-CnL">
+                                <rect key="frame" x="304" y="74" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.85490196080000003" green="0.93333333330000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="7Yv-RN-r1g"/>
+                                    <constraint firstAttribute="height" constant="30" id="EMX-vB-Wsh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                <state key="normal" title="跳过">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="skipDidTouchDown:" destination="9bW-bC-EXB" eventType="touchDown" id="2N0-VF-w15"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="di3-db-CnL" firstAttribute="top" secondItem="8V5-rQ-2pj" secondAttribute="top" constant="30" id="7Ne-G0-jUO"/>
+                            <constraint firstAttribute="bottom" secondItem="GB5-hz-0Kz" secondAttribute="bottom" id="87u-I2-duD"/>
+                            <constraint firstAttribute="trailing" secondItem="di3-db-CnL" secondAttribute="trailing" constant="30" id="GGk-48-miw"/>
+                            <constraint firstItem="GB5-hz-0Kz" firstAttribute="leading" secondItem="8V5-rQ-2pj" secondAttribute="leading" id="i4Y-rE-aHI"/>
+                            <constraint firstItem="GB5-hz-0Kz" firstAttribute="top" secondItem="tXc-xl-86Y" secondAttribute="top" id="jYm-kg-IvF"/>
+                            <constraint firstItem="8V5-rQ-2pj" firstAttribute="trailing" secondItem="GB5-hz-0Kz" secondAttribute="trailing" id="qGi-qq-h7T"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8V5-rQ-2pj"/>
+                    </view>
+                    <connections>
+                        <outlet property="advertisingBgImgView" destination="GB5-hz-0Kz" id="3cw-g4-BJQ"/>
+                        <outlet property="skipBtn" destination="di3-db-CnL" id="d0Y-T0-9z5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gBY-yJ-q28" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="8aC-Lt-9C6">
+                    <connections>
+                        <action selector="detailDidSingleTap:" destination="9bW-bC-EXB" id="7PM-Ri-EGs"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-407" y="145"/>
+        </scene>
+    </scenes>
+</document>

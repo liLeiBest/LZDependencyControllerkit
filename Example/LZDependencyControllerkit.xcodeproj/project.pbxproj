@@ -12,6 +12,13 @@
 		2863220922D988DD00B8EA82 /* LZDiscoverDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2863220522D988DD00B8EA82 /* LZDiscoverDetailViewController.m */; };
 		2863220A22D988DD00B8EA82 /* LZDiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2863220822D988DD00B8EA82 /* LZDiscoverViewController.m */; };
 		2863220C22D989B900B8EA82 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 2863220B22D989B900B8EA82 /* index.html */; };
+		28E7A5F0242E243F00AAE3BD /* LZGuideThreeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E7A5E7242E243E00AAE3BD /* LZGuideThreeViewController.storyboard */; };
+		28E7A5F1242E243F00AAE3BD /* LZGuideTwoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A5EA242E243E00AAE3BD /* LZGuideTwoViewController.m */; };
+		28E7A5F2242E243F00AAE3BD /* LZGuideThreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A5EC242E243E00AAE3BD /* LZGuideThreeViewController.m */; };
+		28E7A5F3242E243F00AAE3BD /* LZGuideTwoViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E7A5ED242E243E00AAE3BD /* LZGuideTwoViewController.storyboard */; };
+		28E7A5F4242E243F00AAE3BD /* LZGuideOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A5EE242E243F00AAE3BD /* LZGuideOneViewController.m */; };
+		28E7A5F5242E243F00AAE3BD /* LZGuideOneViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28E7A5EF242E243F00AAE3BD /* LZGuideOneViewController.storyboard */; };
+		28E7A5F7242FAB5000AAE3BD /* 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 28E7A5F6242FAB5000AAE3BD /* 5.jpg */; };
 		3A0D6AE0096A54E72BBD577B /* Pods_LZDependencyControllerkit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6B6328DA5CCA7B667457007 /* Pods_LZDependencyControllerkit_Tests.framework */; };
 		3EB63E6E1E03CB97F84F1B36 /* Pods_LZDependencyControllerkit_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C2BC3E77888924C49A0795 /* Pods_LZDependencyControllerkit_Example.framework */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -52,6 +59,16 @@
 		2863220722D988DD00B8EA82 /* LZDiscoverDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZDiscoverDetailViewController.h; sourceTree = "<group>"; };
 		2863220822D988DD00B8EA82 /* LZDiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZDiscoverViewController.m; sourceTree = "<group>"; };
 		2863220B22D989B900B8EA82 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		28E7A5E7242E243E00AAE3BD /* LZGuideThreeViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LZGuideThreeViewController.storyboard; sourceTree = "<group>"; };
+		28E7A5E8242E243E00AAE3BD /* LZGuideThreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZGuideThreeViewController.h; sourceTree = "<group>"; };
+		28E7A5E9242E243E00AAE3BD /* LZGuideTwoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZGuideTwoViewController.h; sourceTree = "<group>"; };
+		28E7A5EA242E243E00AAE3BD /* LZGuideTwoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZGuideTwoViewController.m; sourceTree = "<group>"; };
+		28E7A5EB242E243E00AAE3BD /* LZGuideOneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZGuideOneViewController.h; sourceTree = "<group>"; };
+		28E7A5EC242E243E00AAE3BD /* LZGuideThreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZGuideThreeViewController.m; sourceTree = "<group>"; };
+		28E7A5ED242E243E00AAE3BD /* LZGuideTwoViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LZGuideTwoViewController.storyboard; sourceTree = "<group>"; };
+		28E7A5EE242E243F00AAE3BD /* LZGuideOneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZGuideOneViewController.m; sourceTree = "<group>"; };
+		28E7A5EF242E243F00AAE3BD /* LZGuideOneViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LZGuideOneViewController.storyboard; sourceTree = "<group>"; };
+		28E7A5F6242FAB5000AAE3BD /* 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpg; sourceTree = "<group>"; };
 		52C2BC3E77888924C49A0795 /* Pods_LZDependencyControllerkit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LZDependencyControllerkit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AF4B7C89254B0BCDE72228E /* Pods-LZDependencyControllerkit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LZDependencyControllerkit_Example.debug.xcconfig"; path = "Target Support Files/Pods-LZDependencyControllerkit_Example/Pods-LZDependencyControllerkit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* LZDependencyControllerkit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LZDependencyControllerkit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,6 +176,15 @@
 				2863220522D988DD00B8EA82 /* LZDiscoverDetailViewController.m */,
 				2863220622D988DD00B8EA82 /* LZDiscoverViewController.h */,
 				2863220822D988DD00B8EA82 /* LZDiscoverViewController.m */,
+				28E7A5EB242E243E00AAE3BD /* LZGuideOneViewController.h */,
+				28E7A5EE242E243F00AAE3BD /* LZGuideOneViewController.m */,
+				28E7A5EF242E243F00AAE3BD /* LZGuideOneViewController.storyboard */,
+				28E7A5E8242E243E00AAE3BD /* LZGuideThreeViewController.h */,
+				28E7A5EC242E243E00AAE3BD /* LZGuideThreeViewController.m */,
+				28E7A5E7242E243E00AAE3BD /* LZGuideThreeViewController.storyboard */,
+				28E7A5E9242E243E00AAE3BD /* LZGuideTwoViewController.h */,
+				28E7A5EA242E243E00AAE3BD /* LZGuideTwoViewController.m */,
+				28E7A5ED242E243E00AAE3BD /* LZGuideTwoViewController.storyboard */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
@@ -171,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				6003F595195388D20070C39A /* LZDependencyControllerkit-Info.plist */,
+				28E7A5F6242FAB5000AAE3BD /* 5.jpg */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				2863220B22D989B900B8EA82 /* index.html */,
 				6003F599195388D20070C39A /* main.m */,
@@ -302,11 +329,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28E7A5F3242E243F00AAE3BD /* LZGuideTwoViewController.storyboard in Resources */,
 				2863220C22D989B900B8EA82 /* index.html in Resources */,
+				28E7A5F0242E243F00AAE3BD /* LZGuideThreeViewController.storyboard in Resources */,
+				28E7A5F7242FAB5000AAE3BD /* 5.jpg in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				28E7A5F5242E243F00AAE3BD /* LZGuideOneViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,12 +384,14 @@
 				"${BUILT_PRODUCTS_DIR}/LZDependencyControllerkit/LZDependencyControllerkit.framework",
 				"${BUILT_PRODUCTS_DIR}/LZDependencyToolkit/LZDependencyToolkit.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LZDependencyControllerkit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LZDependencyToolkit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -396,10 +429,13 @@
 			files = (
 				2863220922D988DD00B8EA82 /* LZDiscoverDetailViewController.m in Sources */,
 				6003F59E195388D20070C39A /* LZAppDelegate.m in Sources */,
+				28E7A5F1242E243F00AAE3BD /* LZGuideTwoViewController.m in Sources */,
+				28E7A5F2242E243F00AAE3BD /* LZGuideThreeViewController.m in Sources */,
 				285D736123F03A67007E5E25 /* LZTestViewController.m in Sources */,
 				284C9AAD23F54B4100B505B3 /* LZTestWebJSViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* LZViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				28E7A5F4242E243F00AAE3BD /* LZGuideOneViewController.m in Sources */,
 				2863220A22D988DD00B8EA82 /* LZDiscoverViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

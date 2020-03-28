@@ -10,5 +10,6 @@
 
 #import "LZTabBarViewController.h"
 #import "LZWebViewController.h"
+#import "LZStartPageController.h"
 
 #endif /* LZDependencyControllerkit_h */

@@ -41,6 +41,20 @@
       "source_files": "LZDependencyControllerkit/Classes/WebViewController/**/*.{h,m}",
       "public_header_files": "LZDependencyControllerkit/Classes/WebViewController/**/*.h",
       "frameworks": "WebKit"
+    },
+    {
+      "name": "StartPageController",
+      "source_files": [
+        "LZDependencyControllerkit/Classes/StartPageController/**/*.{h,m}",
+        ""
+      ],
+      "public_header_files": "LZDependencyControllerkit/Classes/StartPageController/**/*.h",
+      "dependencies": {
+        "SDWebImage": [
+
+        ]
+      },
+      "resources": "LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle"
     }
   ]
 }
