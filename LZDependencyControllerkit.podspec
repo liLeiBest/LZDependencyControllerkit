@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LZDependencyControllerkit'
-  s.version          = '0.1.9'
+  s.version          = '0.1.9.1'
   s.summary          = 'A short description of LZDependencyControllerkit.'
   s.description      = <<-DESC
   1.TabBarController
@@ -43,7 +43,7 @@ Pod::Spec.new do |s|
   
   pch_AF = <<-EOS
   
-  static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";
+  //static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";
   
   #import <LZDependencyToolkit/LZDependencyToolkit.h>
   

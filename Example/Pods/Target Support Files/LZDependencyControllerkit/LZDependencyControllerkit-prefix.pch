@@ -10,6 +10,6 @@
 #endif
 #endif
 
-static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";
+//static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";
 
 #import <LZDependencyToolkit/LZDependencyToolkit.h>

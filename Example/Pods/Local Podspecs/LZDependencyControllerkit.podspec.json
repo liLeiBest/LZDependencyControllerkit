@@ -1,6 +1,6 @@
 {
   "name": "LZDependencyControllerkit",
-  "version": "0.1.9",
+  "version": "0.1.9.1",
   "summary": "A short description of LZDependencyControllerkit.",
   "description": "1.TabBarController\n2.WebViewController\n3.StartPageController",
   "homepage": "https://github.com/liLeiBest",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/liLeiBest/LZDependencyControllerkit.git",
-    "tag": "0.1.9"
+    "tag": "0.1.9.1"
   },
   "platforms": {
     "ios": "9.0"
@@ -29,7 +29,7 @@
 
     ]
   },
-  "prefix_header_contents": "static NSString * const LZDependencyControllerkitBundle = @\"LZDependencyControllerkitResourceBundle\";\n\n#import <LZDependencyToolkit/LZDependencyToolkit.h>",
+  "prefix_header_contents": "//static NSString * const LZDependencyControllerkitBundle = @\"LZDependencyControllerkitResourceBundle\";\n\n#import <LZDependencyToolkit/LZDependencyToolkit.h>",
   "subspecs": [
     {
       "name": "TabBarController",
