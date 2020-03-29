@@ -11,7 +11,7 @@
         <!--Guide View Controller-->
         <scene sceneID="TMV-rw-d4G">
             <objects>
-                <viewController id="5ze-de-JD5" customClass="LZGuideViewController" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="5ze-de-JD5" customClass="LZGuideViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1xO-EA-Cya">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

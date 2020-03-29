@@ -127,6 +127,7 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
 
 - (LZGuideViewController * _Nonnull (^)(NSArray<UIViewController *> *))guideViewControllers {
     return ^id (NSArray<UIViewController *> *guideViewControllers) {
+        NSAssert(nil != guideViewControllers && 0 != guideViewControllers.count, @"引导页不能为空");
         if (self.guideControllers.count) {
             [self.guideControllers removeAllObjects];
         }

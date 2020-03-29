@@ -11,7 +11,7 @@
         <!--Advertising View Controller-->
         <scene sceneID="nQF-r5-ZmG">
             <objects>
-                <viewController id="9bW-bC-EXB" customClass="LZAdvertisingViewController" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="9bW-bC-EXB" customClass="LZAdvertisingViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tXc-xl-86Y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -25,14 +25,14 @@
                             </imageView>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="di3-db-CnL">
                                 <rect key="frame" x="304" y="74" width="80" height="30"/>
-                                <color key="backgroundColor" red="0.85490196080000003" green="0.93333333330000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="7Yv-RN-r1g"/>
                                     <constraint firstAttribute="height" constant="30" id="EMX-vB-Wsh"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                                 <state key="normal" title="跳过">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="skipDidTouchDown:" destination="9bW-bC-EXB" eventType="touchDown" id="2N0-VF-w15"/>

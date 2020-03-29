@@ -167,9 +167,8 @@
             UIImage *image = nil;
             if ([imgURL isFileURL]) {
                 
-                NSString *filePath = imgURL.absoluteString;
+                NSString *filePath = imgURL.relativePath;
                 image = [UIImage imageWithContentsOfFile:filePath];
-                
             } else {
                 
                 NSData *data = [NSData dataWithContentsOfURL:imgURL];
