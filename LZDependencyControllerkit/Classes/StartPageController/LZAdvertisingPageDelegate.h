@@ -13,6 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol LZAdvertisingPageDelegate <NSObject>
 
+@required
+
+/**
+ 广告页图片 URL
+ 
+ @param advertisingViewController LZAdvertisingViewController
+ */
+- (NSURL *)advertisingViewControllerForCoverAd:(LZAdvertisingViewController *)advertisingViewController;
+
 @optional
 
 /**
@@ -23,13 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)advertisingViewController:(LZAdvertisingViewController *)advertisingViewController
 				  didCloseTrigger:(LZStartPageCloseTrigger)closeTrigger;
-
-/**
- 广告页图片 URL
- 
- @param advertisingViewController LZAdvertisingViewController
- */
-- (NSURL *)advertisingViewControllerForCoverAd:(LZAdvertisingViewController *)advertisingViewController;
 
 @end
 

@@ -6,7 +6,6 @@
 //
 
 #import "LZGuideThreeViewController.h"
-#import "LZStartPageConst.h"
 
 @interface LZGuideThreeViewController () {
 	__weak IBOutlet UIImageView *bgImgView;
