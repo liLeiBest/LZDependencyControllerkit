@@ -1,9 +1,10 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LZDependencyControllerkit'
-  s.version          = '0.1.9.1'
-  s.summary          = 'A short description of LZDependencyControllerkit.'
+  s.version          = '0.1.9.2'
+  s.summary          = 'LZDependencyControllerkit.'
   s.description      = <<-DESC
+  控制器控件：
   1.TabBarController
   2.WebViewController
   3.StartPageController
@@ -37,8 +38,7 @@ Pod::Spec.new do |s|
 #      'LZDependencyControllerkit/Classes/StartPageController/Controller/**/*.{storyboard}',
       ''
       startPageController.public_header_files = 'LZDependencyControllerkit/Classes/StartPageController/**/*.h'
-      startPageController.dependency 'SDWebImage'
-      startPageController.resource                 = 'LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle'
+      startPageController.resource            = 'LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle'
   end
   
   pch_AF = <<-EOS

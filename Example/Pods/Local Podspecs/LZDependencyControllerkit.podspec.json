@@ -1,8 +1,8 @@
 {
   "name": "LZDependencyControllerkit",
-  "version": "0.1.9.1",
-  "summary": "A short description of LZDependencyControllerkit.",
-  "description": "1.TabBarController\n2.WebViewController\n3.StartPageController",
+  "version": "0.1.9.2",
+  "summary": "LZDependencyControllerkit.",
+  "description": "控制器控件：\n1.TabBarController\n2.WebViewController\n3.StartPageController",
   "homepage": "https://github.com/liLeiBest",
   "license": {
     "type": "MIT",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/liLeiBest/LZDependencyControllerkit.git",
-    "tag": "0.1.9.1"
+    "tag": "0.1.9.2"
   },
   "platforms": {
     "ios": "9.0"
@@ -49,11 +49,6 @@
         ""
       ],
       "public_header_files": "LZDependencyControllerkit/Classes/StartPageController/**/*.h",
-      "dependencies": {
-        "SDWebImage": [
-
-        ]
-      },
       "resources": "LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle"
     }
   ]

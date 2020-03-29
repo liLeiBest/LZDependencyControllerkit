@@ -6,10 +6,6 @@
 //
 
 #import "LZAdvertisingViewController.h"
-#import <SDWebImage/SDWebImage.h>
-
-/** 最长等待时间，单位：秒 */
-static NSUInteger MAX_WAIT_SECOND = 3;
 
 @interface LZAdvertisingViewController () {
     
@@ -140,7 +136,7 @@ static NSUInteger MAX_WAIT_SECOND = 3;
 #pragma clang diagnostic ignored "-Wunused-variable"
     id value = self
     .showSkipControl(YES)
-    .skipWaitSeconds(MAX_WAIT_SECOND)
+    .skipWaitSeconds(3)
     .skipTitlel(@"跳过")
     .skipTitleColor([UIColor blackColor])
     .skipBGColor([UIColor colorWithHexString:@"#DAEEFF"]);
@@ -166,9 +162,27 @@ static NSUInteger MAX_WAIT_SECOND = 3;
 	if ([self->_delegate respondsToSelector:selector]) {
 		
 		NSURL *imgURL = [self->_delegate advertisingViewControllerForCoverAd:self];
-		[self.advertisingBgImgView  sd_setImageWithURL:imgURL
-                                      placeholderImage:nil
-                                               options:SDWebImageRefreshCached];
+        if (imgURL) {
+            
+            UIImage *image = nil;
+            if ([imgURL isFileURL]) {
+                
+                NSString *filePath = imgURL.absoluteString;
+                image = [UIImage imageWithContentsOfFile:filePath];
+                
+            } else {
+                
+                NSData *data = [NSData dataWithContentsOfURL:imgURL];
+                image = [UIImage imageWithData:data];
+            }
+            if (image) {
+                self.advertisingBgImgView.image = image;
+            } else {
+                [self closedByTrigger:LZStartPageCloseTriggerOther];
+            }
+        } else {
+            [self closedByTrigger:LZStartPageCloseTriggerOther];
+        }
 	}
 }
 
