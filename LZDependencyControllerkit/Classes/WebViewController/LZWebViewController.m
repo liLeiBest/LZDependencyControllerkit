@@ -175,10 +175,14 @@ static NSString * const LZWebTitle = @"title";
 - (void)dealloc {
 	
 	NSLog(@"已经死去%s", __PRETTY_FUNCTION__);
-	
-    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
-    [self.webView removeObserver:self forKeyPath:@"title"];
-	
+    @try {
+        [self.webView removeObserver:self forKeyPath:LZWebProgress];
+        [self.webView removeObserver:self forKeyPath:LZWebTitle];
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView 通知崩溃:%@", exception);
+    } @finally {
+    }
+    
     self.webView.navigationDelegate = nil;
     self.webView.UIDelegate = nil;
     
