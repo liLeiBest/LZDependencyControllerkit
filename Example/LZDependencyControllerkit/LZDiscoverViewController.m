@@ -80,6 +80,28 @@
     NSString *urlString = @"http://edu.10086.cn/customer-manage/H5/personalcenter/home_page?deviceId=&userId=1003138834885&extend=4R%2FvsM7tt69G9lBi5Kazea%2FDIPBGUJENlggudcITVS7I3lPmhiDeUZtJ6HigdjuMy73e3p8wYBXphuL3XnAYAw%3D%3D";
     NSURL *URL = [NSURL URLWithString:urlString];
     self.URL = URL;
+    self.decidePolicyHandler = ^(WKNavigationAction *navigationAction, void (^decisionHandler)(WKNavigationActionPolicy navigationActionPolicy)) {
+
+        NSURL *URL = navigationAction.request.URL;
+        if ([URL.scheme isEqualToString:@"tel"]) {
+            
+//            NSString *resourceSpecifier = [URL resourceSpecifier];
+//            NSString *callPhone = [NSString stringWithFormat:@"telprompt://%@", resourceSpecifier];
+            /// 防止iOS 10及其之后，拨打电话系统弹出框延迟出现
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:callPhone]];
+//            });
+            if (@available(iOS 10, *)) {
+                [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
+                }];
+            } else {
+                [[UIApplication sharedApplication] openURL:URL];
+            }
+            decisionHandler(WKNavigationActionPolicyCancel);
+        } else {
+            decisionHandler(WKNavigationActionPolicyAllow);
+        }
+    };
 }
 
 @end

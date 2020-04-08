@@ -51,6 +51,8 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 
 /** 挂载完成回调 */
 @property (nonatomic, copy) void (^extractSubLinkCompletionHander)(NSURL *linkURL);
+/** 是否允许继续访问 */
+@property (nonatomic, copy) void (^decidePolicyHandler)(WKNavigationAction *navigationAction, void (^decisionHandler)(WKNavigationActionPolicy navigationActionPolicy));
 
 /** 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认为 NO，本地的全屏控制。YES，video 元素必须包含webkit-playsinline属性 */
 @property (nonatomic, assign) BOOL allowsInlineMediaPlayback;

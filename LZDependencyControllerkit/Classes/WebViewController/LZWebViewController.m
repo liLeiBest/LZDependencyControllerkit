@@ -547,7 +547,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    
+    if (self.decidePolicyHandler) {
+        self.decidePolicyHandler(navigationAction, decisionHandler);
+        return;
+    }
     NSURL *URL = navigationAction.request.URL;
     NSString *scheme = [[URL scheme] lowercaseString];
     if ([scheme isEqualToString:LZURLSchemeTel]
@@ -555,7 +558,7 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
         || [scheme isEqualToString:LZURLSchemeMail]) {
         if ([[UIApplication sharedApplication] canOpenURL:URL]) {
             if (@available(iOS 10, *)) {
-                [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:^(BOOL success) {
+                [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
                 }];
             } else {
                 [[UIApplication sharedApplication] openURL:URL];
