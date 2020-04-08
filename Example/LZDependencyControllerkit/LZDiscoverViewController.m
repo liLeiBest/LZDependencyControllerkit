@@ -77,7 +77,7 @@
     // @"https://www.baidu.com";
     // @"https://www.sina.cn";
     // @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
-    NSString *urlString = @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
+    NSString *urlString = @"http://edu.10086.cn/customer-manage/H5/personalcenter/home_page?deviceId=&userId=1003138834885&extend=4R%2FvsM7tt69G9lBi5Kazea%2FDIPBGUJENlggudcITVS7I3lPmhiDeUZtJ6HigdjuMy73e3p8wYBXphuL3XnAYAw%3D%3D";
     NSURL *URL = [NSURL URLWithString:urlString];
     self.URL = URL;
 }

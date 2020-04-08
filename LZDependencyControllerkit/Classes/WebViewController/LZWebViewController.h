@@ -122,4 +122,13 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 - (void)nativeInvokeJS:(NSString *)script
      completionHandler:(void (^)(id response, NSError *error))completionHandler;
 
+/**
+@author Lilei
+
+@brief 是否添加导航按钮
+
+@attention 可以重写此方法，防止自定义导航按钮被覆盖
+*/
+- (BOOL)shouldAddNavItem;
+
 @end

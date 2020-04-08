@@ -65,6 +65,9 @@
 NSString * const LZWebEmptyURL = @"about:blank";
 static NSString * const LZWebProgress = @"estimatedProgress";
 static NSString * const LZWebTitle = @"title";
+static NSString * const LZURLSchemeTel = @"tel";
+static NSString * const LZURLSchemeSms = @"sms";
+static NSString * const LZURLSchemeMail = @"mailto";
 
 @interface LZWebViewController ()
 <WKNavigationDelegate, WKUIDelegate>
@@ -262,6 +265,20 @@ static NSString * const LZWebTitle = @"title";
     [self.webView evaluateJavaScript:script completionHandler:completionHandler];
 }
 
+- (BOOL)shouldAddNavItem {
+    if (self.navigationController != nil) {
+        if ([self isPush]) {
+            return YES;
+        } else if ([self isPresent]) {
+            return YES;
+        } else {
+            return NO;
+        }
+    } else {
+        return NO;
+    }
+}
+
 // MARK: - UI Action
 - (void)goBackDidClick {
 	if (self.webView.canGoBack) {
@@ -329,7 +346,6 @@ static NSString * const LZWebTitle = @"title";
 	[HTTPCookie setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
 	
 	[self registerObserver];
-	
 	[self configNavigationButton];
 }
 
@@ -365,7 +381,6 @@ static NSString * const LZWebTitle = @"title";
 }
 
 - (void)configNavigationButton {
-	
 	if ([self shouldAddNavItem]) {
 		
 		UIBarButtonItem *back = [UIBarButtonItem itemWithTitle:self.navBackTitle
@@ -378,23 +393,7 @@ static NSString * const LZWebTitle = @"title";
 	}
 }
 
-- (BOOL)shouldAddNavItem {
-	
-	if (self.navigationController != nil) {
-		if ([self isPush]) {
-			return YES;
-		} else if ([self isPresent]) {
-			return YES;
-		} else {
-			return NO;
-		}
-	} else {
-		return NO;
-	}
-}
-
 - (void)correctNavigationButton {
-	
 	if ([self shouldAddNavItem]) {
 		
 		UIBarButtonItem *back = [UIBarButtonItem itemWithTitle:self.navBackTitle
@@ -472,7 +471,6 @@ static NSString * const LZWebTitle = @"title";
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-	
     if ([keyPath isEqual:LZWebProgress] && object == self.webView) {
 		LZLog(@"Web load progress:%f", self.webView.estimatedProgress);
 		if (self.displayProgress) {
@@ -486,9 +484,11 @@ static NSString * const LZWebTitle = @"title";
 				[self.view addSubview:self.progressView];
 			}
 			[self.progressView setAlpha:1.0f];
-			[self.progressView setProgress:self.webView.estimatedProgress animated:YES];
+            [UIView animateWithDuration:0.25 animations:^{
+                [self.progressView setProgress:self.webView.estimatedProgress animated:YES];
+            }];
 			if (self.webView.estimatedProgress >= 1.0f) {
-				[UIView animateWithDuration:0.3 delay:0.3 options:UIViewAnimationOptionCurveEaseOut animations:^{
+				[UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 					[self.progressView setAlpha:0.0f];
 				} completion:^(BOOL finished) {
 					[self.progressView setProgress:0.0f animated:NO];
@@ -505,18 +505,16 @@ static NSString * const LZWebTitle = @"title";
 }
 
 - (void)beginFullScreen:(NSNotification *)notifi {
-	
 	if (YES == self.rotationLandscape) {
 		[self isNeedRotation:YES];
 	}
 }
 
 - (void)endFullScreen:(NSNotification *)notifi {
-	
 	if (YES == self.rotationLandscape) {
 		if (@available(iOS 12, *)) {
 			
-			UIWindow * window = (UIWindow *)notifi.object;
+			UIWindow *window = (UIWindow *)notifi.object;
 			if(window){
 				
 				UIViewController *rootViewController = window.rootViewController;
@@ -539,7 +537,6 @@ static NSString * const LZWebTitle = @"title";
 				}
 			}
 		}
-		
 		[self isNeedRotation:NO];
 		[self forceChangeOrientation:UIInterfaceOrientationPortrait];
 	}
@@ -550,23 +547,38 @@ static NSString * const LZWebTitle = @"title";
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-	
-    if (self.extractSubLinkCompletionHander &&
-        (navigationAction.navigationType == WKNavigationTypeLinkActivated
-         || (navigationAction.navigationType == WKNavigationTypeOther
-             && nil != navigationAction.sourceFrame
-             && nil != navigationAction.request
-             && nil != navigationAction.targetFrame.request
-             && NO == [[[[navigationAction.targetFrame request] URL] absoluteString] isEqualToString:LZWebEmptyURL]))) {
-        self.subWeb = YES;
+    
+    NSURL *URL = navigationAction.request.URL;
+    NSString *scheme = [[URL scheme] lowercaseString];
+    if ([scheme isEqualToString:LZURLSchemeTel]
+        || [scheme isEqualToString:LZURLSchemeSms]
+        || [scheme isEqualToString:LZURLSchemeMail]) {
+        if ([[UIApplication sharedApplication] canOpenURL:URL]) {
+            if (@available(iOS 10, *)) {
+                [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:^(BOOL success) {
+                }];
+            } else {
+                [[UIApplication sharedApplication] openURL:URL];
+            }
+        }
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else {
+        if (self.extractSubLinkCompletionHander &&
+            (navigationAction.navigationType == WKNavigationTypeLinkActivated
+             || (navigationAction.navigationType == WKNavigationTypeOther
+                 && nil != navigationAction.sourceFrame
+                 && nil != navigationAction.request
+                 && nil != navigationAction.targetFrame.request
+                 && NO == [[[[navigationAction.targetFrame request] URL] absoluteString] isEqualToString:LZWebEmptyURL]))) {
+            self.subWeb = YES;
+        }
+        decisionHandler(WKNavigationActionPolicyAllow);
     }
-    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse
 decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
-	
     if (self.subWeb && self.extractSubLinkCompletionHander) {
 		
         self.subWeb = NO;
@@ -584,7 +596,6 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 
 - (void)webView:(WKWebView *)webView
 didFinishNavigation:(null_unspecified WKNavigation *)navigation {
-	
 	if (self.displayRefresh) {
 		[self stopRefresh];
 	}
@@ -597,7 +608,6 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
 - (void)webView:(WKWebView *)webView
 didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
 	  withError:(NSError *)error {
-	
 	if (self.displayRefresh) {
 		[self stopRefresh];
 	}
@@ -614,6 +624,11 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
     self.subWeb = NO;
 }
 
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [webView reload];
+}
+
 #if 0
 - (void)webView:(WKWebView *)webView
 didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
@@ -628,8 +643,6 @@ didCommitNavigation:(null_unspecified WKNavigation *)navigation {
 - (void)webView:(WKWebView *)webView
 didFailNavigation:(null_unspecified WKNavigation *)navigation
 	  withError:(NSError *)error {
-}
-- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView API_AVAILABLE(macosx(10.11), ios(9.0)) {
 }
 #endif
 
