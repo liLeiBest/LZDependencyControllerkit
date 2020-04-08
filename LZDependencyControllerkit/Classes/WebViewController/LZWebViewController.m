@@ -264,7 +264,6 @@ static NSString * const LZWebTitle = @"title";
 
 // MARK: - UI Action
 - (void)goBackDidClick {
-	
 	if (self.webView.canGoBack) {
 		
 		WKBackForwardList *backForwardList = [self.webView backForwardList];
@@ -276,7 +275,9 @@ static NSString * const LZWebTitle = @"title";
 }
 
 - (void)closeDidClick {
-	
+    if (self.closeCompletionCallback) {
+        self.closeCompletionCallback();
+    }
 	if (self.navigationController) {
 		if ([self isPush]) {
 			[self.navigationController popViewControllerAnimated:YES];

@@ -60,6 +60,9 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 是否允许横屏，默认 NO */
 @property (nonatomic, assign) BOOL rotationLandscape;
 
+/** 页面关闭回调 */
+@property (nonatomic, copy) void (^closeCompletionCallback)(void);
+
 
 /**
  @author Lilei
