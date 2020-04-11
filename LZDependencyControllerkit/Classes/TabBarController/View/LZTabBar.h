@@ -95,6 +95,17 @@ typedef void(^LZTabBarPlusClickBlock)(LZTabBar *myTabBar);
 - (void)addTabBarBtn:(UITabBarItem *)tabBarItem;
 
 /**
+ @author Lilei
+ 
+ @brief 更新TabBarButton
+ 
+ @param tabBarItem UITabBarItem
+ @param index NSInteger 下标
+ */
+- (void)updateTabBarBtn:(UITabBarItem *)tabBarItem
+                  index:(NSInteger)index;
+
+/**
  @ahutor Lilei
  
  @brief 更新选中项

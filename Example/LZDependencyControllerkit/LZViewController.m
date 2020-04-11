@@ -78,7 +78,7 @@
 }
 
 - (NSDictionary *)tabBarPlusAttributes:(LZTabBar *)myTabBar {
-    return @{LZTabBarPlusBtnImage : [UIImage imageNamed:@"apple-worm"],
+    return @{LZTabBarPlusBtnImage : [UIImage imageNamed:@"8"],
     };
 }
 
@@ -118,11 +118,23 @@
         
         UINavigationController *nav = self.selectedViewController;
         nav.topViewController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", arc4random_uniform(100)];
+    } else if (1 == to) {
+        
+        UIViewController *ctr1 = [[UIViewController alloc] init];
+        ctr1.view.backgroundColor = [UIColor orangeColor];
+        UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:ctr1];
+        UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
+        UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];
+        [self updateChildViewController:nav1 index:3 title:@"更新视图" normalImg:norImg selectedImg:selImg];
     }
 }
 
 - (void)plusBtnDidCilck:(LZTabBar *)myTabBar {
     NSLog(@"=======");
+    
+    UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
+    UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];
+    [self updateChildViewControllerIndex:0 title:@"更新图标" normalImg:norImg selectedImg:selImg];
 }
 
 //- (NSUInteger)tabBarDefaultSelectedIndex:(LZTabBar *)myTabBar {

@@ -56,35 +56,41 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     [self.myTabBar updateSelectedIndex:selectedIndex];
 }
 
-- (void)addChildViewController:(UIViewController *)childController
+- (void)addChildViewController:(UIViewController *)childViewController
                          title:(NSString *)title
                      normalImg:(UIImage *)normalImg
                    selectedImg:(UIImage *)selectedImg {
     
-	[self addChildViewController:childController];
-	
-	UIViewController *viewController = childController;
-	if ([childController respondsToSelector:@selector(topViewController)]) {
-        
-		viewController = [(UINavigationController *)childController topViewController];
-        if ([viewController isKindOfClass:NSClassFromString(@"RTContainerController")]) {
-            
-            SEL selector = NSSelectorFromString(@"contentViewController");
-            if ([viewController respondsToSelector:selector]) {
-                
-                IMP imp = [viewController methodForSelector:selector];
-                UIViewController * (*func)(id, SEL) = (void *)imp;
-                viewController = func(viewController, selector);
-            }
-        }
-	}
-	viewController.title = title;
-	viewController.tabBarItem.image = normalImg;
-    if (UIImageRenderingModeAlwaysOriginal != selectedImg.renderingMode) {
-        selectedImg = [selectedImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
-	viewController.tabBarItem.selectedImage = selectedImg;
+	[self addChildViewController:childViewController];
+	UIViewController *viewController = [self configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
 	[self.myTabBar addTabBarBtn:viewController.tabBarItem];
+}
+
+- (void)updateChildViewController:(UIViewController *)childViewController
+                            index:(NSUInteger)index
+                            title:(NSString *)title
+                        normalImg:(UIImage *)normalImg
+                      selectedImg:(UIImage *)selectedImg {
+    
+    NSMutableArray *childControllers = [NSMutableArray arrayWithArray:self.viewControllers];
+    [childControllers replaceObjectAtIndex:index withObject:childViewController];
+    [self setViewControllers:[childControllers copy] animated:YES];
+    UIViewController *viewController = [self configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
+    [self.myTabBar updateTabBarBtn:viewController.tabBarItem index:index];
+    [self removeSysTabarButton];
+}
+
+- (void)updateChildViewControllerIndex:(NSUInteger)index
+                                 title:(NSString *)title
+                             normalImg:(UIImage *)normalImg
+                           selectedImg:(UIImage *)selectedImg {
+    if (self.viewControllers.count <= index) {
+        return;
+    }
+    UIViewController *childViewController = self.viewControllers[index];
+    UIViewController *viewController = [self configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
+    [self.myTabBar updateTabBarBtn:viewController.tabBarItem index:index];
+    [self removeSysTabarButton];
 }
 
 // MARK: - Private
@@ -196,6 +202,35 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     [self.tabBar.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
          if ([obj isKindOfClass:NSClassFromString(@"UITabBarButton")]) [obj removeFromSuperview];
      }];
+}
+
+- (UIViewController *)configChildViewController:(UIViewController *)childViewController
+                                          title:(NSString *)title
+                                      normalImg:(UIImage *)normalImg
+                                    selectedImg:(UIImage *)selectedImg {
+    
+    UIViewController *viewController = childViewController;
+    if ([childViewController respondsToSelector:@selector(topViewController)]) {
+        
+        viewController = [(UINavigationController *)childViewController topViewController];
+        if ([viewController isKindOfClass:NSClassFromString(@"RTContainerController")]) {
+            
+            SEL selector = NSSelectorFromString(@"contentViewController");
+            if ([viewController respondsToSelector:selector]) {
+                
+                IMP imp = [viewController methodForSelector:selector];
+                UIViewController * (*func)(id, SEL) = (void *)imp;
+                viewController = func(viewController, selector);
+            }
+        }
+    }
+    viewController.title = title;
+    viewController.tabBarItem.image = normalImg;
+    if (UIImageRenderingModeAlwaysOriginal != selectedImg.renderingMode) {
+        selectedImg = [selectedImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    viewController.tabBarItem.selectedImage = selectedImg;
+    return viewController;
 }
 
 @end

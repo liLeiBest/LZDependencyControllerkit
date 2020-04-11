@@ -53,7 +53,6 @@
 
 // MARK: - UI Action
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    
     if (!self.clipsToBounds && !self.hidden && self.alpha > 0) {
 
         CGPoint newPoint = [self convertPoint:point toView:self.plusBtn];
@@ -74,7 +73,6 @@
 }
 
 - (void)tabBarButtonClick:(LZTabBarButton *)tabBarButton {
-    
     if (self.tabBarBtnDidClickBlock) {
         
         NSUInteger fromIndex = self.currentSelectedButton.tag;
@@ -123,39 +121,14 @@
 
 /** 添加TabBarButton */
 - (void)addTabBarBtn:(UITabBarItem *)tabBarItem {
-    
     // 实例TabBarBtn
     LZTabBarButton *tabBarBtn = [[LZTabBarButton alloc] init];
     tabBarBtn.tabBarBtnType = LZTabBarButtonTypeNormal;
-    [self.normalBtnArrM addObject:tabBarBtn];
-    NSDictionary *normalAttrs = [[UITabBarItem appearance] titleTextAttributesForState:UIControlStateNormal];
-    NSDictionary *selectedAttrs = [[UITabBarItem appearance] titleTextAttributesForState:UIControlStateSelected];
-    if (normalAttrs && selectedAttrs && tabBarItem.title) {
-        
-        NSAttributedString *normalAttrString =
-        [[NSAttributedString alloc] initWithString:tabBarItem.title attributes:normalAttrs];
-        [tabBarBtn setAttributedTitle:normalAttrString forState:UIControlStateNormal];
-        NSAttributedString *selectedAttrString =
-        [[NSAttributedString alloc] initWithString:tabBarItem.title attributes:selectedAttrs];
-        [tabBarBtn setAttributedTitle:selectedAttrString forState:UIControlStateSelected];
-    } else {
-        
-        [tabBarBtn setTitleColor:self.tabBarBtnNormalColor ? self.tabBarBtnNormalColor : [tabBarBtn titleColorForState:UIControlStateNormal]
-                        forState:UIControlStateNormal];
-        [tabBarBtn setTitleColor:self.tabBarBtnSelectedColor ? self.tabBarBtnSelectedColor : [tabBarBtn titleColorForState:UIControlStateSelected]
-                        forState:UIControlStateSelected];
-        tabBarBtn.titleLabel.font = self.tabBarBtnFont ? self.tabBarBtnFont : tabBarBtn.titleLabel.font;
-        
-        [tabBarBtn setTitle:tabBarItem.title forState:UIControlStateNormal];
-    }
-    [tabBarBtn setImage:tabBarItem.image forState:UIControlStateNormal];
-    [tabBarBtn setImage:tabBarItem.selectedImage forState:UIControlStateSelected];
-    
-    tabBarBtn.item = tabBarItem;
     tabBarBtn.tag = nil == self.plusBtn ? self.subviews.count : self.subviews.count - 1;
     [tabBarBtn addTarget:self action:@selector(tabBarButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self setupNormalTabBarButtonAppearance:tabBarBtn tabBarItem:tabBarItem];
     [self addSubview:tabBarBtn];
-    
+    [self.normalBtnArrM addObject:tabBarBtn];
     // 默认选中第一个按钮
     if ((nil == self.plusBtn && self.defaultSelectedIndex + 1 == self.subviews.count) ||
         (nil != self.plusBtn && (self.defaultSelectedIndex + 2) == self.subviews.count)) {
@@ -163,9 +136,17 @@
     }
 }
 
+- (void)updateTabBarBtn:(UITabBarItem *)tabBarItem
+                  index:(NSInteger)index {
+    if (self.normalBtnArrM.count > index) {
+            
+        LZTabBarButton *tabBarBtn = [self.normalBtnArrM objectAtIndex:index];
+        [self setupNormalTabBarButtonAppearance:tabBarBtn tabBarItem:tabBarItem];
+    }
+}
+
 /** 更新选中项 */
 - (void)updateSelectedIndex:(NSInteger)selectedIndex {
-    
     if (self.normalBtnArrM.count > selectedIndex) {
         
         LZTabBarButton *btn = [self.normalBtnArrM objectAtIndex:selectedIndex];
@@ -220,10 +201,8 @@
     NSUInteger count = self.subviews.count;
     CGFloat btnW = self.width / count;
     CGFloat btnH = self.height;
-    
     __block CGFloat btnY = 0;
     [self.subviews enumerateObjectsUsingBlock:^(LZTabBarButton *obj, NSUInteger idx, BOOL *stop) {
-        
         if ([obj isKindOfClass:[LZTabBarButton class]]
             && obj.tabBarBtnType == LZTabBarButtonTypeNormal) {
             
@@ -232,6 +211,34 @@
             obj.frame = CGRectMake(btnX, btnY, btnW, btnH);
         }
     }];
+}
+
+- (void)setupNormalTabBarButtonAppearance:(LZTabBarButton *)tabBarBtn
+                               tabBarItem:(UITabBarItem *)tabBarItem {
+    
+    NSDictionary *normalAttrs = [[UITabBarItem appearance] titleTextAttributesForState:UIControlStateNormal];
+    NSDictionary *selectedAttrs = [[UITabBarItem appearance] titleTextAttributesForState:UIControlStateSelected];
+    if (normalAttrs && selectedAttrs && tabBarItem.title) {
+        
+        NSAttributedString *normalAttrString =
+        [[NSAttributedString alloc] initWithString:tabBarItem.title attributes:normalAttrs];
+        [tabBarBtn setAttributedTitle:normalAttrString forState:UIControlStateNormal];
+        NSAttributedString *selectedAttrString =
+        [[NSAttributedString alloc] initWithString:tabBarItem.title attributes:selectedAttrs];
+        [tabBarBtn setAttributedTitle:selectedAttrString forState:UIControlStateSelected];
+    } else {
+        
+        [tabBarBtn setTitleColor:self.tabBarBtnNormalColor ? self.tabBarBtnNormalColor : [tabBarBtn titleColorForState:UIControlStateNormal]
+                        forState:UIControlStateNormal];
+        [tabBarBtn setTitleColor:self.tabBarBtnSelectedColor ? self.tabBarBtnSelectedColor : [tabBarBtn titleColorForState:UIControlStateSelected]
+                        forState:UIControlStateSelected];
+        tabBarBtn.titleLabel.font = self.tabBarBtnFont ? self.tabBarBtnFont : tabBarBtn.titleLabel.font;
+        
+        [tabBarBtn setTitle:tabBarItem.title forState:UIControlStateNormal];
+    }
+    [tabBarBtn setImage:tabBarItem.image forState:UIControlStateNormal];
+    [tabBarBtn setImage:tabBarItem.selectedImage forState:UIControlStateSelected];
+    tabBarBtn.item = tabBarItem;
 }
 
 @end
