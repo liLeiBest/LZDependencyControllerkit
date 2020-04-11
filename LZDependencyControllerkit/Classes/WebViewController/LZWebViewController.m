@@ -108,8 +108,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 		}
 		config.allowsAirPlayForMediaPlayback = YES;
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
-        _webView.navigationDelegate = self;
-        _webView.UIDelegate = self;
     }
     return _webView;
 }
@@ -121,18 +119,20 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 // MARK: - Initialization
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-	
-	if (self = [super initWithCoder:aDecoder]){
+	if (self = [super initWithCoder:aDecoder]) {
+        
 		[self setupDefaultValue];
+        [self registerObserver];
 	}
 	return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil
 						 bundle:(NSBundle *)nibBundleOrNil {
-	
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		[self setupDefaultValue];
+		
+        [self setupDefaultValue];
+        [self registerObserver];
 	}
 	return self;
 }
@@ -341,11 +341,12 @@ static NSString * const LZURLSchemeMail = @"mailto";
 	
 	self.view.backgroundColor = [UIColor whiteColor];
 	[self.view addSubview:self.webView];
+    self.webView.navigationDelegate = self;
+    self.webView.UIDelegate = self;
 	
 	NSHTTPCookieStorage *HTTPCookie = [NSHTTPCookieStorage sharedHTTPCookieStorage];
 	[HTTPCookie setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
 	
-	[self registerObserver];
 	[self configNavigationButton];
 }
 
