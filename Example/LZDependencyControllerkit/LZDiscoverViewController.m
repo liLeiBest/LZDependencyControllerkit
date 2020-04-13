@@ -63,6 +63,7 @@
     [self configURL];
     self.rotationLandscape = NO;
     self.showWebTitle = NO;
+    self.displayRefresh = YES;
     __weak typeof(self) weakSelf = self;
     self.extractSubLinkCompletionHander = ^(NSURL *linkURL) {
 

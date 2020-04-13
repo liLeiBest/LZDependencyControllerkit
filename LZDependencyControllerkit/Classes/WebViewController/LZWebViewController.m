@@ -179,7 +179,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 	
 	NSLog(@"已经死去%s", __PRETTY_FUNCTION__);
     @try {
-        [self.webView removeObserver:self forKeyPath:LZWebProgress];
         [self.webView removeObserver:self forKeyPath:LZWebTitle];
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView 通知崩溃:%@", exception);
@@ -352,25 +351,21 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)registerObserver {
 	
-	[self.webView addObserver:self
-				   forKeyPath:LZWebProgress
-					  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-					  context:nil];
-	[self.webView addObserver:self
-				   forKeyPath:LZWebTitle
-					  options:NSKeyValueObservingOptionNew
-					  context:NULL];
-	
-	[[NSNotificationCenter defaultCenter]
-	 addObserver:self
-	 selector:@selector(beginFullScreen:)
-	 name:UIWindowDidBecomeVisibleNotification
-	 object:nil];
-	[[NSNotificationCenter defaultCenter]
-	 addObserver:self
-	 selector:@selector(endFullScreen:)
-	 name:UIWindowDidBecomeHiddenNotification
-	 object:nil];
+    @try {
+        [self.webView addObserver:self forKeyPath:LZWebTitle options:NSKeyValueObservingOptionNew context:NULL];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(beginFullScreen:)
+         name:UIWindowDidBecomeVisibleNotification
+         object:nil];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(endFullScreen:)
+         name:UIWindowDidBecomeHiddenNotification
+         object:nil];
+    } @catch (NSException *exception) {
+    } @finally {
+    }
 }
 
 - (void)configRefreshControl {
@@ -492,7 +487,13 @@ static NSString * const LZURLSchemeMail = @"mailto";
 				[UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 					[self.progressView setAlpha:0.0f];
 				} completion:^(BOOL finished) {
+                    
 					[self.progressView setProgress:0.0f animated:NO];
+                    @try {
+                        [self.webView removeObserver:self forKeyPath:LZWebProgress];
+                    } @catch (NSException *exception) {
+                    } @finally {
+                    }
 				}];
 			}
 		}
@@ -628,6 +629,15 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
     self.subWeb = NO;
 }
 
+- (void)webView:(WKWebView *)webView
+didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
+    @try {
+        [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    } @catch (NSException *exception) {
+    } @finally {
+    }
+}
+
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [webView reload];
@@ -635,18 +645,15 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
 
 #if 0
 - (void)webView:(WKWebView *)webView
-didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
-}
-- (void)webView:(WKWebView *)webView
 didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
 }
 - (void)webView:(WKWebView *)webView
-didCommitNavigation:(null_unspecified WKNavigation *)navigation {
+didFailNavigation:(null_unspecified WKNavigation *)navigation
+      withError:(NSError *)error {
 }
 - (void)webView:(WKWebView *)webView
-didFailNavigation:(null_unspecified WKNavigation *)navigation
-	  withError:(NSError *)error {
+didCommitNavigation:(null_unspecified WKNavigation *)navigation {
 }
 #endif
 
