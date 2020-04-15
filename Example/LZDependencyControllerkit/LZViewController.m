@@ -120,8 +120,16 @@
         nav.topViewController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", arc4random_uniform(100)];
     } else if (1 == to) {
         
-        UIViewController *ctr1 = [[UIViewController alloc] init];
-        ctr1.view.backgroundColor = [UIColor orangeColor];
+        LZWebViewController *ctr1 = [[LZWebViewController alloc] init];
+        ctr1.URL = [NSURL URLWithString:@"https://cpcapk.cbg.cn/cpch5/xsdApp/areaList-cq.html"];
+        ctr1.showWebTitle = NO;
+        @lzweakify(self);
+        ctr1.extractSubLinkCompletionHander = ^(NSURL *linkURL) {
+            @lzstrongify(self);
+            LZWebViewController *ctr1 = [[LZWebViewController alloc] init];
+            ctr1.URL = linkURL;
+            [(UINavigationController *)self.selectedViewController pushViewController:ctr1 animated:YES];
+        };
         UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:ctr1];
         UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
         UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];

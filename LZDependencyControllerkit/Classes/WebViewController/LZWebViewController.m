@@ -176,8 +176,11 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)dealloc {
-	
 	NSLog(@"已经死去%s", __PRETTY_FUNCTION__);
+    if (self.closeCompletionCallback) {
+        self.closeCompletionCallback();
+    }
+    
     @try {
         [self.webView removeObserver:self forKeyPath:LZWebTitle];
     } @catch (NSException *exception) {
@@ -234,7 +237,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
     completionCallback:(void (^)(WKScriptMessage *))handler {
-    
     NSAssert(nil != scriptMessage && scriptMessage.length, @"scriptMessage 不能空");
     if (handler) [self.scriptMessageContainer setObject:handler forKey:scriptMessage];
     // JS 调用 OC，添加处理脚本
@@ -258,7 +260,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)nativeInvokeJS:(NSString *)script
      completionHandler:(void (^)(id, NSError *))completionHandler {
-	
     NSAssert(nil != script && script.length, @"script 不能为空");
     if (nil == script || !script.length) return;
     [self.webView evaluateJavaScript:script completionHandler:completionHandler];
@@ -291,9 +292,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)closeDidClick {
-    if (self.closeCompletionCallback) {
-        self.closeCompletionCallback();
-    }
 	if (self.navigationController) {
 		if ([self isPush]) {
 			[self.navigationController popViewControllerAnimated:YES];
@@ -369,7 +367,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)configRefreshControl {
-	
 	__weak typeof(self) weakSelf = self;
 	[self.webView.scrollView headerWithRefreshingBlock:^{
 		[weakSelf reloadRequest];
@@ -549,10 +546,12 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    // 自行决策访问请求
     if (self.decidePolicyHandler) {
         self.decidePolicyHandler(navigationAction, decisionHandler);
         return;
     }
+    // 特殊 scheme 处理:打电话、发短信、发邮件
     NSURL *URL = navigationAction.request.URL;
     NSString *scheme = [[URL scheme] lowercaseString];
     if ([scheme isEqualToString:LZURLSchemeTel]
@@ -567,18 +566,24 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
             }
         }
         decisionHandler(WKNavigationActionPolicyCancel);
-    } else {
-        if (self.extractSubLinkCompletionHander &&
-            (navigationAction.navigationType == WKNavigationTypeLinkActivated
-             || (navigationAction.navigationType == WKNavigationTypeOther
-                 && nil != navigationAction.sourceFrame
-                 && nil != navigationAction.request
-                 && nil != navigationAction.targetFrame.request
-                 && NO == [[[[navigationAction.targetFrame request] URL] absoluteString] isEqualToString:LZWebEmptyURL]))) {
+        return;
+    }
+    // 子页面拦截
+    WKNavigationActionPolicy actionPolicy = WKNavigationActionPolicyAllow;
+    if (self.extractSubLinkCompletionHander) {
+        if (navigationAction.navigationType == WKNavigationTypeLinkActivated) {
+            
+            self.extractSubLinkCompletionHander(URL);
+            actionPolicy = WKNavigationActionPolicyCancel;
+        } else if (navigationAction.navigationType == WKNavigationTypeOther
+                   && nil != navigationAction.sourceFrame
+                   && nil != navigationAction.request
+                   && nil != navigationAction.targetFrame.request
+                   && NO == [[URL absoluteString] isEqualToString:LZWebEmptyURL]) {
             self.subWeb = YES;
         }
-        decisionHandler(WKNavigationActionPolicyAllow);
     }
+    decisionHandler(actionPolicy);
 }
 
 - (void)webView:(WKWebView *)webView
