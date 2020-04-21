@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** web 默认的空 URL */
 UIKIT_EXTERN NSString * const LZWebEmptyURL;
 
@@ -18,15 +20,17 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, strong, readonly) WKWebView *webView;
 /** 请求 URL */
 @property (nonatomic, strong) NSURL *URL;
+/** 自定 UA */
+@property (nonatomic, copy) NSString *customUserAgent;
 
 /** 返回按钮标题，默认 返回 */
-@property (nonatomic, copy) NSString *navBackTitle;
+@property (nonatomic, copy, nullable) NSString *navBackTitle;
 /** 返回按钮图标，UIImage、NSString */
-@property (nonatomic, strong) id navBackIcon;
+@property (nonatomic, strong, nullable) id navBackIcon;
 /** 关闭按钮标题，默认 关闭 */
-@property (nonatomic, copy) NSString *navCloseTitle;
+@property (nonatomic, copy, nullable) NSString *navCloseTitle;
 /** 关闭按钮图标 ，UIImage、NSString */
-@property (nonatomic, strong) id navCloseIcon;
+@property (nonatomic, strong, nullable) id navCloseIcon;
 /** 自动添加关闭，默认：NO  */
 @property (nonatomic, assign) BOOL navAutoAddClose;
 
@@ -100,7 +104,7 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
  @param handler 回调
  */
 - (void)JSInvokeNative:(NSString *)scriptMessage
-    completionCallback:(void (^)(WKScriptMessage *message))handler;
+    completionCallback:(void (^ _Nullable)(WKScriptMessage *message))handler;
 
 /**
  @author Lilei
@@ -111,7 +115,7 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
  @param handler 回调
  */
 - (void)JSInvokeNative:(NSString *)scriptMessage
-     completionHandler:(void (^)(id message))handler;
+     completionHandler:(void (^ _Nullable)(id message))handler;
 
 /**
  @author Lilei
@@ -122,7 +126,7 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
  @param completionHandler 回调
  */
 - (void)nativeInvokeJS:(NSString *)script
-     completionHandler:(void (^)(id response, NSError *error))completionHandler;
+     completionHandler:(void (^ _Nullable)(id response, NSError *error))completionHandler;
 
 /**
 @author Lilei
@@ -134,3 +138,5 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 - (BOOL)shouldAddNavItem;
 
 @end
+
+NS_ASSUME_NONNULL_END

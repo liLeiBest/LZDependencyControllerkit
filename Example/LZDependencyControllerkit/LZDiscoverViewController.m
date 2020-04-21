@@ -75,6 +75,7 @@
 
 - (void)configURL {
     
+    self.customUserAgent = @"iPhone 24";
     // @"https://www.baidu.com";
     // @"https://www.sina.cn";
     // @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";

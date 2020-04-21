@@ -29,6 +29,8 @@
     self.displayEmptyPage = YES;
     self.rotationLandscape = NO;
     self.showWebTitle = NO;
+    
+    self.customUserAgent = @"hidetabbar";
 }
 
 - (void)viewDidLoad {

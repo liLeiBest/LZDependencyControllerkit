@@ -348,7 +348,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)registerObserver {
-	
     @try {
         [self.webView addObserver:self forKeyPath:LZWebTitle options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter]
@@ -613,6 +612,18 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
 	if (self.displayEmptyPage) {
 		[self hideEmptyDataSet:self.webView.scrollView];
 	}
+    @lzweakify(self);
+    [self.webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
+        @lzstrongify(self);
+        if ([self.customUserAgent isValidString]) {
+            if ([result rangeOfString:self.customUserAgent].location == NSNotFound) {
+                
+                NSString *newUserAgent = [result stringByAppendingFormat:@" %@", self.customUserAgent];
+                self.webView.customUserAgent = newUserAgent;
+            }
+        }
+        LZLog(@"\nUserAgent:%@\ncustomUserAgent:%@", result, self.webView.customUserAgent);
+    }];
 }
 
 - (void)webView:(WKWebView *)webView
