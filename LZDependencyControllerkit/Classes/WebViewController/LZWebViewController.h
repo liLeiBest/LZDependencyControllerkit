@@ -43,6 +43,8 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, strong) UIColor *progressColor;
 /** 进度条轨道颜色，默认：[UIColor clearColor] */
 @property (nonatomic, strong) UIColor *progressTrackColor;
+/** 进度回调 */
+@property (nonatomic, copy) void (^progressHandler)(CGFloat progress);
 
 /** 是否添加下拉刷新，默认：NO */
 @property (nonatomic, assign) BOOL displayRefresh;

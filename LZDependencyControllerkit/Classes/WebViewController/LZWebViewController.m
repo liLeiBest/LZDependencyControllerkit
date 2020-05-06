@@ -211,8 +211,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (void)setURL:(NSURL *)URL {
     _URL = URL;
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:_URL];
-    self.webNavigation = [self.webView loadRequest:request];
+    [self reloadRequest];
 }
 
 // MARK: - Public
@@ -484,6 +483,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
             [UIView animateWithDuration:0.25 animations:^{
                 [self.progressView setProgress:self.webView.estimatedProgress animated:YES];
             }];
+            if (self.progressHandler) {
+                self.progressHandler(self.webView.estimatedProgress);
+            }
 			if (self.webView.estimatedProgress >= 1.0f) {
                 [UIView animateWithDuration:0.25 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
 					[self.progressView setAlpha:0.0f];
