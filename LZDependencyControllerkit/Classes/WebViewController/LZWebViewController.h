@@ -53,10 +53,10 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 界面消失后刷新界面，默认：NO。用于停止暴力停止多媒体播放，最好在 Disappear 方法,通过 JS 交互停止。 */
 @property (nonatomic, assign) BOOL disappearToRefresh;
 
-/** 挂载子链接完成回调 */
-@property (nonatomic, copy) void (^extractSubLinkCompletionHander)(NSURL *linkURL);
 /** 自行决策是否允许继续访问 */
-@property (nonatomic, copy) void (^decidePolicyHandler)(WKNavigationAction *navigationAction, void (^decisionHandler)(WKNavigationActionPolicy navigationActionPolicy));
+@property (nonatomic, copy) void (^ __nullable decidePolicyHandler)(WKNavigationAction *navigationAction, void (^decisionHandler)(WKNavigationActionPolicy navigationActionPolicy));
+/** 挂载子链接完成回调 */
+@property (nonatomic, copy) void (^ __nullable extractSubLinkCompletionHander)(NSURL *linkURL);
 
 /** 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认为 NO，本地的全屏控制。YES，video 元素必须包含webkit-playsinline属性 */
 @property (nonatomic, assign) BOOL allowsInlineMediaPlayback;
@@ -67,9 +67,9 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, assign) BOOL rotationLandscape;
 
 /** 完成加载回调 */
-@property (nonatomic, copy) void (^finishLoadCallback)(void);
+@property (nonatomic, copy) void (^ __nullable finishLoadCallback)(void);
 /** 页面关闭回调 */
-@property (nonatomic, copy) void (^closeCompletionCallback)(void);
+@property (nonatomic, copy) void (^ __nullable closeCompletionCallback)(void);
 
 
 /**
