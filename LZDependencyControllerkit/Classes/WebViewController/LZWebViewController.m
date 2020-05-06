@@ -485,7 +485,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 [self.progressView setProgress:self.webView.estimatedProgress animated:YES];
             }];
 			if (self.webView.estimatedProgress >= 1.0f) {
-				[UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                [UIView animateWithDuration:0.25 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
 					[self.progressView setAlpha:0.0f];
 				} completion:^(BOOL finished) {
                     
