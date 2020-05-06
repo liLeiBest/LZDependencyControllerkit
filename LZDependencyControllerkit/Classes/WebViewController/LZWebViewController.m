@@ -604,6 +604,20 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 }
 
 - (void)webView:(WKWebView *)webView
+didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
+    @try {
+        [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    } @catch (NSException *exception) {
+    } @finally {
+    }
+}
+
+- (void)webView:(WKWebView *)webView
+didCommitNavigation:(null_unspecified WKNavigation *)navigation {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)webView:(WKWebView *)webView
 didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     
     [self correctNavigationButton];
@@ -632,15 +646,21 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
 
 - (void)webView:(WKWebView *)webView
 didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
-	  withError:(NSError *)error {
-	if (self.displayRefresh) {
-		[self stopRefresh];
-	}
+      withError:(NSError *)error {
+    if (self.displayRefresh) {
+        [self stopRefresh];
+    }
     if (self.subWeb) return;
-	[self correctNavigationButton];
-	if (self.displayEmptyPage && self.webNavigation == navigation) {
-		[self showEmptyDataSet:self.webView.scrollView];
-	}
+    [self correctNavigationButton];
+    if (self.displayEmptyPage && self.webNavigation == navigation) {
+        [self showEmptyDataSet:self.webView.scrollView];
+    }
+}
+
+- (void)webView:(WKWebView *)webView
+didFailNavigation:(null_unspecified WKNavigation *)navigation
+      withError:(NSError *)error {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)webView:(WKWebView *)webView
@@ -650,32 +670,15 @@ didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation 
 }
 
 - (void)webView:(WKWebView *)webView
-didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
-    @try {
-        [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
+    completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
 }
 
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [webView reload];
 }
-
-#if 0
-- (void)webView:(WKWebView *)webView
-didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
-}
-- (void)webView:(WKWebView *)webView
-didFailNavigation:(null_unspecified WKNavigation *)navigation
-      withError:(NSError *)error {
-}
-- (void)webView:(WKWebView *)webView
-didCommitNavigation:(null_unspecified WKNavigation *)navigation {
-}
-#endif
 
 // MARK: <WKUIDelegate>
 - (void)webView:(WKWebView *)webView
@@ -731,7 +734,7 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
 										message:prompt?:@""
                                  preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = defaultText;
+        textField.placeholder = defaultText;
     }];
     [alertController addAction:[UIAlertAction
                                 actionWithTitle:@"完成"
@@ -741,8 +744,9 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
 								}]];
     [self presentViewController:alertController animated:YES completion:nil];
 }
+
 - (void)webViewDidClose:(WKWebView *)webView API_AVAILABLE(macosx(10.11), ios(9.0)) {
-    LZLog();
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 #if 0
 - (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures
