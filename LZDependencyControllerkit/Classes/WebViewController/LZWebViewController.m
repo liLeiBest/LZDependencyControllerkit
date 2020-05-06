@@ -468,8 +468,13 @@ static NSString * const LZURLSchemeMail = @"mailto";
 		if (self.displayProgress) {
 			if (nil == self.progressView) {
 				
-				CGFloat height = CGRectGetMaxY(self.navigationController.navigationBar.frame) + 1;
-				CGRect frame = CGRectMake(0, height, CGRectGetWidth(self.view.frame), 1);
+				UIImage *bgImg = [self.navigationController.navigationBar backgroundImageForBarMetrics: UIBarMetricsDefault];
+                BOOL translucent = self.navigationController.navigationBar.translucent;
+                CGFloat y = 0;
+                if (nil == bgImg || YES == translucent) {
+                    y = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+                }
+                CGRect frame = CGRectMake(0, y, CGRectGetWidth(self.view.frame), 1);
 				self.progressView = [[UIProgressView alloc] initWithFrame:frame];
 				self.progressView.trackTintColor = self.progressTrackColor;
 				self.progressView.progressTintColor = self.progressColor;
