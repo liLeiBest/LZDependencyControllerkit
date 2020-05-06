@@ -605,10 +605,14 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 
 - (void)webView:(WKWebView *)webView
 didFinishNavigation:(null_unspecified WKNavigation *)navigation {
-	if (self.displayRefresh) {
-		[self stopRefresh];
-	}
-	[self correctNavigationButton];
+    
+    [self correctNavigationButton];
+    if (self.finishLoadCallback) {
+        self.finishLoadCallback();
+    }
+    if (self.displayRefresh) {
+        [self stopRefresh];
+    }
 	if (self.displayEmptyPage) {
 		[self hideEmptyDataSet:self.webView.scrollView];
 	}
@@ -737,7 +741,9 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
 								}]];
     [self presentViewController:alertController animated:YES completion:nil];
 }
-
+- (void)webViewDidClose:(WKWebView *)webView API_AVAILABLE(macosx(10.11), ios(9.0)) {
+    LZLog();
+}
 #if 0
 - (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures
 {
