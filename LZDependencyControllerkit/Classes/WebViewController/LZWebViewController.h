@@ -39,9 +39,9 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 
 /** 是否显示进度条，默认：YES */
 @property (nonatomic, assign) BOOL displayProgress;
-/** 进度条颜色 */
+/** 进度条颜色，默认：[UIColor blueColor] */
 @property (nonatomic, strong) UIColor *progressColor;
-/** 进度条轨道颜色 */
+/** 进度条轨道颜色，默认：[UIColor clearColor] */
 @property (nonatomic, strong) UIColor *progressTrackColor;
 
 /** 是否添加下拉刷新，默认：NO */
