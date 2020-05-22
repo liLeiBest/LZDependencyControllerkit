@@ -29,6 +29,9 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
     NSString *_theEntranceTitle;
     UIColor *_theEntranceTitleColor;
     UIColor *_theEntranceBGColor;
+    UIColor *_theEntranceBorderColor;
+    
+    BOOL _infiniteScrolling;
 }
 
 @property (nonatomic, weak) IBOutlet UIButton *skipBtn;
@@ -53,7 +56,7 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
         };
         UIPageViewController *pageViewController =
         [[UIPageViewController alloc]
-         initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+         initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
          navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
          options:options];
         pageViewController.dataSource = self;
@@ -108,6 +111,12 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
 + (void (^)(void))clearTrigger {
     return ^ {
         [self clearTriggerInVersion];
+    };
+}
+
++ (void (^)(void))updateTrigger {
+    return ^ {
+        [self updateTriggerInVersion];
     };
 }
 
@@ -235,6 +244,20 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
     };
 }
 
+- (LZGuideViewController * _Nonnull (^)(UIColor * _Nonnull))theEntranceBorderColor {
+    return ^id (UIColor * theEntranceBorderColor) {
+        self->_theEntranceBorderColor = theEntranceBorderColor;
+        return self;
+    };
+}
+
+- (LZGuideViewController * _Nonnull (^)(BOOL))infiniteScrolling {
+    return ^id (BOOL infiniteScrolling) {
+        self->_infiniteScrolling = infiniteScrolling;
+        return self;
+    };
+}
+
 // MARK: - UI Action
 - (IBAction)skipDidTouchDown:(id)sender {
 	[self closedByTrigger:LZStartPageCloseTriggerSkip];
@@ -261,7 +284,9 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
     .showTheEntranceControl(YES)
     .theEntranceTitle(@"立即体验")
     .theEntranceTitleColor([UIColor whiteColor])
-    .theEntranceBGColor([UIColor colorWithHexString:@"#299FF7"]);
+    .theEntranceBGColor([UIColor colorWithHexString:@"#299FF7"])
+    .theEntranceBorderColor([UIColor whiteColor])
+    .infiniteScrolling(YES);
 #pragma clang diagnostic pop
 }
 
@@ -281,8 +306,11 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
     self.skipBtn.layer.cornerRadius = self.skipBtn.height * 0.5f;
     self.skipBtn.layer.masksToBounds = YES;
     
+    self.exprienceBtn.hidden = YES;
     self.exprienceBtn.layer.cornerRadius = 8.0f;
     self.exprienceBtn.layer.masksToBounds = YES;
+    self.exprienceBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.exprienceBtn.layer.borderWidth = 2.0f;
     
     [self.view bringSubviewToFront:self.skipBtn];
     [self.view bringSubviewToFront:self.pageControl];
@@ -304,18 +332,19 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
         self.pageControl.pageIndicatorTintColor = self->_pageColor;
         self.pageControl.currentPageIndicatorTintColor = self->_currentPageColor;
     }
-    self.exprienceBtn.hidden = !self->_showTheEntranceControl;
+//    self.exprienceBtn.hidden = !self->_showTheEntranceControl;
     if (self->_showTheEntranceControl) {
         
         [self.exprienceBtn setTitle:self->_theEntranceTitle forState:UIControlStateNormal];
         [self.exprienceBtn setTitleColor:self->_theEntranceTitleColor forState:UIControlStateNormal];
         [self.exprienceBtn setBackgroundColor:self->_theEntranceBGColor];
+        self.exprienceBtn.layer.borderColor = [self->_theEntranceBorderColor CGColor];
     }
 }
 
 - (void)closedByTrigger:(LZStartPageCloseTrigger)trigger {
 	
-	[self updateTriggerInVersion];
+	[[self class] updateTriggerInVersion];
 	[self dismiss];
 	SEL selector = @selector(guideViewController:currentIndex:didCloseTrigger:);
 	if ([self->_delegate respondsToSelector:selector]) {
@@ -325,7 +354,7 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
 	}
 }
 
-- (void)updateTriggerInVersion {
++ (void)updateTriggerInVersion {
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:LZAppUnit.version() forKey:LZGuidePageShowInVersionKey];
@@ -360,22 +389,28 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
 	   viewControllerAfterViewController:(UIViewController *)viewController {
 	LZLog(@"后一个视图控制器");
-	NSInteger after = self.currentIndex + 1;
+    NSInteger after = self.currentIndex + 1;
 	if (after >= self.guideControllers.count) {
-		return nil;
+        if (self->_infiniteScrolling) {
+            return self.guideControllers[0];
+        } else {
+            return nil;
+        }
 	}
-    self.pageControl.currentPage = after;
 	return self.guideControllers[after];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
 	  viewControllerBeforeViewController:(UIViewController *)viewController {
 	LZLog(@"前一个视图控制器");
-	NSInteger before = self.currentIndex - 1;
+    NSInteger before = self.currentIndex - 1;
 	if (before < 0) {
-		return nil;
+        if (self->_infiniteScrolling) {
+            return self.guideControllers[self.guideControllers.count - 1];
+        } else {
+            return nil;
+        }
 	}
-    self.pageControl.currentPage = before;
 	return self.guideControllers[before];
 }
 
@@ -395,10 +430,27 @@ willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewContro
 				// 判断视图控制器是否与正在转换的视图控制器为同一个
 				self.currentIndex = idx;
 				self.pageControl.currentPage = self.currentIndex;
+                if ([obj isEqual:[self.guideControllers lastObject]]) {
+                    
+                    self.exprienceBtn.alpha = 0.0f;
+                    self.exprienceBtn.hidden = !self->_showTheEntranceControl;
+                    if (self->_showTheEntranceControl) {
+                        [UIView animateWithDuration:0.25 animations:^{
+                            self.exprienceBtn.alpha = 1.0f;
+                        } completion:^(BOOL finished) {
+
+                        }];
+                    }
+                } else {
+                    self.exprienceBtn.hidden = YES;
+                }
 				*stop = YES;
-			}
+            }
 		}];
     } else {
+        if (YES == completed) {
+            self.exprienceBtn.hidden = YES;
+        }
         self.pageControl.currentPage = self.currentIndex;
     }
 }

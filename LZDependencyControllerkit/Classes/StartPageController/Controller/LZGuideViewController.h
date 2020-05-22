@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL (^)(void))needGuide;
 /// 清除触发条件
 + (void (^)(void))clearTrigger;
+/// 更新触发条件
++ (void (^)(void))updateTrigger;
 /// 实例
 + (LZGuideViewController * (^)(void))instance;
 
@@ -28,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: - <外观>
 /// 默认配置
 - (LZGuideViewController * (^)(void))defaultConfig;
-/// 更新外观
+/// 实时更新外观配置
 - (LZGuideViewController * (^)(void))updateAppearance;
 
 /// 是否显示跳过控件，默认 YES
@@ -55,6 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (LZGuideViewController * (^)(UIColor *))theEntranceTitleColor;
 /// 入口控件背景色，默认 #299FF7
 - (LZGuideViewController * (^)(UIColor *))theEntranceBGColor;
+/// 入口控件边框色，默认 #FFFFFF
+- (LZGuideViewController * (^)(UIColor *))theEntranceBorderColor;
+
+/// 是否无限滚动，默认 YES
+- (LZGuideViewController * (^)(BOOL))infiniteScrolling;
 
 @end
 
