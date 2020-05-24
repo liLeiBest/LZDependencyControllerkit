@@ -120,9 +120,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 // MARK: - Initialization
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-        
 		[self setupDefaultValue];
-        [self registerObserver];
 	}
 	return self;
 }
@@ -130,9 +128,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil
 						 bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		
         [self setupDefaultValue];
-        [self registerObserver];
 	}
 	return self;
 }
@@ -141,6 +137,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [super viewDidLoad];
 	
 	[self initConfig];
+    [self registerObserver];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -181,23 +178,21 @@ static NSString * const LZURLSchemeMail = @"mailto";
         self.closeCompletionCallback();
     }
     
-    @try {
+    self.webView.navigationDelegate = nil;
+    self.webView.UIDelegate = nil;
+    
+	@try {
+        WKUserContentController *userCC = self.webView.configuration.userContentController;
+        [self.scriptMessageContainer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [userCC removeScriptMessageHandlerForName:key];
+        }];
+        
         [self.webView removeObserver:self forKeyPath:LZWebTitle];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView 通知崩溃:%@", exception);
     } @finally {
     }
-    
-    self.webView.navigationDelegate = nil;
-    self.webView.UIDelegate = nil;
-    
-    WKUserContentController *userCC = self.webView.configuration.userContentController;
-    [self.scriptMessageContainer enumerateKeysAndObjectsUsingBlock:
-	 ^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        [userCC removeScriptMessageHandlerForName:key];
-    }];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {

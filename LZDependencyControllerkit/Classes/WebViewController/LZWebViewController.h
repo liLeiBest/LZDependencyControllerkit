@@ -20,6 +20,8 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, strong, readonly) WKWebView *webView;
 /** 请求 URL */
 @property (nonatomic, strong) NSURL *URL;
+
+// MARK: 以下属性应在 setURL: 之前调用，最好在 loadView 方法赋值
 /** 自定 UA */
 @property (nonatomic, copy) NSString *customUserAgent;
 
