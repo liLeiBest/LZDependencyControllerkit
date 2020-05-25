@@ -72,6 +72,8 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 
 /** 完成加载回调 */
 @property (nonatomic, copy) void (^ __nullable finishLoadCallback)(void);
+/** Go back 回调 */
+@property (nonatomic, copy) void (^ __nullable gobackCallback)(WKBackForwardListItem *backForwardItem);
 /** 页面关闭回调 */
 @property (nonatomic, copy) void (^ __nullable closeCompletionCallback)(void);
 

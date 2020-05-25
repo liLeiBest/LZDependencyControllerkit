@@ -279,6 +279,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 		
 		WKBackForwardList *backForwardList = [self.webView backForwardList];
 		WKBackForwardListItem *backForwardItem = [[backForwardList backList] lastObject];
+        if (self.gobackCallback) {
+            self.gobackCallback(backForwardItem);
+        }
 		[self.webView goToBackForwardListItem:backForwardItem];
 		return;
 	}
