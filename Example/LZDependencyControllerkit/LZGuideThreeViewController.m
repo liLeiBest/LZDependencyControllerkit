@@ -8,7 +8,9 @@
 #import "LZGuideThreeViewController.h"
 
 @interface LZGuideThreeViewController () {
-	__weak IBOutlet UIImageView *bgImgView;
+    IBOutlet UIImageView *bgImgView;
+    IBOutlet UIButton *productBtn;
+    IBOutlet UIButton *exprienceBtn;
 }
 
 @end
@@ -31,13 +33,33 @@
 
 // MARK: - UI Action
 - (IBAction)exprienceDidTouchDown:(id)sender {
-	
-	NSDictionary *userInfo = @{LZStartPageCloseNotificationTriggerKey : @(LZStartPageCloseTriggerEnter)};
-	LZQuickUnit.notificationPost(LZStartPageDidCloseNotification, @(LZStartPageCloseTriggerEnter), userInfo);
+    if (self.exprienceDidTouchCallback) {
+        self.exprienceDidTouchCallback();
+    }
+}
+
+- (IBAction)productManualDidTouchDown {
+    
 }
 
 // MARK: - Private
 - (void)setupUI {
+    
+    UIColor *titleColor = [UIColor whiteColor];
+    UIColor *bgColor = [UIColor orangeColor];
+    CGFloat corner = productBtn.frame.size.height * 0.5f;
+    CGFloat borderW = 2.0f;
+    [productBtn setTitleColor:titleColor forState:UIControlStateNormal];
+    productBtn.backgroundColor = bgColor;
+    productBtn.layer.borderColor = titleColor.CGColor;
+    productBtn.layer.borderWidth = borderW;
+    productBtn.layer.cornerRadius = corner;
+   
+    [exprienceBtn setTitleColor:titleColor forState:UIControlStateNormal];
+    exprienceBtn.backgroundColor = bgColor;
+    exprienceBtn.layer.borderColor = titleColor.CGColor;
+    exprienceBtn.layer.borderWidth = borderW;
+    exprienceBtn.layer.cornerRadius = corner;
 }
 
 @end

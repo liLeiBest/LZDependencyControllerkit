@@ -36,8 +36,9 @@
         .instance()
         .delegate(self)
         .guideViewControllers(@[one, two, three])
-        .showTheEntranceControl(YES)
-        .showPageControl(YES);
+        .showTheEntranceControl(NO)
+        .showPageControl(NO)
+        .showSkipControl(NO);
         ctr.modalPresentationStyle = UIModalPresentationFullScreen;
         ctr.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self presentViewController:ctr animated:YES completion:nil];

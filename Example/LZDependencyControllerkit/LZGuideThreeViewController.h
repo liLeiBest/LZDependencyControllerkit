@@ -11,6 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LZGuideThreeViewController : UIViewController
 
+/// 立即体验点击回调
+@property (nonatomic, copy) void (^exprienceDidTouchCallback)(void);
+
+
 /**
  实例
  

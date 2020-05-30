@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="e43-Ha-ZVe">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="e43-Ha-ZVe">
+    <device id="retina3_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,17 +13,50 @@
             <objects>
                 <viewController id="e43-Ha-ZVe" customClass="LZGuideThreeViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5Ee-GF-eRd">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="3" translatesAutoresizingMaskIntoConstraints="NO" id="nPk-0h-FHc">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="YGh-Bg-e61">
+                                <rect key="frame" x="30" y="410" width="260" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga6-c5-gNQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="120" id="kR2-ZS-JRp"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="查看产品手册">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="productManualDidTouchDown" destination="e43-Ha-ZVe" eventType="touchDown" id="h8D-oQ-Rhs"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FQp-66-xJ8">
+                                        <rect key="frame" x="140" y="0.0" width="120" height="40"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="立即体验">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="exprienceDidTouchDown:" destination="e43-Ha-ZVe" eventType="touchDown" id="EKB-NY-nye"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="K75-LH-ANN"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="YGh-Bg-e61" firstAttribute="centerX" secondItem="5Ee-GF-eRd" secondAttribute="centerX" id="5Zr-TJ-XpU"/>
                             <constraint firstItem="Cdw-M1-jcb" firstAttribute="trailing" secondItem="nPk-0h-FHc" secondAttribute="trailing" id="BHW-4w-R0a"/>
                             <constraint firstItem="nPk-0h-FHc" firstAttribute="top" secondItem="5Ee-GF-eRd" secondAttribute="top" id="EKi-AA-SWk"/>
+                            <constraint firstItem="Cdw-M1-jcb" firstAttribute="bottom" secondItem="YGh-Bg-e61" secondAttribute="bottom" constant="30" id="ZcO-w9-fcj"/>
                             <constraint firstItem="nPk-0h-FHc" firstAttribute="leading" secondItem="Cdw-M1-jcb" secondAttribute="leading" id="eBK-6K-uh2"/>
                             <constraint firstAttribute="bottom" secondItem="nPk-0h-FHc" secondAttribute="bottom" id="pn7-JC-W0O"/>
                         </constraints>
@@ -31,6 +64,8 @@
                     </view>
                     <connections>
                         <outlet property="bgImgView" destination="nPk-0h-FHc" id="TUu-Nh-Es5"/>
+                        <outlet property="exprienceBtn" destination="FQp-66-xJ8" id="XvO-Oq-BQm"/>
+                        <outlet property="productBtn" destination="Ga6-c5-gNQ" id="6IO-CB-U7A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sVz-PV-wNp" userLabel="First Responder" sceneMemberID="firstResponder"/>
