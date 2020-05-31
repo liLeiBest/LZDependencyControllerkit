@@ -19,6 +19,7 @@
     
     self.navBackIcon = [UIImage imageNamed:@"nav_icon_back_black"];
     self.navCloseIcon = [UIImage imageNamed:@"nav_icon_close_black"];
+    self.rotationLandscape = YES;
     __weak typeof(self) weakSelf = self;
     self.extractSubLinkCompletionHander = ^(NSURL *linkURL) {
 

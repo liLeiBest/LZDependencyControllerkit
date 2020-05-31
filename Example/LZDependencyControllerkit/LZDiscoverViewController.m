@@ -61,7 +61,6 @@
 - (void)configWebView {
     
     [self configURL];
-    self.rotationLandscape = NO;
     self.showWebTitle = NO;
     self.displayRefresh = YES;
     __weak typeof(self) weakSelf = self;
@@ -79,31 +78,10 @@
     // @"https://www.baidu.com";
     // @"https://www.sina.cn";
     // @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
-    NSString *urlString = @"http://edu.10086.cn/customer-manage/H5/personalcenter/home_page?deviceId=&userId=1003138834885&extend=4R%2FvsM7tt69G9lBi5Kazea%2FDIPBGUJENlggudcITVS7I3lPmhiDeUZtJ6HigdjuMy73e3p8wYBXphuL3XnAYAw%3D%3D";
+    // @"http://edu.10086.cn/customer-manage/H5/personalcenter/home_page?deviceId=&userId=1003138834885&extend=4R%2FvsM7tt69G9lBi5Kazea%2FDIPBGUJENlggudcITVS7I3lPmhiDeUZtJ6HigdjuMy73e3p8wYBXphuL3XnAYAw%3D%3D";
+    NSString *urlString = @"https://cmsapi.andedu.net:9005/index?access_token=llNJ3jZ3pCnHyDSLJGwxbkQPhMmtJSD5hDegtzkaBrtgZQgIC7sf4hQvCDw56dziN7jc8gvQamtERZbV45rXPw%253D%253D&current_user_id=36856056&parentId=2033770810&parentName=%E5%AE%B6%E9%95%BF&parentAvator=&parentBirthday=&parentGender=0&parentPhone=18867101623&parentAddress=(null)&studentId=1016991145&studentName=%E6%B1%AA%E7%8F%BA&studentAvatar=2b04df3ecc1d94afddff082d139c6f15&studentBirthday=2020-04-29&studentGender=0&classId=3819365&className=hangyan&schoolId=3019548&schoolName=%E5%92%8C%E5%AE%9D%E8%B4%9D%E5%B9%BC%E5%84%BF%E5%9B%AD&grade=4&status=1&enrolmentYear=0&province=120000&city=120100&county=120101&relation=%E6%AF%8D%E4%BA%B2&app_customization=120000&client_role=1&cms_version=1.0";
     NSURL *URL = [NSURL URLWithString:urlString];
     self.URL = URL;
-    self.decidePolicyHandler = ^(WKNavigationAction *navigationAction, void (^decisionHandler)(WKNavigationActionPolicy navigationActionPolicy)) {
-
-        NSURL *URL = navigationAction.request.URL;
-        if ([URL.scheme isEqualToString:@"tel"]) {
-            
-//            NSString *resourceSpecifier = [URL resourceSpecifier];
-//            NSString *callPhone = [NSString stringWithFormat:@"telprompt://%@", resourceSpecifier];
-            /// 防止iOS 10及其之后，拨打电话系统弹出框延迟出现
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:callPhone]];
-//            });
-            if (@available(iOS 10, *)) {
-                [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
-                }];
-            } else {
-                [[UIApplication sharedApplication] openURL:URL];
-            }
-            decisionHandler(WKNavigationActionPolicyCancel);
-        } else {
-            decisionHandler(WKNavigationActionPolicyAllow);
-        }
-    };
 }
 
 @end

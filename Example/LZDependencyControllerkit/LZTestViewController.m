@@ -27,22 +27,22 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (LZGuideViewController.needGuide()) {
-        
-        LZGuideOneViewController *one = [LZGuideOneViewController instance];
-        LZGuideTwoViewController *two = [LZGuideTwoViewController instance];
-        LZGuideThreeViewController *three = [LZGuideThreeViewController instance];
-        LZGuideViewController *ctr = LZGuideViewController
-        .instance()
-        .delegate(self)
-        .guideViewControllers(@[one, two, three])
-        .showTheEntranceControl(NO)
-        .showPageControl(NO)
-        .showSkipControl(NO);
-        ctr.modalPresentationStyle = UIModalPresentationFullScreen;
-        ctr.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:ctr animated:YES completion:nil];
-    }
+//    if (LZGuideViewController.needGuide()) {
+//        
+//        LZGuideOneViewController *one = [LZGuideOneViewController instance];
+//        LZGuideTwoViewController *two = [LZGuideTwoViewController instance];
+//        LZGuideThreeViewController *three = [LZGuideThreeViewController instance];
+//        LZGuideViewController *ctr = LZGuideViewController
+//        .instance()
+//        .delegate(self)
+//        .guideViewControllers(@[one, two, three])
+//        .showTheEntranceControl(NO)
+//        .showPageControl(NO)
+//        .showSkipControl(NO);
+//        ctr.modalPresentationStyle = UIModalPresentationFullScreen;
+//        ctr.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//        [self presentViewController:ctr animated:YES completion:nil];
+//    }
 }
 
 // MARK: - UI Action
