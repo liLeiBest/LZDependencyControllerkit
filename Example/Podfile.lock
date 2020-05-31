@@ -10,24 +10,24 @@ PODS:
     - LZDependencyToolkit
   - LZDependencyControllerkit/WebViewController (0.3.8):
     - LZDependencyToolkit
-  - LZDependencyToolkit (1.6.9):
-    - LZDependencyToolkit/Category (= 1.6.9)
-    - LZDependencyToolkit/Define (= 1.6.9)
-    - LZDependencyToolkit/Object (= 1.6.9)
-    - LZDependencyToolkit/Struct (= 1.6.9)
-  - LZDependencyToolkit/Category (1.6.9):
+  - LZDependencyToolkit (1.8.0):
+    - LZDependencyToolkit/Category (= 1.8.0)
+    - LZDependencyToolkit/Define (= 1.8.0)
+    - LZDependencyToolkit/Object (= 1.8.0)
+    - LZDependencyToolkit/Struct (= 1.8.0)
+  - LZDependencyToolkit/Category (1.8.0):
     - MJRefresh
-  - LZDependencyToolkit/Define (1.6.9)
-  - LZDependencyToolkit/Object (1.6.9)
-  - LZDependencyToolkit/Struct (1.6.9):
-    - LZDependencyToolkit/Struct/AppUnit (= 1.6.9)
-    - LZDependencyToolkit/Struct/CryptoUnit (= 1.6.9)
-    - LZDependencyToolkit/Struct/DeviceUnit (= 1.6.9)
-    - LZDependencyToolkit/Struct/QuickUnit (= 1.6.9)
-  - LZDependencyToolkit/Struct/AppUnit (1.6.9)
-  - LZDependencyToolkit/Struct/CryptoUnit (1.6.9)
-  - LZDependencyToolkit/Struct/DeviceUnit (1.6.9)
-  - LZDependencyToolkit/Struct/QuickUnit (1.6.9)
+  - LZDependencyToolkit/Define (1.8.0)
+  - LZDependencyToolkit/Object (1.8.0)
+  - LZDependencyToolkit/Struct (1.8.0):
+    - LZDependencyToolkit/Struct/AppUnit (= 1.8.0)
+    - LZDependencyToolkit/Struct/CryptoUnit (= 1.8.0)
+    - LZDependencyToolkit/Struct/DeviceUnit (= 1.8.0)
+    - LZDependencyToolkit/Struct/QuickUnit (= 1.8.0)
+  - LZDependencyToolkit/Struct/AppUnit (1.8.0)
+  - LZDependencyToolkit/Struct/CryptoUnit (1.8.0)
+  - LZDependencyToolkit/Struct/DeviceUnit (1.8.0)
+  - LZDependencyToolkit/Struct/QuickUnit (1.8.0)
   - MJRefresh (3.4.3)
 
 DEPENDENCIES:
@@ -44,7 +44,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   LZDependencyControllerkit: 7306797c755771d057be2fa60384df4c7772ff75
-  LZDependencyToolkit: 173f951efa9f3b70b5b5fbeac8f3244405e78491
+  LZDependencyToolkit: 18098cede5608af6d077ff02edb485612e81c165
   MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
 
 PODFILE CHECKSUM: 2505cb330acfd522b830c62e463121ccbe219064
