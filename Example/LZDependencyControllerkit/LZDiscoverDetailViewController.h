@@ -10,4 +10,6 @@
 
 @interface LZDiscoverDetailViewController : LZWebViewController
 
+@property (nonatomic, copy) NSString *urlString;
+
 @end

@@ -17,8 +17,6 @@
 - (void)loadView {
     [super loadView];
     
-     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-    self.URL = [NSURL fileURLWithPath:filePath];
 //    NSURL *baseURL = [[NSBundle mainBundle] bundleURL];
 //        [self.webView loadHTMLString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] baseURL:baseURL];
     //    [self.webView loadHTMLString:@"<html><title>Dialog</title><style type='text/css'>body{font-size:60px}</style><script type='text/javascript'>function myconfirm(){if(confirm('Star it?')){alert('Done')}}</script><body><a href=\"javascript:alert('Just Alert')\" >Alert</a><br /><a href=\"javascript:myconfirm()\">Logout</a></body></html>" baseURL:nil];
@@ -31,6 +29,9 @@
     self.showWebTitle = NO;
     
     self.customUserAgent = @"hidetabbar";
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
+    self.URL = [NSURL fileURLWithPath:filePath];
 }
 
 - (void)viewDidLoad {

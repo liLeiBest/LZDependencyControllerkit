@@ -428,7 +428,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 	const char *originalMethodType = method_getTypeEncoding(class_getInstanceMethod(destClass, originalSEL));
 	IMP originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
 	IMP newIMP = imp_implementationWithBlock(^(id obj, UIApplication *application, UIWindow *window) {
-		
 		if (!weakSelf) {
 			class_replaceMethod(destClass, originalSEL, originalIMP, originalMethodType);
 		}

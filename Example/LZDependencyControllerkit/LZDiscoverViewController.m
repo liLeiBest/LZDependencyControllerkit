@@ -60,16 +60,16 @@
 
 - (void)configWebView {
     
-    [self configURL];
     self.showWebTitle = NO;
     self.displayRefresh = YES;
     __weak typeof(self) weakSelf = self;
     self.extractSubLinkCompletionHander = ^(NSURL *linkURL) {
 
         LZDiscoverDetailViewController *detail = [[LZDiscoverDetailViewController alloc] init];
-        detail.URL = linkURL;
+        detail.urlString = linkURL.absoluteString;
         [weakSelf.navigationController pushViewController:detail animated:YES];
     };
+    [self configURL];
 }
 
 - (void)configURL {
