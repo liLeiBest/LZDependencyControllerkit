@@ -431,7 +431,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     if (YES == needRotation) {
         _originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
     }
-    __weak __typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
 	IMP newIMP = imp_implementationWithBlock(^(id obj, UIApplication *application, UIWindow *window) {
 		if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
             if (needRotation) {
