@@ -71,6 +71,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 @interface LZWebViewController ()
 <WKNavigationDelegate, WKUIDelegate>
+{
+    IMP _originalIMP;
+}
 
 /** WebView */
 @property (nonatomic, strong) WKWebView *webView;
@@ -422,21 +425,26 @@ static NSString * const LZURLSchemeMail = @"mailto";
 	
 	id appDelegate = [UIApplication sharedApplication].delegate;
 	
-	__weak __typeof(self) weakSelf = self;
 	Class destClass = [appDelegate class];
 	SEL originalSEL = @selector(application:supportedInterfaceOrientationsForWindow:);
 	const char *originalMethodType = method_getTypeEncoding(class_getInstanceMethod(destClass, originalSEL));
-	IMP originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
+    if (YES == needRotation) {
+        _originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
+    }
+    __weak __typeof(self) weakSelf = self;
 	IMP newIMP = imp_implementationWithBlock(^(id obj, UIApplication *application, UIWindow *window) {
-		if (!weakSelf) {
-			class_replaceMethod(destClass, originalSEL, originalIMP, originalMethodType);
-		}
 		if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
-			[weakSelf forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
+            if (needRotation) {
+                [weakSelf forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
+            }
 		}
 		return needRotation ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskPortrait;
 	});
-	class_replaceMethod(destClass, originalSEL, newIMP, originalMethodType);
+    if (YES == needRotation) {
+        class_replaceMethod(destClass, originalSEL, newIMP, originalMethodType);
+    } else {
+        class_replaceMethod(destClass, originalSEL, _originalIMP, originalMethodType);
+    }
 }
 
 - (void)forceChangeOrientation:(UIInterfaceOrientation)orientation {
@@ -651,6 +659,9 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
 - (void)webView:(WKWebView *)webView
 didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
       withError:(NSError *)error {
+    if (self.failedLoadCallback) {
+        self.failedLoadCallback();
+    }
     if (self.displayRefresh) {
         [self stopRefresh];
     }
