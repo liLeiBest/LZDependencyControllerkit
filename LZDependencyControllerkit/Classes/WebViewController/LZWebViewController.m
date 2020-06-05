@@ -191,6 +191,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }];
         
         [self.webView removeObserver:self forKeyPath:LZWebTitle];
+        [self.webView removeObserver:self forKeyPath:LZWebProgress];
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView 通知崩溃:%@", exception);
@@ -350,6 +351,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (void)registerObserver {
     @try {
         [self.webView addObserver:self forKeyPath:LZWebTitle options:NSKeyValueObservingOptionNew context:NULL];
+        [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter]
          addObserver:self
          selector:@selector(beginFullScreen:)
@@ -495,13 +497,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 [UIView animateWithDuration:0.25 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
 					[self.progressView setAlpha:0.0f];
 				} completion:^(BOOL finished) {
-                    
 					[self.progressView setProgress:0.0f animated:NO];
-                    @try {
-                        [self.webView removeObserver:self forKeyPath:LZWebProgress];
-                    } @catch (NSException *exception) {
-                    } @finally {
-                    }
 				}];
 			}
 		}
@@ -617,11 +613,7 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 
 - (void)webView:(WKWebView *)webView
 didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
-    @try {
-        [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 - (void)webView:(WKWebView *)webView
