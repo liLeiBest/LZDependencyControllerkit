@@ -101,7 +101,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 		config.allowsInlineMediaPlayback = self.allowsInlineMediaPlayback;
 		// HTML5 视频可以自动播放还是需要用户去启动播放，默认为YES
 		if (@available(iOS 10.0, *)) {
-			config.mediaTypesRequiringUserActionForPlayback = self.mediaPlaybackRequiresUserAction ? WKAudiovisualMediaTypeNone : WKAudiovisualMediaTypeAll;
+			config.mediaTypesRequiringUserActionForPlayback = self.mediaPlaybackRequiresUserAction ? WKAudiovisualMediaTypeAll : WKAudiovisualMediaTypeNone;
 		} else if (@available(iOS 9, *)) {
 			config.requiresUserActionForMediaPlayback = self.mediaPlaybackRequiresUserAction;
 		} else {
