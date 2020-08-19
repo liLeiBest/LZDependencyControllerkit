@@ -96,10 +96,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (WKWebView *)webView {
 	
     if (nil == _webView) {
+        
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-		// 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认：NO，本地的全屏控制。YES，video 元素必须包含webkit-playsinline属性
 		config.allowsInlineMediaPlayback = self.allowsInlineMediaPlayback;
-		// HTML5 视频可以自动播放还是需要用户去启动播放，默认为YES
 		if (@available(iOS 10.0, *)) {
 			config.mediaTypesRequiringUserActionForPlayback = self.mediaPlaybackRequiresUserAction ? WKAudiovisualMediaTypeAll : WKAudiovisualMediaTypeNone;
 		} else if (@available(iOS 9, *)) {
@@ -328,7 +327,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 	self.disappearToRefresh = NO;
 	
 	self.allowsInlineMediaPlayback = NO;
-	self.mediaPlaybackRequiresUserAction = YES;
+	self.mediaPlaybackRequiresUserAction = NO;
 	
 	self.rotationLandscape = NO;
 	

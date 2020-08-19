@@ -21,7 +21,7 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 请求 URL */
 @property (nonatomic, strong) NSURL *URL;
 
-// MARK: 以下属性应在 setURL: 之前调用，最好在 loadView 方法赋值
+// MARK: - 以下配置应在 setURL: 之前调用，最好在 loadView 方法赋值
 /** 自定 UA */
 @property (nonatomic, copy) NSString *customUserAgent;
 
@@ -45,13 +45,13 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, strong) UIColor *progressColor;
 /** 进度条轨道颜色，默认：[UIColor clearColor] */
 @property (nonatomic, strong) UIColor *progressTrackColor;
-/** 进度回调 */
+/** 加载进度回调 */
 @property (nonatomic, copy) void (^progressHandler)(CGFloat progress);
 
-/** 是否添加下拉刷新，默认：NO */
+/** 是否添加下拉刷新，默认：NO，无下拉刷新 */
 @property (nonatomic, assign) BOOL displayRefresh;
 
-/** 是否显示空白页，默认：NO */
+/** 是否显示空白页，默认：NO，不显示空白页 */
 @property (nonatomic, assign) BOOL displayEmptyPage;
 
 /** 界面消失后刷新界面，默认：NO。用于停止暴力停止多媒体播放，最好在 Disappear 方法,通过 JS 交互停止。 */
@@ -62,12 +62,12 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 挂载子链接完成回调 */
 @property (nonatomic, copy) void (^ __nullable extractSubLinkCompletionHander)(NSURL *linkURL);
 
-/** 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认为 NO，本地的全屏控制。YES，video 元素必须包含webkit-playsinline属性 */
+/** 是否允许内嵌 HTML5 播放视频还是用本地的全屏控制，默认为 NO，本地的全屏控制；YES，video 元素必须包含webkit-playsinline属性 */
 @property (nonatomic, assign) BOOL allowsInlineMediaPlayback;
-/** HTML5 视频需要用户去触发播放还是自动播放，默认为 NO */
+/** HTML5 音视频需要用户去触发播放还是自动播放，默认为 NO 自动播放；YES，手动播放 */
 @property (nonatomic, assign) BOOL mediaPlaybackRequiresUserAction;
 
-/** 是否允许横屏，默认 NO */
+/** 是否允许横屏，默认 NO，不允许 */
 @property (nonatomic, assign) BOOL rotationLandscape;
 
 /** 完成加载回调 */
@@ -78,6 +78,7 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, copy) void (^ __nullable gobackCallback)(WKBackForwardListItem *backForwardItem);
 /** 页面关闭回调 */
 @property (nonatomic, copy) void (^ __nullable closeCompletionCallback)(void);
+// MARK: -
 
 
 /**
