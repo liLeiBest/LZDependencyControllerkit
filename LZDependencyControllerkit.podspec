@@ -1,13 +1,14 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LZDependencyControllerkit'
-  s.version          = '0.4.2'
+  s.version          = '0.5.0'
   s.summary          = 'LZDependencyControllerkit.'
   s.description      = <<-DESC
   控制器控件：
   1.TabBarController
   2.WebViewController
   3.StartPageController
+  4.PickerViewController
                        DESC
   s.homepage         = 'https://github.com/liLeiBest'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
