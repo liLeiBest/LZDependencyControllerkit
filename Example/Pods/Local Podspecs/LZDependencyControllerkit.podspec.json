@@ -50,6 +50,15 @@
       ],
       "public_header_files": "LZDependencyControllerkit/Classes/StartPageController/**/*.h",
       "resources": "LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle"
+    },
+    {
+      "name": "PickerViewController",
+      "source_files": [
+        "LZDependencyControllerkit/Classes/PickerViewController/**/*.{h,m}",
+        ""
+      ],
+      "public_header_files": "LZDependencyControllerkit/Classes/PickerViewController/**/*.h",
+      "resources": "LZDependencyControllerkit/Classes/PickerViewController/Resources/LZPickerViewController.bundle"
     }
   ]
 }

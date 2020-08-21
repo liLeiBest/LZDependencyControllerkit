@@ -11,6 +11,7 @@
 #endif
 
 #import "LZDependencyControllerkit.h"
+#import "LZPickerViewController.h"
 #import "LZAdvertisingViewController.h"
 #import "LZGuideViewController.h"
 #import "LZAdvertisingPageDelegate.h"

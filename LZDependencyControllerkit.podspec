@@ -41,6 +41,15 @@ Pod::Spec.new do |s|
       startPageController.resource            = 'LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle'
   end
   
+  s.subspec 'PickerViewController' do |pickerViewController|
+      pickerViewController.source_files         =
+      'LZDependencyControllerkit/Classes/PickerViewController/**/*.{h,m}',
+#      'LZDependencyControllerkit/Classes/PickerViewController/Controller/**/*.{storyboard}',
+      ''
+      pickerViewController.public_header_files  = 'LZDependencyControllerkit/Classes/PickerViewController/**/*.h'
+      pickerViewController.resource             = 'LZDependencyControllerkit/Classes/PickerViewController/Resources/LZPickerViewController.bundle'
+  end
+  
   pch_AF = <<-EOS
   
   //static NSString * const LZDependencyControllerkitBundle = @"LZDependencyControllerkitResourceBundle";

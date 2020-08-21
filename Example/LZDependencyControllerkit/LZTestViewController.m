@@ -11,11 +11,32 @@
 #import "LZGuideTwoViewController.h"
 #import "LZGuideThreeViewController.h"
 
-@interface LZTestViewController ()<LZGuidePageDelegate, LZAdvertisingPageDelegate>
+@interface LZTestViewController ()<LZGuidePageDelegate, LZAdvertisingPageDelegate, LZPickerViewControllerDataSource, LZPickerViewControllerDelegate>
+
+// 选中类别的索引
+@property (nonatomic, strong) NSArray *categorySelectedIndexs;
+@property (nonatomic, strong) NSMutableArray *datasoource;
 
 @end
 
 @implementation LZTestViewController
+
+// MARK: - Lazy Loading
+- (NSMutableArray *)datasoource {
+    if (nil == _datasoource) {
+        _datasoource = [NSMutableArray array];
+        [_datasoource addObjectsFromArray:@[
+            @"普通教学",
+            @"双语教学",
+            @"蒙氏教学",
+            @"国学特色",
+            @"艺术培养",
+            @"科学领域",
+            @"体智能",
+        ]];
+    }
+    return _datasoource;
+}
 
 // MARK: - Initialization
 - (void)viewDidLoad {
@@ -57,10 +78,23 @@
     [self presentViewController:ctr animated:YES completion:nil];
 }
 
+- (void)testPickerDidTouch {
+    
+    LZPickerViewController *ctr = [LZPickerViewController instance];
+    ctr.pickerTitle = @"点单类型";
+    ctr.selectedIndexs = self.categorySelectedIndexs;
+    ctr.toolbarTitleColor = [UIColor magentaColor];
+    ctr.pickerSeperatorColor = [UIColor redColor];
+    ctr.dataSource = self;
+    ctr.delegate = self;
+    [ctr showPickerVC:self];
+}
+
 // MARK: - Private
 - (void)setupUI {
     
     self.view.backgroundColor = [UIColor lightGrayColor];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTitle:@"测试Picker" target:self action:@selector(testPickerDidTouch)];
 }
 
 // MARK: - Delegate
@@ -107,6 +141,43 @@
 //    NSString *imgFilePath = [[NSBundle mainBundle] pathForResource:@"5" ofType:@"jpg"];
 //    NSURL *fileFileURL = [NSURL fileURLWithPath:imgFilePath];
 //    return fileFileURL;
+}
+
+// MARK: - LZPickerViewController
+// MARK: <LZPickerViewControllerDataSource>
+- (NSInteger)numberOfComponentsInPickerViewController:(LZPickerViewController *)pickerVC {
+    return 1;
+}
+
+- (NSInteger)pickerViewController:(LZPickerViewController *)pickerVC
+          numberOfRowsInComponent:(NSInteger)component
+               selectedIndexArray:(nonnull NSArray *)indexArray {
+    return self.datasoource.count;
+}
+
+// MARK: <LZPickerViewControllerDelegate>
+- (NSString *)pickerViewController:(LZPickerViewController *)pickerVC
+                       titleForRow:(NSInteger)row
+                      forComponent:(NSInteger)component
+                selectedIndexArray:(nonnull NSArray *)indexArray {
+    
+    return [self.datasoource objectAtIndex:row];;
+}
+
+- (void)pickerViewController:(LZPickerViewController *)pickerVC
+       didSelectedIndexArray:(NSArray *)indexArray {
+    if (0 == self.datasoource.count) {
+        return;
+    }
+    self.categorySelectedIndexs = indexArray;
+}
+
+- (void)pickerViewController:(LZPickerViewController *)pickerVC
+                didDoneSelectedIndexArray:(nonnull NSArray *)indexArray {
+    if (0 == self.datasoource.count) {
+        return;
+    }
+    self.categorySelectedIndexs = indexArray;
 }
 
 @end
