@@ -15,6 +15,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *confirmBtn;
 @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
+@property (nonatomic, strong) NSArray *lastSelectedIndex;
 @property (nonatomic, strong) NSMutableArray *indexDataSource;
 
 @end
@@ -38,7 +39,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [UIView animateWithDuration:1 delay:0.25 usingSpringWithDamping:0.8 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.25 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveLinear animations:^{
         self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     } completion:^(BOOL finished) {
     }];
@@ -57,7 +58,7 @@
 - (void)showPickerVC:(UIViewController *)sender {
     
     self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [sender presentViewController:self animated:YES completion:nil];
 }
 
@@ -68,7 +69,17 @@
 }
 
 - (IBAction)cancleDidTouch:(UIButton *)sender {
+    
     [self closePickerView];
+    if (self.lastSelectedIndex && self.lastSelectedIndex.count) {
+        
+        [self.indexDataSource removeAllObjects];
+        [self.indexDataSource addObjectsFromArray:self.lastSelectedIndex];
+        SEL selector = @selector(pickerViewController:didSelectedIndexArray:);
+        if ([self.delegate respondsToSelector:selector]) {
+            [self.delegate pickerViewController:self didSelectedIndexArray:self.indexDataSource];
+        }
+    }
 }
 
 - (IBAction)confirmDidTouch:(UIButton *)sender {
@@ -104,6 +115,8 @@
     self.pickerView.delegate = self;
     
     if (self.selectedIndexs && self.selectedIndexs.count) {
+        
+        self.lastSelectedIndex = self.selectedIndexs;
         [self.indexDataSource addObjectsFromArray:self.selectedIndexs];
     }
     for (NSInteger i = 0; i < self.selectedIndexs.count; i++) {
@@ -130,7 +143,7 @@
         self.view.alpha = 0.0;
         self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.0];
     } completion:^(BOOL finished) {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:NO completion:nil];
     }];
 }
 
@@ -207,7 +220,6 @@ numberOfRowsInComponent:(NSInteger)component {
 - (void)pickerView:(UIPickerView *)pickerView
       didSelectRow:(NSInteger)row
        inComponent:(NSInteger)component {
-    
     // 更新选中的行
     for (NSUInteger column = 0; column < self.indexDataSource.count; column++) {
         if (column == component) {

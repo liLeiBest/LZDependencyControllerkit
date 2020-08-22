@@ -14,7 +14,7 @@
 @interface LZTestViewController ()<LZGuidePageDelegate, LZAdvertisingPageDelegate, LZPickerViewControllerDataSource, LZPickerViewControllerDelegate>
 
 // 选中类别的索引
-@property (nonatomic, strong) NSArray *categorySelectedIndexs;
+@property (nonatomic, strong) NSArray *selectedIndexs;
 @property (nonatomic, strong) NSMutableArray *datasoource;
 
 @end
@@ -82,7 +82,7 @@
     
     LZPickerViewController *ctr = [LZPickerViewController instance];
     ctr.pickerTitle = @"点单类型";
-    ctr.selectedIndexs = self.categorySelectedIndexs;
+    ctr.selectedIndexs = self.selectedIndexs;
     ctr.toolbarTitleColor = [UIColor magentaColor];
     ctr.pickerSeperatorColor = [UIColor redColor];
     ctr.dataSource = self;
@@ -95,6 +95,17 @@
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTitle:@"测试Picker" target:self action:@selector(testPickerDidTouch)];
+}
+
+// MARK: - Private
+- (void)handlePickerContentData:(nonnull NSArray *)indexArray {
+    if (0 == self.datasoource.count) {
+        return;
+    }
+    self.selectedIndexs = indexArray;
+    NSInteger index = [self.selectedIndexs[0] integerValue];
+    NSString *content = [self.datasoource objectAtIndex:index];
+    LZLog(@"选择项:%@", content);
 }
 
 // MARK: - Delegate
@@ -133,6 +144,7 @@
             break;
     }
 }
+
 - (NSURL *)advertisingViewControllerForCoverAd:(LZAdvertisingViewController *)advertisingViewController {
     
     NSString *imgURLString = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585452528893&di=95442a108d60a388c924d815fa6cba7a&imgtype=0&src=http%3A%2F%2Fwww.318art.cn%2Fdata%2Fattached%2Fimage%2F20130326%2F20130326170226_93408.jpg";
@@ -160,24 +172,17 @@
                        titleForRow:(NSInteger)row
                       forComponent:(NSInteger)component
                 selectedIndexArray:(nonnull NSArray *)indexArray {
-    
     return [self.datasoource objectAtIndex:row];;
 }
 
 - (void)pickerViewController:(LZPickerViewController *)pickerVC
        didSelectedIndexArray:(NSArray *)indexArray {
-    if (0 == self.datasoource.count) {
-        return;
-    }
-    self.categorySelectedIndexs = indexArray;
+    [self handlePickerContentData:indexArray];
 }
 
 - (void)pickerViewController:(LZPickerViewController *)pickerVC
                 didDoneSelectedIndexArray:(nonnull NSArray *)indexArray {
-    if (0 == self.datasoource.count) {
-        return;
-    }
-    self.categorySelectedIndexs = indexArray;
+    [self handlePickerContentData:indexArray];
 }
 
 @end
