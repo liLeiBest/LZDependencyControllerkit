@@ -81,7 +81,10 @@
     // @"http://cms.kids.andedu.net:8282/readydiscover/index.jhtml";
     // @"http://edu.10086.cn/customer-manage/H5/personalcenter/home_page?deviceId=&userId=1003138834885&extend=4R%2FvsM7tt69G9lBi5Kazea%2FDIPBGUJENlggudcITVS7I3lPmhiDeUZtJ6HigdjuMy73e3p8wYBXphuL3XnAYAw%3D%3D";
     // @"https://cmsapi.andedu.net:9005/index?access_token=llNJ3jZ3pCnHyDSLJGwxbkQPhMmtJSD5hDegtzkaBrtgZQgIC7sf4hQvCDw56dziN7jc8gvQamtERZbV45rXPw%253D%253D&current_user_id=36856056&parentId=2033770810&parentName=%E5%AE%B6%E9%95%BF&parentAvator=&parentBirthday=&parentGender=0&parentPhone=18867101623&parentAddress=(null)&studentId=1016991145&studentName=%E6%B1%AA%E7%8F%BA&studentAvatar=2b04df3ecc1d94afddff082d139c6f15&studentBirthday=2020-04-29&studentGender=0&classId=3819365&className=hangyan&schoolId=3019548&schoolName=%E5%92%8C%E5%AE%9D%E8%B4%9D%E5%B9%BC%E5%84%BF%E5%9B%AD&grade=4&status=1&enrolmentYear=0&province=120000&city=120100&county=120101&relation=%E6%AF%8D%E4%BA%B2&app_customization=120000&client_role=1&cms_version=1.0";
-    NSString *urlString = @"http://101.200.135.215:19095/%E4%B8%8A%E5%AD%A6%E6%AD%8C.htm";
+//    @"http://101.200.135.215:19095/%E4%B8%8A%E5%AD%A6%E6%AD%8C.htm";
+//    @"https://cms.andedu.net:8484/ergeyinpin2/14380.jhtml";
+//    @"https://cms.andedu.net:8484/discoverTeacher/index.jhtml?app_customization=110000&current_user_id=38&access_token=q66wBV3MzclOg7U%25252FR7K3JBxObXapOtmYorKKNxiGqqOxCN8MpgT3xGNx36qfO0DRS86OfIBxHLd5tZljdodS%25252Bg%25253D%25253D&class_type=1&phone=13522332092&school_id=1&school_name=%E6%85%A7%E4%BA%AB%E6%B5%8B%E8%AF%95%E5%B9%BC%E5%84%BF%E5%9B%AD&class_name=%E5%B0%8F%E4%B8%80%E7%8F%AD&user_id=3000000026&user_display_name=%E7%8E%8B%E6%96%8C&teacher_id=3000000026&user_avatar=078026dc1be9cac845cdb7a130815177&birthday=&class_id=1&client_role=0&gender=1&user_type=1&noShare=1&cms_version=1.0";
+    NSString *urlString = @"https://cms.andedu.net:8484/ergeyinpin2/14380.jhtml";
     NSURL *URL = [NSURL URLWithString:urlString];
     self.URL = URL;
 }

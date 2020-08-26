@@ -22,7 +22,7 @@
     self.displayRefresh = NO;
     self.disappearToRefresh = YES;
     self.allowsInlineMediaPlayback = YES;
-    self.mediaPlaybackRequiresUserAction = YES;
+    self.mediaPlaybackRequiresUserAction = NO;
     self.rotationLandscape = YES;
     __weak typeof(self) weakSelf = self;
     self.extractSubLinkCompletionHander = ^(NSURL *linkURL) {
