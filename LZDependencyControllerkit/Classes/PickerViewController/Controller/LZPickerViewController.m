@@ -49,6 +49,14 @@
     LZLog();
 }
 
+- (UIModalPresentationStyle)modalPresentationStyle {
+    return UIModalPresentationOverFullScreen;
+}
+
+- (UIModalTransitionStyle)modalTransitionStyle {
+    return UIModalTransitionStyleCrossDissolve;
+}
+
 // MARK: - Public
 + (instancetype)instance {
     return [self viewControllerFromstoryboard:@"LZPickerViewController"
@@ -56,9 +64,6 @@
 }
 
 - (void)showPickerVC:(UIViewController *)sender {
-    
-    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [sender presentViewController:self animated:YES completion:nil];
 }
 
