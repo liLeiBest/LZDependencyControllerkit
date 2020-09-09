@@ -28,8 +28,7 @@
 - (NSString *)urlByAppendingKeyAndValue:(NSString * _Nonnull)paraString {
     
     NSCharacterSet *queryCharacterSet = [NSCharacterSet URLQueryAllowedCharacterSet];
-    paraString =
-    [paraString stringByAddingPercentEncodingWithAllowedCharacters:queryCharacterSet];
+    paraString = [paraString stringByAddingPercentEncodingWithAllowedCharacters:queryCharacterSet];
     // 去掉前后空格
     NSString *urlString = self;
     urlString = [urlString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -37,8 +36,7 @@
     NSString *regx = @"/#{1,1}.{0,}/";
     NSRange range = [urlString rangeOfString:regx options:NSRegularExpressionSearch];
     if (range.location == NSNotFound) {
-        urlString =
-        [urlString stringByAddingPercentEncodingWithAllowedCharacters:queryCharacterSet];
+        urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:queryCharacterSet];
     }
     // 拼接参数
     if ([urlString hasSuffix:@"?"]
