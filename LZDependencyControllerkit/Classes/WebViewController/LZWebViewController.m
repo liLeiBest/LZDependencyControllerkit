@@ -155,12 +155,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
     
     CGRect webFrame = self.view.bounds;
     CGRect attachFrame = self.attachView.frame;
-    
     // 附件视图 Frame
     attachFrame.size.width = webFrame.size.width;
     attachFrame.origin.y = webFrame.size.height - attachFrame.size.height;
     self.attachView.frame = attachFrame;
-
     // Web 视图 Frame
     webFrame.size.height -= attachFrame.size.height;
     self.webView.frame = webFrame;
@@ -200,9 +198,12 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-	
-	[self.webView stopLoading];
     NSLog(@"Web页面内存警告!:%@", NSStringFromClass([self class]));
+    [self.webView stopLoading];
+    dispatch_after(0.25, dispatch_get_main_queue(), ^{
+        [self.webView reload];
+        [self reloadRequest];
+    });
 }
 
 // MARK: - Setter
