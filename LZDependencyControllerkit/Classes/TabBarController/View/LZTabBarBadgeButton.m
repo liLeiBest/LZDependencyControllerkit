@@ -7,7 +7,7 @@
 
 #import "LZTabBarBadgeButton.h"
 
-NSString * const LZBADGE_NONENUMBER = @"badge_noneNumber";
+NSString * const LZTabbar_badge_nonNumber = @"tabar_badge_noneNumber";
 
 @interface LZTabBarBadgeButton()
 
@@ -62,7 +62,7 @@ NSString * const LZBADGE_NONENUMBER = @"badge_noneNumber";
     self.hidden = NO;
     
     // 不显示数字
-    if ([badgeValue isEqualToString:LZBADGE_NONENUMBER]) {
+    if ([badgeValue isEqualToString:LZTabbar_badge_nonNumber]) {
         
         self.size = CGSizeMake(_dotSize, _dotSize);
         self.layer.cornerRadius = _dotSize * 0.5;
