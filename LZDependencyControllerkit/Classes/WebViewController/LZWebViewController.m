@@ -502,7 +502,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 			}
 		}
     } else if ([keyPath isEqualToString:LZWebTitle] && object == self.webView) {
-		if (self.showWebTitle) {
+		if (self.showWebTitle && NO == [self.title isValidString]) {
 			if (self.showWebTitle) self.title = self.webView.title;
 		}
     } else {
