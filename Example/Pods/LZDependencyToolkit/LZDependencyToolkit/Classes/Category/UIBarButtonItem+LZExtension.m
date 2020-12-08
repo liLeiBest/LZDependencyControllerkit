@@ -30,7 +30,6 @@
     
     UIView *customView = self.customView;
     if (customView) {
-        
         if ([customView isKindOfClass:[UIButton class]]) {
             UIButton *tempBtn = (UIButton *)customView;
             if (nil == tempBtn.currentTitle && 0 == tempBtn.currentTitle.length) {
@@ -137,6 +136,11 @@
         if (nil != barButton.currentTitle) {
             
             CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:barButton.titleLabel.font}];
+            if (UIAccessibilityIsBoldTextEnabled()) {
+                
+                CGFloat adjust = barButton.titleLabel.font.pointSize * barButton.titleLabel.text.length * 0.16f;
+                titleSize = CGSizeMake(titleSize.width + adjust, titleSize.height);
+            }
             CGRect oldFrame = barButton.frame;
             oldFrame.size.width = titleSize.width + barButton.currentImage.size.width;
             if (0 == oldFrame.size.height) oldFrame.size.height = titleSize.height;
