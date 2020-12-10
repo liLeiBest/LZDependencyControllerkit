@@ -430,7 +430,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 	Class destClass = [appDelegate class];
 	SEL originalSEL = @selector(application:supportedInterfaceOrientationsForWindow:);
 	const char *originalMethodType = method_getTypeEncoding(class_getInstanceMethod(destClass, originalSEL));
-    if (YES == needRotation) {
+    if (YES == needRotation && nil == _originalIMP) {
         _originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
     }
     __weak typeof(self) weakSelf = self;
