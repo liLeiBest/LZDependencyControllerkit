@@ -757,13 +757,22 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+- (nullable WKWebView *)webView:(WKWebView *)webView
+ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
+            forNavigationAction:(WKNavigationAction *)navigationAction
+                 windowFeatures:(WKWindowFeatures *)windowFeatures {
+    
+    WKFrameInfo *frameInfo = navigationAction.targetFrame;
+    if (![frameInfo isMainFrame]) {
+        [webView loadRequest:navigationAction.request];
+    }
+    return nil;
+}
+
 - (void)webViewDidClose:(WKWebView *)webView API_AVAILABLE(macosx(10.11), ios(9.0)) {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 #if 0
-- (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures
-{
-}
 - (BOOL)webView:(WKWebView *)webView shouldPreviewElement:(WKPreviewElementInfo *)elementInfo API_AVAILABLE(ios(10.0))
 {
 }
