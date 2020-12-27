@@ -119,7 +119,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 // MARK: - Initialization
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
+        
         [self setupDefaultValue];
+        [self registerObserver];
     }
     return self;
 }
@@ -127,7 +129,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil
                          bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        
         [self setupDefaultValue];
+        [self registerObserver];
     }
     return self;
 }
@@ -136,7 +140,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [super viewDidLoad];
     
     [self initConfig];
-    [self registerObserver];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

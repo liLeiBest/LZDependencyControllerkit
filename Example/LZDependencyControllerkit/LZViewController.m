@@ -64,11 +64,11 @@
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:ctr2];
     UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
     UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];
-    [self addChildViewController:nav2 title:@"哈哈" normalImg:norImg selectedImg:selImg];
+    [self addChildViewController:nav2 title:@"" normalImg:norImg selectedImg:selImg];
     
     LZDiscoverViewController *ctr3 = [[LZDiscoverViewController alloc] init];
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:ctr3];
-    [self addChildViewController:nav3 title:nil normalImg:norImg selectedImg:selImg];
+    [self addChildViewController:nav3 title:@"发现" normalImg:norImg selectedImg:selImg];
 }
 
 // MARK: - LZTabBarViewController
