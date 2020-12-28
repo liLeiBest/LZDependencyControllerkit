@@ -8,6 +8,7 @@
 
 #import "LZWebViewController.h"
 #import <objc/runtime.h>
+#import "LZMarqueeLabel.h"
 
 /**
  @author Lilei
@@ -81,6 +82,8 @@ static NSString * const LZURLSchemeMail = @"mailto";
 @property (nonatomic, assign, getter = isSubWeb) BOOL subWeb;
 /** 附加视图 */
 @property (nonatomic, weak) UIView *attachView;
+/** 标题视图 */
+@property (nonatomic, weak) LZMarqueeLabel *titlelabel;
 /** ScriptMessage 容器 */
 @property (nonatomic, strong) NSMutableDictionary *scriptMessageContainer;
 /** 用于判断是否是同一个 webpage */
@@ -211,6 +214,27 @@ static NSString * const LZURLSchemeMail = @"mailto";
     _URL = URL;
     
     [self reloadRequest];
+}
+
+- (void)setTitle:(NSString *)title {
+    [super setTitle:title];
+    
+    if (title && title.length) {
+        
+        LZMarqueeLabel *titleView = [[LZMarqueeLabel alloc] init];
+        titleView.marqueeLabelType = LZMarqueeLabelTypeLeft;
+        Class appearanceClass = [UINavigationController class];
+        UINavigationBar *theme = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[appearanceClass]];
+        NSDictionary *attributes = [theme titleTextAttributes];
+        if (nil == attributes || 0 == attributes.count) {
+            attributes = @{
+                NSForegroundColorAttributeName : LZColorWithHexString(@"#333333"),
+                NSFontAttributeName : LZQuickUnit.fontWeight(18, UIFontWeightSemibold),
+            };
+        }
+        titleView.attributedText = [[NSAttributedString alloc] initWithString:title attributes:attributes];
+        self.navigationItem.titleView = titleView;
+    }
 }
 
 // MARK: - Public
@@ -345,7 +369,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     NSHTTPCookieStorage *HTTPCookie = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [HTTPCookie setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
     
-    [self configNavigationButton];
+    [self configNavigation];
 }
 
 - (void)registerObserver {
@@ -374,7 +398,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     }];
 }
 
-- (void)configNavigationButton {
+- (void)configNavigation {
     if ([self shouldAddNavItem]) {
         
         UIBarButtonItem *back = [UIBarButtonItem itemWithTitle:self.navBackTitle

@@ -24,6 +24,7 @@
 #import "LZTabBar.h"
 #import "LZTabBarBadgeButton.h"
 #import "LZTabBarButton.h"
+#import "LZMarqueeLabel.h"
 #import "LZWebViewController.h"
 
 FOUNDATION_EXPORT double LZDependencyControllerkitVersionNumber;
