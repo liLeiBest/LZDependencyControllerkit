@@ -219,20 +219,22 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [super setTitle:title];
     
     if (title && title.length) {
-        
-        LZMarqueeLabel *titleView = [[LZMarqueeLabel alloc] init];
-        titleView.marqueeLabelType = LZMarqueeLabelTypeLeft;
-        Class appearanceClass = [UINavigationController class];
-        UINavigationBar *theme = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[appearanceClass]];
-        NSDictionary *attributes = [theme titleTextAttributes];
-        if (nil == attributes || 0 == attributes.count) {
-            attributes = @{
-                NSForegroundColorAttributeName : LZColorWithHexString(@"#333333"),
-                NSFontAttributeName : LZQuickUnit.fontWeight(18, UIFontWeightSemibold),
-            };
+        if (@available(iOS 11, *)) {
+            
+            LZMarqueeLabel *titleView = [[LZMarqueeLabel alloc] init];
+            titleView.marqueeLabelType = LZMarqueeLabelTypeLeft;
+            Class appearanceClass = [UINavigationController class];
+            UINavigationBar *theme = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[appearanceClass]];
+            NSDictionary *attributes = [theme titleTextAttributes];
+            if (nil == attributes || 0 == attributes.count) {
+                attributes = @{
+                    NSForegroundColorAttributeName : LZColorWithHexString(@"#333333"),
+                    NSFontAttributeName : LZQuickUnit.fontWeight(18, UIFontWeightSemibold),
+                };
+            }
+            titleView.attributedText = [[NSAttributedString alloc] initWithString:title attributes:attributes];
+            self.navigationItem.titleView = titleView;
         }
-        titleView.attributedText = [[NSAttributedString alloc] initWithString:title attributes:attributes];
-        self.navigationItem.titleView = titleView;
     }
 }
 
