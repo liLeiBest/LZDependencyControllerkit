@@ -121,7 +121,7 @@
     } else if (1 == to) {
         
         LZWebViewController *ctr1 = [[LZWebViewController alloc] init];
-        ctr1.URL = [NSURL URLWithString:@"https://cpcapk.cbg.cn/cpch5/xsdApp/areaList-cq.html"];
+        ctr1.URL = [NSURL URLWithString:@"https://www.baidu.com"];
         ctr1.showWebTitle = NO;
         @lzweakify(self);
         ctr1.extractSubLinkCompletionHander = ^(NSURL *linkURL) {

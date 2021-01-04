@@ -91,10 +91,15 @@
     
     [self updateProportionOfTitleAndImage];
     // 注册监听
-    [_item addObserver:self
-            forKeyPath:@"badgeValue"
-               options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-               context:nil];
+    @try {
+        [self.item removeObserver:self forKeyPath:@"badgeValue"];
+        [_item addObserver:self
+                forKeyPath:@"badgeValue"
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                   context:nil];
+    } @catch (NSException *exception) {
+    } @finally {
+    }
 }
 
 - (void)updateProportionOfTitleAndImage {
