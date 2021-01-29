@@ -868,6 +868,7 @@ commitPreviewingViewController:(UIViewController *)previewingViewController API_
 contextMenuConfigurationForElement:(WKContextMenuElementInfo *)elementInfo
 completionHandler:(void (^)(UIContextMenuConfiguration * _Nullable configuration))completionHandler API_AVAILABLE(ios(13.0)) {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    completionHandler(nil);
 }
 - (void)webView:(WKWebView *)webView
 contextMenuForElement:(WKContextMenuElementInfo *)elementInfo
