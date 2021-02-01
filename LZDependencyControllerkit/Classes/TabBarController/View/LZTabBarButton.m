@@ -9,6 +9,8 @@
 #import "LZTabBarButton.h"
 #import "LZTabBarBadgeButton.h"
 
+static NSString *kBadgeNumber = @"badgeValue";
+
 @interface LZTabBarButton()
 
 /** 字体未选中颜色 */
@@ -28,9 +30,7 @@
 
 // MARK: - Initialization
 - (instancetype)init {
-    
     if (self = [super init]) {
-        
         // 设置默值
         _margin = 10.0f;
         _titleNormalColor = [UIColor grayColor];
@@ -45,7 +45,6 @@
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.contentMode = UIViewContentModeScaleAspectFit;
-        
         // 添加小红点提示
         LZTabBarBadgeButton *badgeBtn = [[LZTabBarBadgeButton alloc] init];
         self.badgeBtn = badgeBtn;
@@ -62,7 +61,7 @@
 }
 
 - (void)dealloc {
-    [self.item removeObserver:self forKeyPath:@"badgeValue"];
+    [self removeBadgeObserver];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {}
@@ -85,23 +84,19 @@
     return CGRectMake(titleX, titleY, titleW, titleH);
 }
 
-// MAKR: - Public
+// MARK: - Setter
 - (void)setItem:(UITabBarItem *)item {
     _item = item;
     
     [self updateProportionOfTitleAndImage];
-    // 注册监听
-    @try {
-        [self.item removeObserver:self forKeyPath:@"badgeValue"];
-        [_item addObserver:self
-                forKeyPath:@"badgeValue"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-                   context:nil];
-    } @catch (NSException *exception) {
-    } @finally {
-    }
+    [self removeBadgeObserver];
+    [self.item addObserver:self
+            forKeyPath:kBadgeNumber
+               options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+               context:nil];
 }
 
+// MARK: - Private
 - (void)updateProportionOfTitleAndImage {
     
     self.imageProportion = 0.5f;
@@ -135,6 +130,14 @@
 
 - (BOOL)hasBgImage {
     return nil != self.currentBackgroundImage;
+}
+
+- (void)removeBadgeObserver {
+    @try {
+        [self.item removeObserver:self forKeyPath:kBadgeNumber];
+    } @catch (NSException *exception) {
+    } @finally {
+    }
 }
 
 // MARK: - Observer
