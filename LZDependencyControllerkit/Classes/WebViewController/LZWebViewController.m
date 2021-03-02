@@ -462,7 +462,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
     IMP newIMP = imp_implementationWithBlock(^(id obj, UIApplication *application, UIWindow *window) {
         if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
             if (needRotation) {
-                [weakSelf forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
+                if (@available(iOS 11, *)) {
+                    [weakSelf forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
+                }
             }
         }
         return needRotation ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskPortrait;
