@@ -1,36 +1,36 @@
 PODS:
-  - LZDependencyControllerkit (0.7.1):
-    - LZDependencyControllerkit/PickerViewController (= 0.7.1)
-    - LZDependencyControllerkit/StartPageController (= 0.7.1)
-    - LZDependencyControllerkit/TabBarController (= 0.7.1)
-    - LZDependencyControllerkit/WebViewController (= 0.7.1)
+  - LZDependencyControllerkit (0.7.2):
+    - LZDependencyControllerkit/PickerViewController (= 0.7.2)
+    - LZDependencyControllerkit/StartPageController (= 0.7.2)
+    - LZDependencyControllerkit/TabBarController (= 0.7.2)
+    - LZDependencyControllerkit/WebViewController (= 0.7.2)
     - LZDependencyToolkit
-  - LZDependencyControllerkit/PickerViewController (0.7.1):
+  - LZDependencyControllerkit/PickerViewController (0.7.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/StartPageController (0.7.1):
+  - LZDependencyControllerkit/StartPageController (0.7.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/TabBarController (0.7.1):
+  - LZDependencyControllerkit/TabBarController (0.7.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/WebViewController (0.7.1):
+  - LZDependencyControllerkit/WebViewController (0.7.2):
     - LZDependencyToolkit
-  - LZDependencyToolkit (2.0.4):
-    - LZDependencyToolkit/Category (= 2.0.4)
-    - LZDependencyToolkit/Define (= 2.0.4)
-    - LZDependencyToolkit/Object (= 2.0.4)
-    - LZDependencyToolkit/Struct (= 2.0.4)
-  - LZDependencyToolkit/Category (2.0.4):
+  - LZDependencyToolkit (2.1.4):
+    - LZDependencyToolkit/Category (= 2.1.4)
+    - LZDependencyToolkit/Define (= 2.1.4)
+    - LZDependencyToolkit/Object (= 2.1.4)
+    - LZDependencyToolkit/Struct (= 2.1.4)
+  - LZDependencyToolkit/Category (2.1.4):
     - MJRefresh
-  - LZDependencyToolkit/Define (2.0.4)
-  - LZDependencyToolkit/Object (2.0.4)
-  - LZDependencyToolkit/Struct (2.0.4):
-    - LZDependencyToolkit/Struct/AppUnit (= 2.0.4)
-    - LZDependencyToolkit/Struct/CryptoUnit (= 2.0.4)
-    - LZDependencyToolkit/Struct/DeviceUnit (= 2.0.4)
-    - LZDependencyToolkit/Struct/QuickUnit (= 2.0.4)
-  - LZDependencyToolkit/Struct/AppUnit (2.0.4)
-  - LZDependencyToolkit/Struct/CryptoUnit (2.0.4)
-  - LZDependencyToolkit/Struct/DeviceUnit (2.0.4)
-  - LZDependencyToolkit/Struct/QuickUnit (2.0.4)
+  - LZDependencyToolkit/Define (2.1.4)
+  - LZDependencyToolkit/Object (2.1.4)
+  - LZDependencyToolkit/Struct (2.1.4):
+    - LZDependencyToolkit/Struct/AppUnit (= 2.1.4)
+    - LZDependencyToolkit/Struct/CryptoUnit (= 2.1.4)
+    - LZDependencyToolkit/Struct/DeviceUnit (= 2.1.4)
+    - LZDependencyToolkit/Struct/QuickUnit (= 2.1.4)
+  - LZDependencyToolkit/Struct/AppUnit (2.1.4)
+  - LZDependencyToolkit/Struct/CryptoUnit (2.1.4)
+  - LZDependencyToolkit/Struct/DeviceUnit (2.1.4)
+  - LZDependencyToolkit/Struct/QuickUnit (2.1.4)
   - MJRefresh (3.5.0)
 
 DEPENDENCIES:
@@ -46,8 +46,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LZDependencyControllerkit: eafb6c6ac76241795dc32d384a171c1979cf1359
-  LZDependencyToolkit: 249183f00555e7e4f26c66642e10f38d8a7007b8
+  LZDependencyControllerkit: 929f9e480b207baa141e958035364d31414ac905
+  LZDependencyToolkit: 3f56e2293f5a511c9798ca653c461337d4290c97
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
 
 PODFILE CHECKSUM: 2505cb330acfd522b830c62e463121ccbe219064
