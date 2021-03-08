@@ -69,6 +69,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIColor *pickerSeperatorColor;
 /// 选中的索引
 @property (nonatomic, strong) NSArray *selectedIndexs;
+/// 圆角，默认：0
+@property (nonatomic, assign) CGFloat corner;
 
 
 /// 实例

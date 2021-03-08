@@ -7,13 +7,16 @@
 
 #import "LZPickerViewController.h"
 
-@interface LZPickerViewController ()<UIPickerViewDataSource, UIPickerViewDelegate>
+@interface LZPickerViewController ()
+<LZModalPresentationTranslucentTransitioningDelegate, UIViewControllerTransitioningDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
+@property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, weak) IBOutlet UIView *toolbarView;
 @property (nonatomic, weak) IBOutlet UIButton *cancleBtn;
 @property (nonatomic, weak) IBOutlet UIButton *titleBtn;
 @property (nonatomic, weak) IBOutlet UIButton *confirmBtn;
 @property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *pickerViewBottom;
 
 @property (nonatomic, strong) NSArray *lastSelectedIndex;
 @property (nonatomic, strong) NSMutableArray *indexDataSource;
@@ -30,31 +33,28 @@
 }
 
 // MARK: - Initialization
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if (self = [super initWithCoder:coder]) {
+        
+        self.modalPresentationStyle = UIModalPresentationCustom;
+        self.transitioningDelegate = self;
+    }
+    return self;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self setupUI];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     
-    [UIView animateWithDuration:0.25 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0.5 options:UIViewAnimationOptionCurveLinear animations:^{
-        self.view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-    } completion:^(BOOL finished) {
-    }];
+    [self.containerView roundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight radius:self.corner];
 }
 
 - (void)dealloc {
     LZLog();
-}
-
-- (UIModalPresentationStyle)modalPresentationStyle {
-    return UIModalPresentationOverFullScreen;
-}
-
-- (UIModalTransitionStyle)modalTransitionStyle {
-    return UIModalTransitionStyleCrossDissolve;
 }
 
 // MARK: - Public
@@ -68,11 +68,6 @@
 }
 
 // MARK: - UI Action
-- (void)touchesBegan:(NSSet<UITouch *> *)touches
-           withEvent:(UIEvent *)event {
-    [self closePickerView];
-}
-
 - (IBAction)cancleDidTouch:(UIButton *)sender {
     
     [self closePickerView];
@@ -96,17 +91,23 @@
     [self closePickerView];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    
+    [self closePickerView];
+}
+
 // MAKR: - Private
 - (void)setupUI {
     
-    self.view.backgroundColor = [[UIColor blackColor] colorWithAlpha:0.0];
+    self.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3f];
+    
     [self configToolBar];
     [self configPickerView];
 }
 
 - (void)configToolBar {
     
-    self.toolbarView.backgroundColor = [UIColor whiteColor];
     UIColor *textColor = self.toolbarTitleColor ?: [UIColor colorWithHexString:@"#333333"];
     [self.cancleBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.titleBtn setTitleColor:textColor forState:UIControlStateNormal];
@@ -116,9 +117,10 @@
 
 - (void)configPickerView {
     
+    self.pickerViewBottom.constant = LZAppUnit.safeAreaInsets().bottom;
+    [self.view layoutIfNeeded];
     self.pickerView.dataSource = self;
     self.pickerView.delegate = self;
-    
     if (self.selectedIndexs && self.selectedIndexs.count) {
         
         self.lastSelectedIndex = self.selectedIndexs;
@@ -152,7 +154,28 @@
     }];
 }
 
-// MARK: - UIPickerView
+
+// MARK: - Delegate
+// MARK: <LZModalPresentationTranslucentTransitioningDelegate>
+- (UIView *)contentViewInModalPresentationTranslucentTransitioning:(LZModalPresentationTranslucentTransitioning *)addressPickerTransition {
+    return self.containerView;
+}
+
+// MARK: <UIViewControllerTransitioningDelegate>
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    
+    LZModalPresentationTranslucentTransitioning *transitioning = [[LZModalPresentationTranslucentTransitioning alloc] initWithType:LZModalPresentationTypeShow];
+    transitioning.delegate = self;
+    return transitioning;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    
+    LZModalPresentationTranslucentTransitioning *transitioning = [[LZModalPresentationTranslucentTransitioning alloc] initWithType:LZModalPresentationTypeDismiss];
+    transitioning.delegate = self;
+    return transitioning;
+}
+
 // MARK: <UIPickerViewDataSource>
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
     if ([self.dataSource respondsToSelector:@selector(numberOfComponentsInPickerViewController:)]) {

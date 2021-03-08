@@ -25,15 +25,12 @@
 - (NSMutableArray *)datasoource {
     if (nil == _datasoource) {
         _datasoource = [NSMutableArray array];
-        [_datasoource addObjectsFromArray:@[
-            @"普通教学",
-            @"双语教学",
-            @"蒙氏教学",
-            @"国学特色",
-            @"艺术培养",
-            @"科学领域",
-            @"体智能",
-        ]];
+        NSString *tmp = @"选项";
+        for (NSInteger i = 0; i < 10; i++) {
+            
+            NSString *title = [tmp stringByAppendingFormat:@"%@", LZQuickUnit.toString(@(i))];
+            [_datasoource addObject:title];
+        }
     }
     return _datasoource;
 }
@@ -49,7 +46,7 @@
     [super viewWillAppear:animated];
     
 //    if (LZGuideViewController.needGuide()) {
-//        
+//
 //        LZGuideOneViewController *one = [LZGuideOneViewController instance];
 //        LZGuideTwoViewController *two = [LZGuideTwoViewController instance];
 //        LZGuideThreeViewController *three = [LZGuideThreeViewController instance];
@@ -81,7 +78,8 @@
 - (void)testPickerDidTouch {
     
     LZPickerViewController *ctr = [LZPickerViewController instance];
-    ctr.pickerTitle = @"点单类型";
+    ctr.pickerTitle = @"我是标题";
+    ctr.corner = 8.0f;
     ctr.selectedIndexs = self.selectedIndexs;
     ctr.toolbarTitleColor = [UIColor magentaColor];
     ctr.pickerSeperatorColor = [UIColor redColor];
@@ -150,9 +148,6 @@
     NSString *imgURLString = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585452528893&di=95442a108d60a388c924d815fa6cba7a&imgtype=0&src=http%3A%2F%2Fwww.318art.cn%2Fdata%2Fattached%2Fimage%2F20130326%2F20130326170226_93408.jpg";
     NSURL *imgURL = [NSURL URLWithString:imgURLString];
     return imgURL;
-//    NSString *imgFilePath = [[NSBundle mainBundle] pathForResource:@"5" ofType:@"jpg"];
-//    NSURL *fileFileURL = [NSURL fileURLWithPath:imgFilePath];
-//    return fileFileURL;
 }
 
 // MARK: - LZPickerViewController
