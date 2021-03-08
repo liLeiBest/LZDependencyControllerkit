@@ -223,9 +223,13 @@ static NSString * const LZURLSchemeMail = @"mailto";
             
             LZMarqueeLabel *titleView = [[LZMarqueeLabel alloc] init];
             titleView.marqueeLabelType = LZMarqueeLabelTypeLeft;
-            Class appearanceClass = [UINavigationController class];
-            UINavigationBar *theme = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[appearanceClass]];
-            NSDictionary *attributes = [theme titleTextAttributes];
+            NSDictionary *attributes = [self.navigationController.navigationBar titleTextAttributes];
+            if (nil == attributes || 0 == attributes.count) {
+                
+                Class appearanceClass = [UINavigationController class];
+                UINavigationBar *theme = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[appearanceClass]];
+                attributes = [theme titleTextAttributes];
+            }
             if (nil == attributes || 0 == attributes.count) {
                 attributes = @{
                     NSForegroundColorAttributeName : LZColorWithHexString(@"#333333"),
