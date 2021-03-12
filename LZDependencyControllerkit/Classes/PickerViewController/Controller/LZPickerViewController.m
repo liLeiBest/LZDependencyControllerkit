@@ -33,14 +33,6 @@
 }
 
 // MARK: - Initialization
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        
-        self.modalPresentationStyle = UIModalPresentationCustom;
-        self.transitioningDelegate = self;
-    }
-    return self;
-}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -55,6 +47,14 @@
 
 - (void)dealloc {
     LZLog();
+}
+
+- (UIModalPresentationStyle)modalPresentationStyle {
+    return UIModalPresentationCustom;
+}
+
+- (id<UIViewControllerTransitioningDelegate>)transitioningDelegate {
+    return self;
 }
 
 // MARK: - Public
