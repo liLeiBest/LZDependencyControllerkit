@@ -24,11 +24,22 @@ NSString * stringFromBytesWithLength(unsigned char *bytes, unsigned long length)
 /**
  加解密
  */
-NSData * Crypto(NSData *data, NSString *secret, CCOperation operation, size_t keySize, size_t blockSize, CCAlgorithm alg) {
+NSData * Crypto(NSData *data, id secret,  CCOperation operation, size_t keySize, size_t blockSize, CCAlgorithm alg) {
     
     char keyPtr[keySize + 1];
     bzero(keyPtr, sizeof(keyPtr));
-    [secret getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
+    if (secret && [secret isKindOfClass:[NSString class]] && [(NSString *)secret length]) {
+        
+        NSUInteger length = [secret lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        if (length > keySize) {
+            secret = [secret substringToIndex:keySize];
+        }
+        [secret getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
+    } else if (secret && [secret isKindOfClass:[NSData class]]) {
+        memcpy(keyPtr, [(NSData *)secret bytes], keySize);
+    } else {
+        return nil;
+    }
     
     size_t bufferSize = 0;
     size_t dataLength = [data length];
@@ -53,161 +64,197 @@ NSData * Crypto(NSData *data, NSString *secret, CCOperation operation, size_t ke
     if (cryptStatus == kCCSuccess) {
         return [NSData dataWithBytesNoCopy:buffer length:numBytesEncrypted];
     }
-    
     free(buffer);
     return nil;
 }
 
 /**
- DES 加解密
+ 统一加密
  */
-NSData * DESCrypto(NSData *data, NSString *secret, CCOperation operation) {
-    
-    NSUInteger length = [secret lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    if (length > kCCKeySizeDES) {
-        secret = [secret substringToIndex:kCCKeySizeDES];
-    }
-	return Crypto(data, secret, operation, kCCKeySizeDES, kCCBlockSizeDES, kCCAlgorithmDES);
-}
-
-/**
- 3DES 加解密
- */
-NSData * TripleDESCrypto(NSData *data, NSString *secret, CCOperation operation) {
-    
-    NSUInteger length = [secret lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    if (length > kCCKeySize3DES) {
-        secret = [secret substringToIndex:kCCKeySize3DES];
-    }
-    return Crypto(data, secret, operation, kCCKeySize3DES, kCCBlockSize3DES, kCCAlgorithm3DES);
-}
-
-// MARK: MD5
-NSString * MD5(NSString *plaintext) {
-	
-	const char *string = plaintext.UTF8String;
-	CC_LONG length = (CC_LONG)strlen(string);
-	unsigned char bytes[CC_MD5_DIGEST_LENGTH];
-	CC_MD5(string, length, bytes);
-	return stringFromBytesWithLength(bytes, CC_MD5_DIGEST_LENGTH);
-}
-
-// MARK: SHA
-NSString * SHA1(NSString *plaintext) {
-	
-	NSData *data = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
-	unsigned char bytes[CC_SHA1_DIGEST_LENGTH];
-	CC_SHA1(data.bytes, (CC_LONG)data.length, bytes);
-	return stringFromBytesWithLength(bytes, CC_SHA1_DIGEST_LENGTH);
-}
-
-NSString * SHA1WithSecret(NSString *plaintext, NSString *secret) {
-	
-	NSData *keyData = [secret dataUsingEncoding:NSUTF8StringEncoding];
-	NSData *plaintextData = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
-	NSMutableData *dataM = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
-	CCHmac(kCCHmacAlgSHA1,
-		   keyData.bytes,
-		   keyData.length,
-		   plaintextData.bytes,
-		   plaintextData.length,
-		   dataM.mutableBytes);
-	return stringFromBytesWithLength((unsigned char *)dataM.bytes, CC_SHA1_DIGEST_LENGTH);
-}
-
-NSString * SHA256(NSString *plaintext) {
-	
-	const char *string = plaintext.UTF8String;
-	unsigned long length = strlen(string);
-	unsigned char bytes[CC_SHA256_DIGEST_LENGTH];
-	CC_SHA256(string, (CC_LONG)length, bytes);
-	return stringFromBytesWithLength(bytes, CC_SHA256_DIGEST_LENGTH);
-}
-
-NSString * SHA256WithSecret(NSString *plaintext, NSString *secret) {
-	
-	NSData *keyData = [secret dataUsingEncoding:NSUTF8StringEncoding];
-	NSData *plaintextData = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
-	NSMutableData *dataM = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
-	CCHmac(kCCHmacAlgSHA256,
-		   keyData.bytes,
-		   keyData.length,
-		   plaintextData.bytes,
-		   plaintextData.length,
-		   dataM.mutableBytes);
-	return stringFromBytesWithLength((unsigned char *)dataM.bytes, CC_SHA256_DIGEST_LENGTH);
-}
-
-NSString *SHA512(NSString *plaintext) {
-	
-	const char *string = plaintext.UTF8String;
-	unsigned long length = strlen(string);
-	unsigned char bytes[CC_SHA512_DIGEST_LENGTH];
-	CC_SHA512(string, (CC_LONG)length, bytes);
-	return stringFromBytesWithLength(bytes, CC_SHA512_DIGEST_LENGTH);
-}
-
-NSString *SHA512WithSecret(NSString *plaintext, NSString *secret) {
-	
-	NSData *keyData = [secret dataUsingEncoding:NSUTF8StringEncoding];
-	NSData *plaintextData = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
-	NSMutableData *dataM = [NSMutableData dataWithLength:CC_SHA512_DIGEST_LENGTH];
-	CCHmac(kCCHmacAlgSHA512,
-		   keyData.bytes,
-		   keyData.length,
-		   plaintextData.bytes,
-		   plaintextData.length,
-		   dataM.mutableBytes);
-	return stringFromBytesWithLength((unsigned char *)dataM.bytes, CC_SHA512_DIGEST_LENGTH);
-}
-
-// MARK: DES
-NSString * DES_Encrypt(NSString *plaintext, NSString *secret) {
-	
-	NSData *data = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
-	data = DESCrypto(data, secret, kCCEncrypt);
-	NSString *result = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-	return result;
-}
-
-NSString * DES_Decrypt(NSString *ciphertext, NSString *secret) {
-	
-	NSData *data = [[NSData alloc] initWithBase64EncodedString:ciphertext
-													   options:NSDataBase64DecodingIgnoreUnknownCharacters];
-	data = DESCrypto(data, secret, kCCDecrypt);
-	NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	return result;
-}
-
-NSString * TDES_Encrypt(NSString *plaintext, NSString *secret) {
+NSString * _Encrypt(NSString *plaintext, id secret, size_t keySize, size_t blockSize, CCAlgorithm alg, id (* _Crypto)(NSData *data, id secret, CCOperation operation, size_t keySize, size_t blockSize, CCAlgorithm alg)) {
     
     NSData *data = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
-    data = TripleDESCrypto(data, secret, kCCEncrypt);
+    data = _Crypto(data, secret, kCCEncrypt, keySize, blockSize, alg);
     NSString *result = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     return result;
 }
 
-NSString * TDES_Decrypt(NSString *ciphertext, NSString *secret) {
+/**
+ 统一解密
+ */
+NSString * _Decrypt(NSString *ciphertext, id secret, size_t keySize, size_t blockSize, CCAlgorithm alg, id (* _Crypto)(NSData *data, id secret, CCOperation operation, size_t keySize, size_t blockSize, CCAlgorithm alg)) {
     
     NSData *data = [[NSData alloc] initWithBase64EncodedString:ciphertext
                                                        options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    data = TripleDESCrypto(data, secret, kCCDecrypt);
+    data = _Crypto(data, secret, kCCDecrypt, keySize, blockSize, alg);
     NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     return result;
+}
+
+// MARK: MD5
+NSString * MD5_1(NSString *plaintext, NSData **data) {
+    
+    const char *string = plaintext.UTF8String;
+    CC_LONG length = (CC_LONG)strlen(string);
+    unsigned char bytes[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(string, length, bytes);
+    if (nil != data) {
+        
+        NSMutableData *md5Data = [NSMutableData data];
+        [md5Data appendBytes:bytes length:CC_MD5_DIGEST_LENGTH];
+        *data = [md5Data copy];
+    }
+    return stringFromBytesWithLength(bytes, CC_MD5_DIGEST_LENGTH);
+}
+
+NSString * MD5(NSString *plaintext) {
+    return MD5_1(plaintext, NULL);
+}
+
+// MARK: SHA
+NSString * SHA1(NSString *plaintext, ...) {
+	
+    va_list list;
+    va_start(list, plaintext);
+    NSString *secret = va_arg(list, NSString *);
+    va_end(list);
+    
+	NSData *plaintextData = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
+    if (secret && [secret isKindOfClass:[NSString class]]) {
+        
+        NSData *keyData = [secret dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableData *dataM = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA1,
+               keyData.bytes,
+               keyData.length,
+               plaintextData.bytes,
+               plaintextData.length,
+               dataM.mutableBytes);
+        return stringFromBytesWithLength((unsigned char *)dataM.bytes, CC_SHA1_DIGEST_LENGTH);
+    } else {
+        
+        unsigned char bytes[CC_SHA1_DIGEST_LENGTH];
+        CC_SHA1(plaintextData.bytes, (CC_LONG)plaintextData.length, bytes);
+        return stringFromBytesWithLength(bytes, CC_SHA1_DIGEST_LENGTH);
+    }
+}
+
+NSString * SHA256(NSString *plaintext, ...) {
+    
+    va_list list;
+    va_start(list, plaintext);
+    NSString *secret = va_arg(list, NSString *);
+    va_end(list);
+    
+    if (secret && [secret isKindOfClass:[NSString class]]) {
+        
+        NSData *keyData = [secret dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *plaintextData = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableData *dataM = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA256,
+               keyData.bytes,
+               keyData.length,
+               plaintextData.bytes,
+               plaintextData.length,
+               dataM.mutableBytes);
+        return stringFromBytesWithLength((unsigned char *)dataM.bytes, CC_SHA256_DIGEST_LENGTH);
+    } else {
+        
+        const char *string = plaintext.UTF8String;
+        unsigned long length = strlen(string);
+        unsigned char bytes[CC_SHA256_DIGEST_LENGTH];
+        CC_SHA256(string, (CC_LONG)length, bytes);
+        return stringFromBytesWithLength(bytes, CC_SHA256_DIGEST_LENGTH);
+    }
+}
+
+NSString *SHA512(NSString *plaintext, ...) {
+	
+    va_list list;
+    va_start(list, plaintext);
+    NSString *secret = va_arg(list, NSString *);
+    va_end(list);
+    
+    if (secret && [secret isKindOfClass:[NSString class]]) {
+        
+        NSData *keyData = [secret dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *plaintextData = [plaintext dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableData *dataM = [NSMutableData dataWithLength:CC_SHA512_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA512,
+               keyData.bytes,
+               keyData.length,
+               plaintextData.bytes,
+               plaintextData.length,
+               dataM.mutableBytes);
+        return stringFromBytesWithLength((unsigned char *)dataM.bytes, CC_SHA512_DIGEST_LENGTH);
+    } else {
+        
+        const char *string = plaintext.UTF8String;
+        unsigned long length = strlen(string);
+        unsigned char bytes[CC_SHA512_DIGEST_LENGTH];
+        CC_SHA512(string, (CC_LONG)length, bytes);
+        return stringFromBytesWithLength(bytes, CC_SHA512_DIGEST_LENGTH);
+    }
+}
+
+// MARK: DES
+NSString * DES_Encrypt(NSString *plaintext, NSString *secret) {
+    return _Encrypt(plaintext, secret, kCCKeySizeDES, kCCBlockSizeDES, kCCAlgorithmDES, Crypto);
+}
+
+NSString * DES_Decrypt(NSString *ciphertext, NSString *secret) {
+    return _Decrypt(ciphertext, secret, kCCKeySizeDES, kCCBlockSizeDES, kCCAlgorithmDES, Crypto);
+}
+
+NSString * TDES_Encrypt(NSString *plaintext, NSString *secret) {
+    return _Encrypt(plaintext, secret, kCCKeySize3DES, kCCBlockSize3DES, kCCAlgorithm3DES, Crypto);
+}
+
+NSString * TDES_Decrypt(NSString *ciphertext, NSString *secret) {
+    return _Decrypt(ciphertext, secret, kCCKeySize3DES, kCCBlockSize3DES, kCCAlgorithm3DES, Crypto);
+}
+
+// MARK: AES
+NSString * AES_Encrypt(NSString *plaintext, NSString *secret) {
+    return _Encrypt(plaintext, secret, kCCKeySizeAES128, kCCBlockSizeAES128, kCCAlgorithmAES, Crypto);
+}
+
+NSString * AES_Decrypt(NSString *ciphertext, NSString *secret) {
+    return _Decrypt(ciphertext, secret, kCCKeySizeAES128, kCCBlockSizeAES128, kCCAlgorithmAES, Crypto);
+}
+
+NSString * AES192_Encrypt(NSString *plaintext, NSString *secret) {
+    return _Encrypt(plaintext, secret, kCCKeySizeAES192, kCCBlockSizeAES128, kCCAlgorithmAES, Crypto);
+}
+
+NSString * AES192_Decrypt(NSString *ciphertext, NSString *secret) {
+    return _Decrypt(ciphertext, secret, kCCKeySizeAES192, kCCBlockSizeAES128, kCCAlgorithmAES, Crypto);
+}
+
+NSString * AES256_Encrypt(NSString *plaintext, NSString *secret) {
+    return _Encrypt(plaintext, secret, kCCKeySizeAES256, kCCBlockSizeAES128, kCCAlgorithmAES, Crypto);
+}
+
+NSString * AES256_Decrypt(NSString *ciphertext, NSString *secret) {
+    return _Decrypt(ciphertext, secret, kCCKeySizeAES256, kCCBlockSizeAES128, kCCAlgorithmAES, Crypto);
 }
 
 // MARK: - Initilization
 struct LZCryptoUnit_type LZCryptoUnit = {
     
 	.MD5 = MD5,
+    .MD5_1 = MD5_1,
 	.SHA1 = SHA1,
-	.SHA1WithSecret = SHA1WithSecret,
 	.SHA256 = SHA256,
-	.SHA256WithSecret = SHA256WithSecret,
 	.SHA512 = SHA512,
-	.SHA512WithSecret = SHA512WithSecret,
 	.DES_Encrypt = DES_Encrypt,
 	.DES_Decrypt = DES_Decrypt,
     .TDES_Encrypt = TDES_Encrypt,
     .TDES_Decrypt = TDES_Decrypt,
+    .AES_Encrypt = AES_Encrypt,
+    .AES_Decrypt = AES_Decrypt,
+    .AES192_Encrypt = AES192_Encrypt,
+    .AES192_Decrypt = AES192_Decrypt,
+    .AES256_Encrypt = AES256_Encrypt,
+    .AES256_Decrypt = AES256_Decrypt,
 };
