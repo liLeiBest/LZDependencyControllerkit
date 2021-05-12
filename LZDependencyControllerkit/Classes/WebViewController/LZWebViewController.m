@@ -698,6 +698,18 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 - (void)webView:(WKWebView *)webView
 didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+    if ([self.customUserAgent isValidString]) {
+    
+        NSString *ua = self.webView.customUserAgent;
+        if (nil == ua || 0 == ua.length || [ua rangeOfString:self.customUserAgent].location == NSNotFound) {
+            @lzweakify(self);
+            [self.webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
+                @lzstrongify(self);
+                self.webView.customUserAgent = [result stringByAppendingFormat:@" %@", self.customUserAgent];
+                LZLog(@"\nUserAgent:%@\ncustomUserAgent:%@", result, self.webView.customUserAgent);
+            }];
+        }
+    }
 }
 
 - (void)webView:(WKWebView *)webView
@@ -718,18 +730,6 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
     if (self.displayEmptyPage) {
         [self hideEmptyDataSet:self.webView.scrollView];
     }
-    @lzweakify(self);
-    [self.webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
-        @lzstrongify(self);
-        if ([self.customUserAgent isValidString]) {
-            if ([result rangeOfString:self.customUserAgent].location == NSNotFound) {
-                
-                NSString *newUserAgent = [result stringByAppendingFormat:@" %@", self.customUserAgent];
-                self.webView.customUserAgent = newUserAgent;
-            }
-        }
-        LZLog(@"\nUserAgent:%@\ncustomUserAgent:%@", result, self.webView.customUserAgent);
-    }];
 }
 
 - (void)webView:(WKWebView *)webView
