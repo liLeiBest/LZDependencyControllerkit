@@ -12,37 +12,6 @@
 #import "UIColor+LZExtension.h"
 #import "NSObject+LZRuntime.h"
 
-@interface LZWeakEmptyObjectContainer : NSObject
-
-@property (nonatomic, readonly, strong) id weakObject;
-
-/** 构造方法 */
-- (instancetype)initWithWeakObject:(id)object;
-
-@end
-
-@implementation LZWeakEmptyObjectContainer
-
-- (instancetype)initWithWeakObject:(id)object {
-    if (self = [super init]) {
-        _weakObject = object;
-    }
-    return self;
-}
-
-@end
-
-static char const * const kEmptyDataSetImage = "emptyDataSetImage";
-static char const * const kEmptyDataSetTitle = "emptyDataSetTitle";
-static char const * const kEmptyDataSetTitleColor = "emptyDataSetImageColor";
-static char const * const kEmptyDataSetDetail = "emptyDataSetDetail";
-static char const * const kEmptyDataSetDetailColor = "emptyDataSetDetailColor";
-static char const * const kEmptyDataSetButtonTitle = "emptyDataSetButtonTitle";
-static char const * const kEmptyDataSetButtonTitleColor = "emptyDataSetButtonTitleColor";
-static char const * const kEmptyDataSetButtonBackgroundColor = "emptyDataSetButtonBackgroundColor";
-static char const * const kEmptyDataSetButtonBackgroundImage = "emptyDataSetButtonBackgroundImage";
-static char const * const kEmptyDataSetVerticalOff = "emptyDataSetVerticalOff";
-
 @interface UIViewController (LZEmptyDataSet)<DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, LZEmptyDataSetDelegate>
 @end
 
@@ -51,103 +20,83 @@ static char const * const kEmptyDataSetVerticalOff = "emptyDataSetVerticalOff";
 // MARK: - Public
 // MARK: Setter/Getter
 - (UIImage *)emptyDataSetImage {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetImage);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetImage:(UIImage *)emptyDataSetImage {
-    LZ_setAssociatedObject(self, kEmptyDataSetImage, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetImage]);
+    LZ_setAssociatedObject(self, @selector(emptyDataSetImage), emptyDataSetImage);
 }
 
 - (NSString *)emptyDataSetTitle {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetTitle);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetTitle:(NSString *)emptyDataSetTitle {
-    LZ_setAssociatedObject(self, kEmptyDataSetTitle, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetTitle]);
+    LZ_setAssociatedCopyObject(self, @selector(emptyDataSetTitle), emptyDataSetTitle);
 }
 
 - (UIColor *)emptyDataSetTitleColor {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetTitleColor);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetTitleColor:(UIColor *)emptyDataSetTitleColor {
-    LZ_setAssociatedObject(self, kEmptyDataSetTitleColor, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetTitleColor]);
+    LZ_setAssociatedObject(self, @selector(emptyDataSetTitleColor), emptyDataSetTitleColor);
 }
 
 - (NSString *)emptyDataSetDetail {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetDetail);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetDetail:(NSString *)emptyDataSetDetail {
-    LZ_setAssociatedObject(self, kEmptyDataSetDetail, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetDetail]);
+    LZ_setAssociatedCopyObject(self, @selector(emptyDataSetDetail), emptyDataSetDetail);
 }
 
 - (UIColor *)emptyDataSetDetailColor {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetDetailColor);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetDetailColor:(UIColor *)emptyDataSetDetailColor {
-    LZ_setAssociatedObject(self, kEmptyDataSetDetailColor, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetDetailColor]);
+    LZ_setAssociatedObject(self, @selector(emptyDataSetDetailColor), emptyDataSetDetailColor);
 }
 
 - (NSString *)emptyDataSetButtonTitle {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetButtonTitle);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetButtonTitle:(NSString *)emptyDataSetButtonTitle {
-    LZ_setAssociatedObject(self, kEmptyDataSetButtonTitle, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetButtonTitle]);
+    LZ_setAssociatedCopyObject(self, @selector(emptyDataSetButtonTitle), emptyDataSetButtonTitle);
 }
 
 - (UIColor *)emptyDataSetButtonTitleColor {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetButtonTitleColor);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetButtonTitleColor:(UIColor *)emptyDataSetButtonTitleColor {
-    LZ_setAssociatedObject(self, kEmptyDataSetButtonTitleColor, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetButtonTitleColor]);
+    LZ_setAssociatedObject(self, @selector(emptyDataSetButtonTitleColor), emptyDataSetButtonTitleColor);
 }
 
 - (NSString *)emptyDataSetButtonBackgroundColor {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetButtonBackgroundColor);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetButtonBackgroundColor:(NSString *)emptyDataSetButtonBackgroundColor {
-    LZ_setAssociatedObject(self, kEmptyDataSetButtonBackgroundColor, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetButtonBackgroundColor]);
+    LZ_setAssociatedCopyObject(self, @selector(emptyDataSetButtonBackgroundColor), emptyDataSetButtonBackgroundColor);
 }
 
 - (UIImage *)emptyDataSetButtonBackgroundImage {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetButtonBackgroundImage);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetButtonBackgroundImage:(UIImage *)emptyDataSetButtonBackgroundImage {
-    LZ_setAssociatedObject(self, kEmptyDataSetButtonBackgroundImage, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetButtonBackgroundImage]);
+    LZ_setAssociatedObject(self, @selector(emptyDataSetButtonBackgroundImage), emptyDataSetButtonBackgroundImage);
 }
 
 - (NSNumber *)emptyDataSetVerticalOff {
-    
-    LZWeakEmptyObjectContainer *container = LZ_getAssociatedObject(self, kEmptyDataSetVerticalOff);
-    return container.weakObject;
+    return LZ_getAssociatedObject(self, _cmd);
 }
 
 - (void)setEmptyDataSetVerticalOff:(NSNumber *)emptyDataSetVerticalOff {
-    LZ_setAssociatedObject(self, kEmptyDataSetVerticalOff, [[LZWeakEmptyObjectContainer alloc] initWithWeakObject:emptyDataSetVerticalOff]);
+    LZ_setAssociatedObject(self, @selector(emptyDataSetVerticalOff), emptyDataSetVerticalOff);
 }
 
 // MARK: Method
