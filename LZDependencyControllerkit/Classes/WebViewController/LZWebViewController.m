@@ -166,16 +166,11 @@ static NSString * const LZURLSchemeMail = @"mailto";
     self.webView.frame = webFrame;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
+- (void)dealloc {
+    NSLog(@"已经死去%s", __PRETTY_FUNCTION__);
     if (self.disappearToRefresh) {
         [self.webView reload];
     }
-}
-
-- (void)dealloc {
-    NSLog(@"已经死去%s", __PRETTY_FUNCTION__);
     if (self.closeCompletionCallback) {
         self.closeCompletionCallback();
     }
