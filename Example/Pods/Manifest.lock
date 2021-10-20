@@ -1,45 +1,45 @@
 PODS:
-  - LZDependencyControllerkit (0.9.1):
-    - LZDependencyControllerkit/PickerViewController (= 0.9.1)
-    - LZDependencyControllerkit/StartPageController (= 0.9.1)
-    - LZDependencyControllerkit/TabBarController (= 0.9.1)
-    - LZDependencyControllerkit/WebViewController (= 0.9.1)
+  - LZDependencyControllerkit (0.9.2):
+    - LZDependencyControllerkit/PickerViewController (= 0.9.2)
+    - LZDependencyControllerkit/StartPageController (= 0.9.2)
+    - LZDependencyControllerkit/TabBarController (= 0.9.2)
+    - LZDependencyControllerkit/WebViewController (= 0.9.2)
     - LZDependencyToolkit
-  - LZDependencyControllerkit/PickerViewController (0.9.1):
+  - LZDependencyControllerkit/PickerViewController (0.9.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/StartPageController (0.9.1):
+  - LZDependencyControllerkit/StartPageController (0.9.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/TabBarController (0.9.1):
+  - LZDependencyControllerkit/TabBarController (0.9.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/WebViewController (0.9.1):
+  - LZDependencyControllerkit/WebViewController (0.9.2):
     - LZDependencyToolkit
-  - LZDependencyToolkit (2.5.0):
-    - LZDependencyToolkit/Category (= 2.5.0)
-    - LZDependencyToolkit/Define (= 2.5.0)
-    - LZDependencyToolkit/Object (= 2.5.0)
-    - LZDependencyToolkit/Struct (= 2.5.0)
-  - LZDependencyToolkit/Category (2.5.0):
+  - LZDependencyToolkit (2.5.2):
+    - LZDependencyToolkit/Category (= 2.5.2)
+    - LZDependencyToolkit/Define (= 2.5.2)
+    - LZDependencyToolkit/Object (= 2.5.2)
+    - LZDependencyToolkit/Struct (= 2.5.2)
+  - LZDependencyToolkit/Category (2.5.2):
     - MJRefresh
-  - LZDependencyToolkit/Define (2.5.0)
-  - LZDependencyToolkit/Object (2.5.0):
-    - LZDependencyToolkit/Object/Proxy (= 2.5.0)
-    - LZDependencyToolkit/Object/Thread (= 2.5.0)
-    - LZDependencyToolkit/Object/Timer (= 2.5.0)
-    - LZDependencyToolkit/Object/Transitioning (= 2.5.0)
-  - LZDependencyToolkit/Object/Proxy (2.5.0)
-  - LZDependencyToolkit/Object/Thread (2.5.0)
-  - LZDependencyToolkit/Object/Timer (2.5.0)
-  - LZDependencyToolkit/Object/Transitioning (2.5.0)
-  - LZDependencyToolkit/Struct (2.5.0):
-    - LZDependencyToolkit/Struct/AppUnit (= 2.5.0)
-    - LZDependencyToolkit/Struct/CryptoUnit (= 2.5.0)
-    - LZDependencyToolkit/Struct/DeviceUnit (= 2.5.0)
-    - LZDependencyToolkit/Struct/QuickUnit (= 2.5.0)
-  - LZDependencyToolkit/Struct/AppUnit (2.5.0)
-  - LZDependencyToolkit/Struct/CryptoUnit (2.5.0)
-  - LZDependencyToolkit/Struct/DeviceUnit (2.5.0)
-  - LZDependencyToolkit/Struct/QuickUnit (2.5.0)
-  - MJRefresh (3.6.1)
+  - LZDependencyToolkit/Define (2.5.2)
+  - LZDependencyToolkit/Object (2.5.2):
+    - LZDependencyToolkit/Object/Proxy (= 2.5.2)
+    - LZDependencyToolkit/Object/Thread (= 2.5.2)
+    - LZDependencyToolkit/Object/Timer (= 2.5.2)
+    - LZDependencyToolkit/Object/Transitioning (= 2.5.2)
+  - LZDependencyToolkit/Object/Proxy (2.5.2)
+  - LZDependencyToolkit/Object/Thread (2.5.2)
+  - LZDependencyToolkit/Object/Timer (2.5.2)
+  - LZDependencyToolkit/Object/Transitioning (2.5.2)
+  - LZDependencyToolkit/Struct (2.5.2):
+    - LZDependencyToolkit/Struct/AppUnit (= 2.5.2)
+    - LZDependencyToolkit/Struct/CryptoUnit (= 2.5.2)
+    - LZDependencyToolkit/Struct/DeviceUnit (= 2.5.2)
+    - LZDependencyToolkit/Struct/QuickUnit (= 2.5.2)
+  - LZDependencyToolkit/Struct/AppUnit (2.5.2)
+  - LZDependencyToolkit/Struct/CryptoUnit (2.5.2)
+  - LZDependencyToolkit/Struct/DeviceUnit (2.5.2)
+  - LZDependencyToolkit/Struct/QuickUnit (2.5.2)
+  - MJRefresh (3.7.2)
 
 DEPENDENCIES:
   - LZDependencyControllerkit (from `../`)
@@ -54,9 +54,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LZDependencyControllerkit: 48c48f5077e889deda603974a21c0add661ebef5
-  LZDependencyToolkit: 935264d036983f0192f5fd8b64c3bfef231695a6
-  MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
+  LZDependencyControllerkit: 8ff0a5285ef71d013ff2ce1829cbe05bcd043300
+  LZDependencyToolkit: 7ce920f21b9c973e913dcb18f14cee941c470350
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
 
 PODFILE CHECKSUM: 27e735c86f5e0f850b26eefcd3601fe8d0474c47
 
