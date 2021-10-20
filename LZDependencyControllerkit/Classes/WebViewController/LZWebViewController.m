@@ -183,14 +183,28 @@ static NSString * const LZURLSchemeMail = @"mailto";
         [self.scriptMessageContainer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             [userCC removeScriptMessageHandlerForName:key];
         }];
-        
-        [self.webView removeObserver:self forKeyPath:LZWebTitle];
-        [self.webView removeObserver:self forKeyPath:LZWebProgress];
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView Script 崩溃:%@", exception);
+    } @finally {}
+    @try {
+        if (YES == self.isViewLoaded) {
+            [self.webView removeObserver:self forKeyPath:LZWebTitle];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZWebTitle, exception);
+    } @finally {}
+    @try {
+        if (YES == self.isViewLoaded) {
+            [self.webView removeObserver:self forKeyPath:LZWebProgress];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZWebProgress, exception);
+    } @finally {}
+    @try {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView 通知崩溃:%@", exception);
-    } @finally {
-    }
+    } @finally {}
 }
 
 - (void)didReceiveMemoryWarning {
