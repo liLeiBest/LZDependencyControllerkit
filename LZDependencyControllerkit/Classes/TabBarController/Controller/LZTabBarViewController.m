@@ -49,6 +49,17 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     [self removeSysTabarButton];
 }
 
+- (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers animated:(BOOL)animated {
+    [super setViewControllers:viewControllers animated:YES];
+    
+    if (nil == viewControllers || 0 == viewControllers.count) {
+        for (UIView *subView in self.myTabBar.subviews) {
+            [subView removeFromSuperview];
+        }
+        [self setupTabBar];
+    }
+}
+
 #pragma mark - Public
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
     [super setSelectedIndex:selectedIndex];
