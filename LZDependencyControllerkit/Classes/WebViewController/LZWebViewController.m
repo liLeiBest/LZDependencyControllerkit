@@ -237,7 +237,11 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 
                 Class appearanceClass = [UINavigationController class];
                 UINavigationBar *theme = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[appearanceClass]];
-                attributes = [theme titleTextAttributes];
+                if (@available(iOS 13, *)) {
+                    attributes = theme.scrollEdgeAppearance.titleTextAttributes;
+                } else {
+                    attributes = [theme titleTextAttributes];
+                }
             }
             if (nil == attributes || 0 == attributes.count) {
                 attributes = @{
