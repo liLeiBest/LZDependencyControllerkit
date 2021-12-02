@@ -365,6 +365,9 @@ static NSString * const LZGuidePageShowInVersionKey = @"LZGuidePageShowInVersion
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *lastVersion = [defaults stringForKey:LZGuidePageShowInVersionKey];
+    if (nil == lastVersion) {
+        return YES;
+    }
     BOOL isNewVersion = LZAppUnit.compareVersion(lastVersion);
     return NO == isNewVersion;
 }
