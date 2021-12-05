@@ -56,7 +56,6 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         for (UIView *subView in self.myTabBar.subviews) {
             [subView removeFromSuperview];
         }
-        [self setupTabBar];
     }
 }
 
