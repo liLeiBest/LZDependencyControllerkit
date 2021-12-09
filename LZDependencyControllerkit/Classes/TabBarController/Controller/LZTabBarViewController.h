@@ -10,9 +10,9 @@
 #import "LZTabBarControllerDataSource.h"
 #import "LZTabBarControllerDelegate.h"
 
-/** Badge 仅显示红点，不显示数字 */
-UIKIT_EXTERN NSString * const LZTabbar_badge_nonNumber;
-
+/*
+ Badge 显示规则：0不显示；>0显示数字；<0显示红点
+ **/
 @interface LZTabBarViewController : UITabBarController
 
 /** DataSource */

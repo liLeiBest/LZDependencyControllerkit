@@ -50,13 +50,13 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 }
 
 - (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers animated:(BOOL)animated {
-    [super setViewControllers:viewControllers animated:YES];
-    
     if (nil == viewControllers || 0 == viewControllers.count) {
         for (UIView *subView in self.myTabBar.subviews) {
             [subView removeFromSuperview];
         }
+        [self setupTabBar];
     }
+    [super setViewControllers:viewControllers animated:YES];
 }
 
 #pragma mark - Public

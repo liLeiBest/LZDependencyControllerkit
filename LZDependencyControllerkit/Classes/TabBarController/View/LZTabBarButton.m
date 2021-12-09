@@ -25,6 +25,8 @@ static NSString *kBadgeNumber = @"badgeValue";
 /** 引用小红点  */
 @property (nonatomic, weak) LZTabBarBadgeButton *badgeBtn;
 
+@property (nonatomic, assign) BOOL beObserved;
+
 @end
 @implementation LZTabBarButton
 
@@ -89,11 +91,14 @@ static NSString *kBadgeNumber = @"badgeValue";
     _item = item;
     
     [self updateProportionOfTitleAndImage];
-    [self removeBadgeObserver];
-    [self.item addObserver:self
-            forKeyPath:kBadgeNumber
-               options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-               context:nil];
+    if (NO == self.beObserved) {
+        
+        self.beObserved = YES;
+        [self.item addObserver:self
+                    forKeyPath:kBadgeNumber
+                       options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                       context:nil];
+    }
 }
 
 // MARK: - Private

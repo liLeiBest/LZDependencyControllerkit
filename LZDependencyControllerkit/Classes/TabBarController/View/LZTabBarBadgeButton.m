@@ -7,8 +7,6 @@
 
 #import "LZTabBarBadgeButton.h"
 
-NSString * const LZTabbar_badge_nonNumber = @"tabar_badge_noneNumber";
-
 @interface LZTabBarBadgeButton()
 
 /** 默认小红点的大小 */
@@ -60,21 +58,18 @@ NSString * const LZTabbar_badge_nonNumber = @"tabar_badge_noneNumber";
     _badgeValue = badgeValue;
     
     self.hidden = NO;
-    
     // 不显示数字
-    if ([badgeValue isEqualToString:LZTabbar_badge_nonNumber]) {
+    if (0 > badgeValue.integerValue) {
         
         self.size = CGSizeMake(_dotSize, _dotSize);
         self.layer.cornerRadius = _dotSize * 0.5;
         return;
     }
-    
     // 等于“0”，隐藏小红点
     if (0 == _badgeValue.intValue) {
         self.hidden = YES;
         return;
     }
-    
     // 显示数字
     switch (_badgeValue.length) {
         case 1: {
