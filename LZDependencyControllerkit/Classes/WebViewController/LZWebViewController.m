@@ -522,6 +522,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 self.progressView = [[UIProgressView alloc] initWithFrame:frame];
                 self.progressView.trackTintColor = self.progressTrackColor;
                 self.progressView.progressTintColor = self.progressColor;
+                self.progressView.progressViewStyle = UIProgressViewStyleBar;
                 [self.view addSubview:self.progressView];
             }
             [self.progressView setAlpha:1.0f];
