@@ -34,11 +34,8 @@
 //MARK: - Private
 - (void)setupUI {
     
-    [self configTabController];
-}
-
-- (void)configTabController {
-    
+    self.view.backgroundColor = UIColor.whiteColor;
+    self.tabBar.backgroundColor = UIColor.whiteColor;
     [[UITabBarItem appearance] setTitleTextAttributes:@{
         NSForegroundColorAttributeName : [UIColor blackColor],
         NSFontAttributeName : [UIFont systemFontOfSize:10 weight:UIFontWeightThin],
@@ -47,6 +44,10 @@
         NSForegroundColorAttributeName : [UIColor redColor],
         NSFontAttributeName : [UIFont systemFontOfSize:10 weight:UIFontWeightSemibold],
     } forState:UIControlStateSelected];
+    [self configTabController];
+}
+
+- (void)configTabController {
     
     LZTestViewController *ctr = [[LZTestViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:ctr];
@@ -60,7 +61,6 @@
     ctr1.title = @"无标题";
     
     LZTestWebJSViewController *ctr2 = [[LZTestWebJSViewController alloc] init];
-    ctr2.view.backgroundColor = [UIColor orangeColor];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:ctr2];
     UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
     UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];
@@ -73,15 +73,6 @@
 
 // MARK: - LZTabBarViewController
 // MARK: <LZTabBarControllerDataSource>
-- (BOOL)tabBarWhetherToShowPlusBtn {
-    return YES;
-}
-
-- (NSDictionary *)tabBarPlusAttributes:(LZTabBar *)myTabBar {
-    return @{LZTabBarPlusBtnImage : [UIImage imageNamed:@"8"],
-    };
-}
-
 //- (NSDictionary *)tabBarBtnAttributes:(LZTabBar *)myTabBar {
 //    return @{LZTabBarTitleNormalColor : [UIColor blackColor],
 //             LZTabBarTitleSelectedColor : [UIColor redColor],
@@ -93,16 +84,8 @@
     return [UIColor whiteColor];
 }
 
-- (UIImage *)tabBarBackgroundImage:(LZTabBar *)myTabBar {
-    return [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 10)];
-}
-
-- (BOOL)tabBarWhetherToshowTopBlackLine {
-    return NO;
-}
-
-//- (NSUInteger)tabBarPlusBtnOffsetY:(LZTabBar *)myTabBar {
-//    return 30;
+//- (UIImage *)tabBarBackgroundImage:(LZTabBar *)myTabBar {
+//    return [UIImage imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 10)];
 //}
 
 // MARK: <LZTabBarControllerDelegate>
@@ -115,10 +98,16 @@
     }
     self.selectedIndex = to;
     if (0 == to) {
-        
+        // 角标
         UINavigationController *nav = self.selectedViewController;
         nav.topViewController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", arc4random_uniform(100)];
     } else if (1 == to) {
+        
+        [self setViewControllers:@[] animated:NO];
+        [self configTabController];
+    } else if (2 == to) {
+        
+    } else if (3 == to) {
         
         LZWebViewController *ctr1 = [[LZWebViewController alloc] init];
         ctr1.URL = [NSURL URLWithString:@"https://www.baidu.com"];
@@ -137,16 +126,8 @@
     }
 }
 
-- (void)plusBtnDidCilck:(LZTabBar *)myTabBar {
-    NSLog(@"=======");
-    
-    UIImage *norImg = [UIImage imageNamed:@"tabbar_classroom_default"];
-    UIImage *selImg = [UIImage imageNamed:@"tabbar_classroom_selected"];
-    [self updateChildViewControllerIndex:0 title:@"更新图标" normalImg:norImg selectedImg:selImg];
+- (NSUInteger)tabBarDefaultSelectedIndex:(LZTabBar *)myTabBar {
+    return 0;
 }
-
-//- (NSUInteger)tabBarDefaultSelectedIndex:(LZTabBar *)myTabBar {
-//    return 0;
-//}
 
 @end

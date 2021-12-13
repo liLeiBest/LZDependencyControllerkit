@@ -11,8 +11,6 @@
 
 @interface LZTabBar()
 
-/** 保存规则菜单按钮 */
-@property (nonatomic, strong) NSMutableArray *normalBtnArrM;
 /** Plus按钮 */
 @property (nonatomic, weak) LZTabBarButton *plusBtn;
 /** TabBar按钮 */
@@ -21,12 +19,6 @@
 @end
 
 @implementation LZTabBar
-
-// MARK: - Lazy Loading
-- (NSMutableArray *)normalBtnArrM {
-    if (nil == _normalBtnArrM) _normalBtnArrM = [NSMutableArray array];
-    return _normalBtnArrM;
-}
 
 // MARK: - Initialization
 - (instancetype)init {
@@ -37,6 +29,7 @@
     }
     return self;
 }
+
 - (instancetype)initWithPlusBtn {
     if (self == [super init]) {
         [self setupPlusbtn];
@@ -49,6 +42,10 @@
     
     [self setupPlusTabBarButtonFrame];
     [self setupNormalTabBarButtonFrame];
+}
+
+- (void)dealloc {
+    LZLog();
 }
 
 // MARK: - UI Action
@@ -128,7 +125,6 @@
     [tabBarBtn addTarget:self action:@selector(tabBarButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self setupNormalTabBarButtonAppearance:tabBarBtn tabBarItem:tabBarItem];
     [self addSubview:tabBarBtn];
-    [self.normalBtnArrM addObject:tabBarBtn];
     // 默认选中第一个按钮
     if ((nil == self.plusBtn && self.defaultSelectedIndex + 1 == self.subviews.count) ||
         (nil != self.plusBtn && (self.defaultSelectedIndex + 2) == self.subviews.count)) {
@@ -138,18 +134,18 @@
 
 - (void)updateTabBarBtn:(UITabBarItem *)tabBarItem
                   index:(NSInteger)index {
-    if (self.normalBtnArrM.count > index) {
+    if (self.subviews.count > index) {
             
-        LZTabBarButton *tabBarBtn = [self.normalBtnArrM objectAtIndex:index];
+        LZTabBarButton *tabBarBtn = [self.subviews objectAtIndex:index];
         [self setupNormalTabBarButtonAppearance:tabBarBtn tabBarItem:tabBarItem];
     }
 }
 
 /** 更新选中项 */
 - (void)updateSelectedIndex:(NSInteger)selectedIndex {
-    if (self.normalBtnArrM.count > selectedIndex) {
+    if (self.subviews.count > selectedIndex) {
         
-        LZTabBarButton *btn = [self.normalBtnArrM objectAtIndex:selectedIndex];
+        LZTabBarButton *btn = [self.subviews objectAtIndex:selectedIndex];
         if (btn && [btn respondsToSelector:@selector(setSelected:)]) {
             
             self.currentSelectedButton.selected = NO;

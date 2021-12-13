@@ -76,10 +76,7 @@
 - (void)configURL {
     
     self.customUserAgent = @"iPhone 24";
-    // @"https://www.baidu.com";
-    // @"https://www.sina.cn";
-    
-    NSString *urlString = @"https://www.sina.cn";
+    NSString *urlString = @"https://www.baidu.com";
     NSURL *URL = [NSURL URLWithString:urlString];
     self.URL = URL;
 }

@@ -50,13 +50,14 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 }
 
 - (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers animated:(BOOL)animated {
+    [super setViewControllers:viewControllers animated:animated];
+    
     if (nil == viewControllers || 0 == viewControllers.count) {
         for (UIView *subView in self.myTabBar.subviews) {
             [subView removeFromSuperview];
         }
-        [self setupTabBar];
     }
-    [super setViewControllers:viewControllers animated:YES];
+    [self setupTabBar];
 }
 
 #pragma mark - Public
@@ -105,47 +106,46 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 
 // MARK: - Private
 - (void)setupTabBar {
-    
     // 实例LZTabBar
-    LZTabBar *tabBar = nil;
-    if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToShowPlusBtn)]) {
-        self.showPlusBtn = [self.tabBarDataSource tabBarWhetherToShowPlusBtn];
-    }
-    if (self.isShowPlusBtn) {
+    if (nil == self.myTabBar) {
         
-        tabBar = [[LZTabBar alloc] initWithPlusBtn];
-        tabBar.frame = self.tabBar.bounds;
-    } else {
-        tabBar = [[LZTabBar alloc] initWithFrame:self.tabBar.bounds];
+        LZTabBar *tabBar = nil;
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToShowPlusBtn)]) {
+            self.showPlusBtn = [self.tabBarDataSource tabBarWhetherToShowPlusBtn];
+        }
+        if (self.isShowPlusBtn) {
+            
+            tabBar = [[LZTabBar alloc] initWithPlusBtn];
+            tabBar.frame = self.tabBar.bounds;
+        } else {
+            tabBar = [[LZTabBar alloc] initWithFrame:self.tabBar.bounds];
+        }
+        self.myTabBar = tabBar;
+        [self.tabBar addSubview:tabBar];
     }
-    self.myTabBar = tabBar;
-    [self.tabBar addSubview:tabBar];
-    
     // 设置TabBarButton
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarBtnAttributes:)]) {
         
         NSDictionary *attributes = [self.tabBarDataSource tabBarBtnAttributes:self.myTabBar];
-        tabBar.tabBarBtnNormalColor = [attributes objectForKey:LZTabBarTitleNormalColor];
-        tabBar.tabBarBtnSelectedColor = [attributes objectForKey:LZTabBarTitleSelectedColor];
-        tabBar.tabBarBtnFont = [attributes objectForKey:LZTabBarTitleFont];
+        self.myTabBar.tabBarBtnNormalColor = [attributes objectForKey:LZTabBarTitleNormalColor];
+        self.myTabBar.tabBarBtnSelectedColor = [attributes objectForKey:LZTabBarTitleSelectedColor];
+        self.myTabBar.tabBarBtnFont = [attributes objectForKey:LZTabBarTitleFont];
     }
-    
     // 设置加号按钮
     if (self.isShowPlusBtn &&
         [self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarPlusAttributes:)]) {
         
         NSDictionary *plusAttributes = [self.tabBarDataSource tabBarPlusAttributes:self.myTabBar];
-        [tabBar setupPlusBtnBackgroundImage:[plusAttributes objectForKey:LZTabBarPlusBtnBackgroundImage]
+        [self.myTabBar setupPlusBtnBackgroundImage:[plusAttributes objectForKey:LZTabBarPlusBtnBackgroundImage]
                                    forState:UIControlStateNormal];
-        [tabBar setupPlusBtnImage:[plusAttributes objectForKey:LZTabBarPlusBtnImage]
+        [self.myTabBar setupPlusBtnImage:[plusAttributes objectForKey:LZTabBarPlusBtnImage]
                          forState:UIControlStateNormal];
-        [tabBar setupPlusBtnAttributedTitle:[plusAttributes objectForKey:LZTabBarPlusBtnAttributedTitle]
+        [self.myTabBar setupPlusBtnAttributedTitle:[plusAttributes objectForKey:LZTabBarPlusBtnAttributedTitle]
                                    forState:UIControlStateNormal];
     }
-    
     // TabBar背景
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)]) {
@@ -160,7 +160,6 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         UIColor *backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
         [[UITabBar appearance] setBarTintColor:backgroundColor];
     }
-    
     // 去掉TabBar上面黑线
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
@@ -175,36 +174,34 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         // 添加的图片大小不匹配的话，加上此句，屏蔽掉tabbar多余部分
 //         [UITabBar appearance].clipsToBounds = YES;
     }
-    
     // 加号按钮偏移量
-        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-            [self.tabBarDataSource respondsToSelector:@selector(tabBarPlusBtnOffsetY:)]) {
-            
-            CGFloat offsetY = [self.tabBarDataSource tabBarPlusBtnOffsetY:self.myTabBar];
-            self.myTabBar.plusBtnOffsetY = offsetY;
-        }
-    
+    if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarPlusBtnOffsetY:)]) {
+        
+        CGFloat offsetY = [self.tabBarDataSource tabBarPlusBtnOffsetY:self.myTabBar];
+        self.myTabBar.plusBtnOffsetY = offsetY;
+    }
     // TabBarBtn点击事件
-    __weak typeof(self) weakSelf = self;
-    tabBar.tabBarBtnDidClickBlock = ^(LZTabBar *myTabBar, NSInteger from, NSInteger to) {
-        if ([weakSelf conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
-            [weakSelf.tabBarDelegate respondsToSelector:@selector(tabBarBtnDidClick:from:to:)]) {
-            [weakSelf.tabBarDelegate tabBarBtnDidClick:myTabBar from:from to:to];
+    @lzweakify(self);
+    self.myTabBar.tabBarBtnDidClickBlock = ^(LZTabBar *myTabBar, NSInteger from, NSInteger to) {
+        @lzstrongify(self);
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
+            [self.tabBarDelegate respondsToSelector:@selector(tabBarBtnDidClick:from:to:)]) {
+            [self.tabBarDelegate tabBarBtnDidClick:myTabBar from:from to:to];
         }
     };
-    
     // 加号按钮点击事件
-    tabBar.tabBarPulsBtnDidClickBlock = ^(LZTabBar *myTabBar) {
-        if ([weakSelf conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
-            [weakSelf.tabBarDelegate respondsToSelector:@selector(plusBtnDidCilck:)]) {
-            [weakSelf.tabBarDelegate plusBtnDidCilck:myTabBar];
+    self.myTabBar.tabBarPulsBtnDidClickBlock = ^(LZTabBar *myTabBar) {
+        @lzstrongify(self);
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
+            [self.tabBarDelegate respondsToSelector:@selector(plusBtnDidCilck:)]) {
+            [self.tabBarDelegate plusBtnDidCilck:myTabBar];
         }
     };
-    
     // TabBar 默认选中
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
         [self.tabBarDelegate respondsToSelector:@selector(tabBarDefaultSelectedIndex:)]) {
-        tabBar.defaultSelectedIndex = [self.tabBarDelegate tabBarDefaultSelectedIndex:tabBar];
+        self.myTabBar.defaultSelectedIndex = [self.tabBarDelegate tabBarDefaultSelectedIndex:self.myTabBar];
     }
 }
 

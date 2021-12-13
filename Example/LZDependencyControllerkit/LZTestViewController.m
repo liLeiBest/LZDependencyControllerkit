@@ -57,7 +57,6 @@
 //        .showTheEntranceControl(NO)
 //        .showPageControl(NO)
 //        .showSkipControl(NO);
-//        ctr.modalPresentationStyle = UIModalPresentationFullScreen;
 //        ctr.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 //        [self presentViewController:ctr animated:YES completion:nil];
 //    }
@@ -91,7 +90,7 @@
 // MARK: - Private
 - (void)setupUI {
     
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor orangeColor];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithTitle:@"测试Picker" target:self action:@selector(testPickerDidTouch)];
 }
 
