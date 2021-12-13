@@ -54,7 +54,7 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 是否显示空白页，默认：NO，不显示空白页 */
 @property (nonatomic, assign) BOOL displayEmptyPage;
 
-/** 界面消失后刷新界面，默认：NO。用于停止暴力停止多媒体播放，最好在 Disappear 方法,通过 JS 交互停止。 */
+/** 界面消失后刷新界面，默认：NO。用于暴力停止多媒体播放，最好在 Disappear 方法,通过 JS 交互停止。 */
 @property (nonatomic, assign) BOOL disappearToRefresh;
 
 /** 自行决策是否允许继续访问 */
