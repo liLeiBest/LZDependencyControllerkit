@@ -1,6 +1,6 @@
 {
   "name": "LZDependencyControllerkit",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "summary": "LZDependencyControllerkit.",
   "description": "控制器控件：\n1.TabBarController\n2.WebViewController\n3.StartPageController\n4.PickerViewController",
   "homepage": "https://github.com/liLeiBest",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/liLeiBest/LZDependencyControllerkit.git",
-    "tag": "0.9.6"
+    "tag": "0.9.7"
   },
   "platforms": {
     "ios": "9.0"
