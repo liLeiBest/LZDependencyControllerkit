@@ -109,6 +109,11 @@ static NSString * const LZURLSchemeMail = @"mailto";
 #endif
         }
         config.allowsAirPlayForMediaPlayback = YES;
+        if (@available(iOS 10.0, *)) {
+            [config.preferences setValue:@(YES) forKey:@"allowFileAccessFromFileURLs"];
+        } else {
+            [config setValue:@(YES) forKey:@"allowUniversalAccessFromFileURLs"];
+        }
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
     }
     return _webView;
@@ -282,10 +287,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
     // JS 调用 OC，添加处理脚本
     WKUserContentController *userCC = self.webView.configuration.userContentController;
     LZWeakScriptMessageDelegate *scriptMessageDelegate =
-    [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self
-                                        completionHandler:^(WKScriptMessage *message) {
-                                            if (handler) handler(message);
-                                        }];
+    [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self completionHandler:^(WKScriptMessage *message) {
+        LZLog(@"script<%@>: messageClass:%@ message:%@", scriptMessage, [message.body class], message.body);
+        if (handler) handler(message);
+    }];
     [userCC addScriptMessageHandler:scriptMessageDelegate name:scriptMessage];
 }
 
@@ -302,7 +307,12 @@ static NSString * const LZURLSchemeMail = @"mailto";
      completionHandler:(void (^)(id, NSError *))completionHandler {
     NSAssert(nil != script && script.length, @"script 不能为空");
     if (nil == script || !script.length) return;
-    [self.webView evaluateJavaScript:script completionHandler:completionHandler];
+    [self.webView evaluateJavaScript:script completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        LZLog(@"script<%@>: result:%@ error:%@", script, result, error);
+        if (completionHandler) {
+            completionHandler(result, error);
+        }
+    }];
 }
 
 - (BOOL)shouldAddNavItem {
