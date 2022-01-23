@@ -63,8 +63,9 @@
 @end
 
 NSString * const LZWebEmptyURL = @"about:blank";
-static NSString * const LZWebProgress = @"estimatedProgress";
 static NSString * const LZWebTitle = @"title";
+static NSString * const LZWebProgress = @"estimatedProgress";
+static NSString * const LZCanGoBack = @"canGoBack";
 static NSString * const LZURLSchemeTel = @"tel";
 static NSString * const LZURLSchemeSms = @"sms";
 static NSString * const LZURLSchemeMail = @"mailto";
@@ -204,6 +205,13 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView %@ 通知崩溃:%@", LZWebProgress, exception);
+    } @finally {}
+    @try {
+        if (YES == self.isViewLoaded) {
+            [self.webView removeObserver:self forKeyPath:LZCanGoBack];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZCanGoBack, exception);
     } @finally {}
     @try {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -404,6 +412,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     @try {
         [self.webView addObserver:self forKeyPath:LZWebTitle options:NSKeyValueObservingOptionNew context:NULL];
         [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew context:NULL];
+        [self.webView addObserver:self forKeyPath:LZCanGoBack options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter]
          addObserver:self
          selector:@selector(beginFullScreen:)
@@ -523,7 +532,16 @@ static NSString * const LZURLSchemeMail = @"mailto";
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    if ([keyPath isEqual:LZWebProgress] && object == self.webView) {
+    if ([keyPath isEqualToString:LZWebTitle] && object == self.webView) {
+        if (self.showWebTitle) {
+            if (NO == [self.title isValidString]) {
+                self.title = self.webView.title;
+            }
+            if (NO == [self.title isEqualToString:self.webView.title]) {
+                self.title = self.webView.title;
+            }
+        }
+    } else if ([keyPath isEqual:LZWebProgress] && object == self.webView) {
         LZLog(@"Web load progress:%f", self.webView.estimatedProgress);
         if (self.displayProgress) {
             if (nil == self.progressView) {
@@ -550,15 +568,8 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 }];
             }
         }
-    } else if ([keyPath isEqualToString:LZWebTitle] && object == self.webView) {
-        if (self.showWebTitle) {
-            if (NO == [self.title isValidString]) {
-                self.title = self.webView.title;
-            }
-            if (NO == [self.title isEqualToString:self.webView.title]) {
-                self.title = self.webView.title;
-            }
-        }
+    } else if ([keyPath isEqualToString:LZCanGoBack] && object == self.webView) {
+        [self correctNavigationButton];
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -737,8 +748,6 @@ didCommitNavigation:(null_unspecified WKNavigation *)navigation {
 
 - (void)webView:(WKWebView *)webView
 didFinishNavigation:(null_unspecified WKNavigation *)navigation {
-    
-    [self correctNavigationButton];
     if (self.finishLoadCallback) {
         self.finishLoadCallback();
     }
@@ -760,7 +769,6 @@ didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
         [self stopRefresh];
     }
     if (self.subWeb) return;
-    [self correctNavigationButton];
     if (self.displayEmptyPage && self.webNavigation == navigation) {
         [self showEmptyDataSet:self.webView.scrollView];
     }
