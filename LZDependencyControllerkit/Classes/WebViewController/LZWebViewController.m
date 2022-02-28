@@ -125,6 +125,16 @@ static NSString * const LZURLSchemeMail = @"mailto";
     return _scriptMessageContainer;
 }
 
+- (NSMutableArray *)allowSchemes {
+    if (nil == _allowSchemes) {
+        _allowSchemes = [NSMutableArray array];
+    }
+    if (0 == _allowSchemes.count) {
+        [_allowSchemes addObjectsFromArray:@[LZURLSchemeTel, LZURLSchemeSms, LZURLSchemeMail]];
+    }
+    return _allowSchemes;
+}
+
 // MARK: - Initialization
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -618,26 +628,22 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
 decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    // 自行决策访问请求
-    if (self.decidePolicyHandler) {
-        self.decidePolicyHandler(navigationAction, decisionHandler);
-        return;
-    }
     // 特殊 scheme 处理:打电话、发短信、发邮件
     NSURL *URL = navigationAction.request.URL;
     NSString *scheme = [[URL scheme] lowercaseString];
-    if ([scheme isEqualToString:LZURLSchemeTel]
-        || [scheme isEqualToString:LZURLSchemeSms]
-        || [scheme isEqualToString:LZURLSchemeMail]) {
-        if ([[UIApplication sharedApplication] canOpenURL:URL]) {
-            if (@available(iOS 10, *)) {
-                [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
-                }];
-            } else {
-                [[UIApplication sharedApplication] openURL:URL];
-            }
+    if ([self.allowSchemes containsObject:scheme]) {
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
+            }];
+        } else {
+            [[UIApplication sharedApplication] openURL:URL];
         }
         decisionHandler(WKNavigationActionPolicyCancel);
+        return;
+    }
+    // 自行决策访问请求
+    if (self.decidePolicyHandler) {
+        self.decidePolicyHandler(navigationAction, decisionHandler);
         return;
     }
     // 子页面拦截
@@ -663,28 +669,24 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     preferences:(WKWebpagePreferences *)preferences
 decisionHandler:(void (^)(WKNavigationActionPolicy, WKWebpagePreferences *))decisionHandler API_AVAILABLE(macos(10.15), ios(13.0)) {
+    // 特殊 scheme 处理:打电话、发短信、发邮件
+    NSURL *URL = navigationAction.request.URL;
+    NSString *scheme = [[URL scheme] lowercaseString];
+    if ([self.allowSchemes containsObject:scheme]) {
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
+            }];
+        } else {
+            [[UIApplication sharedApplication] openURL:URL];
+        }
+        decisionHandler(WKNavigationActionPolicyCancel, preferences);
+        return;
+    }
     // 自行决策访问请求
     if (self.decidePolicyHandler) {
         self.decidePolicyHandler(navigationAction, ^(WKNavigationActionPolicy navigationActionPolicy) {
             decisionHandler(navigationActionPolicy, preferences);
         });
-        return;
-    }
-    // 特殊 scheme 处理:打电话、发短信、发邮件
-    NSURL *URL = navigationAction.request.URL;
-    NSString *scheme = [[URL scheme] lowercaseString];
-    if ([scheme isEqualToString:LZURLSchemeTel]
-        || [scheme isEqualToString:LZURLSchemeSms]
-        || [scheme isEqualToString:LZURLSchemeMail]) {
-        if ([[UIApplication sharedApplication] canOpenURL:URL]) {
-            if (@available(iOS 10, *)) {
-                [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
-                }];
-            } else {
-                [[UIApplication sharedApplication] openURL:URL];
-            }
-        }
-        decisionHandler(WKNavigationActionPolicyCancel, preferences);
         return;
     }
     // 子页面拦截

@@ -57,6 +57,9 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 界面消失后刷新界面，默认：NO。用于暴力停止多媒体播放，最好在 Disappear 方法,通过 JS 交互停止。 */
 @property (nonatomic, assign) BOOL disappearToRefresh;
 
+/** 允许打开的 scheme，默认：@[@"tel", @"sms", @"mailto"] */
+@property (nonatomic, strong) NSMutableArray *allowSchemes;
+
 /** 自行决策是否允许继续访问 */
 @property (nonatomic, copy) void (^ __nullable decidePolicyHandler)(WKNavigationAction *navigationAction, void (^decisionHandler)(WKNavigationActionPolicy navigationActionPolicy));
 /** 挂载子链接完成回调 */
