@@ -109,9 +109,9 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     if (self.isShowPlusBtn) {
         
         tabBar = [[LZTabBar alloc] initWithPlusBtn];
-        tabBar.frame = self.tabBar.bounds;
+        tabBar.frame = self.myTabBar ? self.myTabBar.bounds : self.tabBar.bounds;
     } else {
-        tabBar = [[LZTabBar alloc] initWithFrame:self.tabBar.bounds];
+        tabBar = [[LZTabBar alloc] initWithFrame:self.myTabBar ? self.myTabBar.bounds : self.tabBar.bounds];
     }
     self.myTabBar = tabBar;
     [self.tabBar addSubview:tabBar];
