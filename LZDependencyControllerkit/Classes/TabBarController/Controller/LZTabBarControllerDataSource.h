@@ -89,6 +89,17 @@ UIKIT_EXTERN NSString * const LZTabBarTitleFont;
  */
 - (BOOL)tabBarWhetherToshowTopBlackLine;
 
+/**
+ @author Lilei
+ 
+ @brief 顶部黑线颜色
+ 
+ @param myTabBar LZTabBar
+ 
+ @return UIColor
+ */
+- (UIColor *)tabBarTopBlackLineColor:(LZTabBar *)myTabBar;
+
 
 /**
 @author Lilei

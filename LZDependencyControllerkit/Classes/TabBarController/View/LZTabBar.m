@@ -85,12 +85,6 @@
 /** 设置加号按钮背景图 */
 - (void)setupPlusBtnBackgroundImage:(UIImage *)backgroundImage
                            forState:(UIControlState)state {
-    
-    CGFloat top = (backgroundImage.size.height - self.plusBtnOffsetY) * 0.5;
-    CGFloat left = backgroundImage.size.width * 0.5;
-    CGFloat bottom = top;
-    CGFloat right = left;
-    backgroundImage  = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(top, left, bottom, right) resizingMode:UIImageResizingModeStretch];
     [self.plusBtn setBackgroundImage:backgroundImage forState:state];
 }
 
@@ -143,11 +137,14 @@
 
 /** 更新选中项 */
 - (void)updateSelectedIndex:(NSInteger)selectedIndex {
+    if (nil != self.plusBtn) {
+        selectedIndex += 1;
+    }
     if (self.subviews.count > selectedIndex) {
         
         LZTabBarButton *btn = [self.subviews objectAtIndex:selectedIndex];
         if (btn && [btn respondsToSelector:@selector(setSelected:)]) {
-            
+
             self.currentSelectedButton.selected = NO;
             btn.selected = YES;
             self.currentSelectedButton = btn;
@@ -184,7 +181,7 @@
     self.plusBtn.width = btnW;
     self.plusBtn.height = self.height + self.plusBtnOffsetY; // imageSize.height;
     self.plusBtn.centerX = self.width * 0.5;
-    self.plusBtn.centerY = self.height * 0.5;
+    self.plusBtn.centerY = self.height * 0.5 - self.plusBtnOffsetY * 0.5;
 }
 
 /**

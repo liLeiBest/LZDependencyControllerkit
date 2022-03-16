@@ -71,9 +71,14 @@ static NSString *kBadgeNumber = @"badgeValue";
 - (CGRect)imageRectForContentRect:(CGRect)contentRect {
     
     CGFloat imageX = 0;
-    CGFloat imageY = 0;
+    CGFloat imageY = fabs(self.frame.origin.y);
     CGFloat imageW = self.frame.size.width;
-    CGFloat imageH = self.frame.size.height * self.imageProportion;
+    CGFloat imageH = (self.frame.size.height - imageY) * self.imageProportion;
+    if (LZTabBarButtonTypePlus == self.tabBarBtnType) {
+        if (NO == [self hasTitle]) {
+            imageY += self.frame.size.height * (1 - self.imageProportion) * 0.5;
+        }
+    }
     return CGRectMake(imageX, imageY, imageW, imageH);
 }
 
@@ -120,6 +125,15 @@ static NSString *kBadgeNumber = @"badgeValue";
             self.imageView.contentMode = UIViewContentModeBottom;
         } else {
             self.imageProportion = 0.0f;
+        }
+    }
+    if (LZTabBarButtonTypePlus == self.tabBarBtnType) {
+        if (NO == [self hasTitle]) {
+            self.imageProportion = 0.8f;
+        }
+        if (self.imageView.image.size.height > self.frame.size.height
+            || self.imageView.image.size.width > self.frame.size.width) {
+            self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         }
     }
 }

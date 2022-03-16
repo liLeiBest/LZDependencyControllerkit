@@ -30,16 +30,10 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 @implementation LZTabBarViewController
 
 // MARK: - Initialization
-- (instancetype)init {
-    if (self = [super init]) {
-        _showPlusBtn = NO;
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.showPlusBtn = NO;
     [self setupTabBar];
 }
 
@@ -107,23 +101,20 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
 // MARK: - Private
 - (void)setupTabBar {
     // 实例LZTabBar
-    if (nil == self.myTabBar) {
-        
-        LZTabBar *tabBar = nil;
-        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-            [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToShowPlusBtn)]) {
-            self.showPlusBtn = [self.tabBarDataSource tabBarWhetherToShowPlusBtn];
-        }
-        if (self.isShowPlusBtn) {
-            
-            tabBar = [[LZTabBar alloc] initWithPlusBtn];
-            tabBar.frame = self.tabBar.bounds;
-        } else {
-            tabBar = [[LZTabBar alloc] initWithFrame:self.tabBar.bounds];
-        }
-        self.myTabBar = tabBar;
-        [self.tabBar addSubview:tabBar];
+    LZTabBar *tabBar = nil;
+    if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToShowPlusBtn)]) {
+        self.showPlusBtn = [self.tabBarDataSource tabBarWhetherToShowPlusBtn];
     }
+    if (self.isShowPlusBtn) {
+        
+        tabBar = [[LZTabBar alloc] initWithPlusBtn];
+        tabBar.frame = self.tabBar.bounds;
+    } else {
+        tabBar = [[LZTabBar alloc] initWithFrame:self.tabBar.bounds];
+    }
+    self.myTabBar = tabBar;
+    [self.tabBar addSubview:tabBar];
     // 设置TabBarButton
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarBtnAttributes:)]) {
@@ -146,33 +137,82 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         [self.myTabBar setupPlusBtnAttributedTitle:[plusAttributes objectForKey:LZTabBarPlusBtnAttributedTitle]
                                    forState:UIControlStateNormal];
     }
+    
+    if (@available(iOS 100.0, *)) {
+        
+        UITabBarAppearance *appearance = self.tabBar.standardAppearance;
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)]) {
+            
+            appearance.backgroundImage = [self.tabBarDataSource tabBarBackgroundImage:self.myTabBar];
+            appearance.backgroundImageContentMode = UIViewContentModeScaleAspectFill;
+        }
+        appearance.backgroundColor = LZOrangeColor;
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
+            appearance.backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
+        }
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
+            if (NO == [self.tabBarDataSource tabBarWhetherToshowTopBlackLine]) {
+                
+                appearance.shadowColor = [UIColor clearColor];
+                appearance.shadowImage = [UIImage new];
+            }
+        }
+        [self.tabBar setStandardAppearance:appearance];
+    } else {
+    }
     // TabBar背景
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)]) {
         
-        UIImage *backgroundImage =
-        [[self.tabBarDataSource tabBarBackgroundImage:self.myTabBar] middleStretch];
+        UIImage *backgroundImage = [self.tabBarDataSource tabBarBackgroundImage:self.myTabBar];
+        self.myTabBar.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
         [[UITabBar appearance] setBackgroundImage:backgroundImage];
     }
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
         
         UIColor *backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
-        [[UITabBar appearance] setBarTintColor:backgroundColor];
+        self.myTabBar.backgroundColor = backgroundColor;
+        [[UITabBar appearance] setBackgroundColor:backgroundColor];
     }
     // 去掉TabBar上面黑线
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
         [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
-        
-        UIImage *clearImage =
-        [UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(1.0, 1.0)];
-        if (![self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)] &&
-            ![self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
-            [[UITabBar appearance] setBackgroundImage:clearImage];
+        if (NO == [self.tabBarDataSource tabBarWhetherToshowTopBlackLine]) {
+            
+            UIImage *clearImg = [UIImage imageWithColor:LZClearColor size:CGSizeMake(1.0, 1.0)];
+            if (@available(iOS 13.0, *)) {
+                
+                UITabBarAppearance *appearance = self.tabBar.standardAppearance;
+                appearance.shadowColor = LZClearColor;
+                appearance.shadowImage = clearImg;
+                [[UITabBar appearance] setStandardAppearance:appearance];
+            } else {
+                [[UITabBar appearance] setShadowImage:clearImg];
+            }
+        } else {
+            
+            UIColor *lineColor = UIColor.lightGrayColor;
+            if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+                [self.tabBarDataSource respondsToSelector:@selector(tabBarTopBlackLineColor:)]) {
+                lineColor = [self.tabBarDataSource tabBarTopBlackLineColor:self.myTabBar];
+            }
+            UIImage *lineImg = [UIImage imageWithColor:lineColor size:CGSizeMake(1.0, 0.6f)];
+            if (@available(iOS 13.0, *)) {
+            
+                UITabBarAppearance *appearance = self.tabBar.standardAppearance;
+                appearance.shadowColor = lineColor;
+                appearance.shadowImage = lineImg;
+                [[UITabBar appearance] setStandardAppearance:appearance];
+            } else {
+                [[UITabBar appearance] setShadowImage:lineImg];
+            }
         }
-        [[UITabBar appearance] setShadowImage:clearImage];
         // 添加的图片大小不匹配的话，加上此句，屏蔽掉tabbar多余部分
-//         [UITabBar appearance].clipsToBounds = YES;
+        //         [UITabBar appearance].clipsToBounds = YES;
     }
     // 加号按钮偏移量
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
