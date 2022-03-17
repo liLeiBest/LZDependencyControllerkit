@@ -34,13 +34,13 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     [super viewDidLoad];
     
     self.showPlusBtn = NO;
-    [self setupTabBar];
+    [self _setupTabBar];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    [self removeSysTabarButton];
+    [self _removeSysTabarButton];
 }
 
 - (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers animated:(BOOL)animated {
@@ -51,7 +51,7 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
             [subView removeFromSuperview];
         }
     }
-    [self setupTabBar];
+    [self _setupTabBar];
 }
 
 #pragma mark - Public
@@ -67,7 +67,7 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
                    selectedImg:(UIImage *)selectedImg {
     
 	[self addChildViewController:childViewController];
-	UIViewController *viewController = [self configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
+	UIViewController *viewController = [self _configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
 	[self.myTabBar addTabBarBtn:viewController.tabBarItem];
 }
 
@@ -80,9 +80,9 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     NSMutableArray *childControllers = [NSMutableArray arrayWithArray:self.viewControllers];
     [childControllers replaceObjectAtIndex:index withObject:childViewController];
     [self setViewControllers:[childControllers copy] animated:YES];
-    UIViewController *viewController = [self configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
+    UIViewController *viewController = [self _configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
     [self.myTabBar updateTabBarBtn:viewController.tabBarItem index:index];
-    [self removeSysTabarButton];
+    [self _removeSysTabarButton];
 }
 
 - (void)updateChildViewControllerIndex:(NSUInteger)index
@@ -93,13 +93,13 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
         return;
     }
     UIViewController *childViewController = self.viewControllers[index];
-    UIViewController *viewController = [self configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
+    UIViewController *viewController = [self _configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
     [self.myTabBar updateTabBarBtn:viewController.tabBarItem index:index];
-    [self removeSysTabarButton];
+    [self _removeSysTabarButton];
 }
 
 // MARK: - Private
-- (void)setupTabBar {
+- (void)_setupTabBar {
     // 实例LZTabBar
     LZTabBar *tabBar = nil;
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
@@ -245,16 +245,16 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     }
 }
 
-- (void)removeSysTabarButton {
+- (void)_removeSysTabarButton {
     [self.tabBar.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
          if ([obj isKindOfClass:NSClassFromString(@"UITabBarButton")]) [obj removeFromSuperview];
      }];
 }
 
-- (UIViewController *)configChildViewController:(UIViewController *)childViewController
-                                          title:(NSString *)title
-                                      normalImg:(UIImage *)normalImg
-                                    selectedImg:(UIImage *)selectedImg {
+- (UIViewController *)_configChildViewController:(UIViewController *)childViewController
+                                           title:(NSString *)title
+                                       normalImg:(UIImage *)normalImg
+                                     selectedImg:(UIImage *)selectedImg {
     
     UIViewController *viewController = childViewController;
     if ([childViewController respondsToSelector:@selector(topViewController)]) {
