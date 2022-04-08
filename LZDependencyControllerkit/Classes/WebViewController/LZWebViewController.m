@@ -130,7 +130,12 @@ static NSString * const LZURLSchemeMail = @"mailto";
         _allowSchemes = [NSMutableArray array];
     }
     if (0 == _allowSchemes.count) {
+        
         [_allowSchemes addObjectsFromArray:@[LZURLSchemeTel, LZURLSchemeSms, LZURLSchemeMail]];
+        NSArray *queriesSchemes = [NSBundle.mainBundle.infoDictionary objectForKey:@"LSApplicationQueriesSchemes"];
+        if (queriesSchemes && queriesSchemes.count) {
+            [_allowSchemes addObjectsFromArray:queriesSchemes];
+        }
     }
     return _allowSchemes;
 }
