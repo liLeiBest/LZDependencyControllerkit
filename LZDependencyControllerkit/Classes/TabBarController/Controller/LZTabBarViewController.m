@@ -138,7 +138,7 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
                                    forState:UIControlStateNormal];
     }
     
-    if (@available(iOS 100.0, *)) {
+    if (@available(iOS 13.0, *)) {
         
         UITabBarAppearance *appearance = self.tabBar.standardAppearance;
         if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
@@ -147,7 +147,6 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
             appearance.backgroundImage = [self.tabBarDataSource tabBarBackgroundImage:self.myTabBar];
             appearance.backgroundImageContentMode = UIViewContentModeScaleAspectFill;
         }
-        appearance.backgroundColor = LZOrangeColor;
         if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
             [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
             appearance.backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
@@ -156,63 +155,68 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
             [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
             if (NO == [self.tabBarDataSource tabBarWhetherToshowTopBlackLine]) {
                 
-                appearance.shadowColor = [UIColor clearColor];
-                appearance.shadowImage = [UIImage new];
+                UIImage *clearImg = [UIImage imageWithColor:LZClearColor size:CGSizeMake(LZDeviceInfo.screen_width(), 1.0)];
+                appearance.shadowColor = LZClearColor;
+                appearance.shadowImage = clearImg;
+            } else {
+                
+                UIColor *lineColor = UIColor.lightGrayColor;
+                if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+                    [self.tabBarDataSource respondsToSelector:@selector(tabBarTopBlackLineColor:)]) {
+                    lineColor = [self.tabBarDataSource tabBarTopBlackLineColor:self.myTabBar];
+                }
+                UIImage *lineImg = [UIImage imageWithColor:lineColor size:CGSizeMake(LZDeviceInfo.screen_width(), 0.6f)];
+                appearance.shadowColor = lineColor;
+                appearance.shadowImage = lineImg;
             }
         }
         [self.tabBar setStandardAppearance:appearance];
+        if (@available(iOS 15.0, *)) {
+            
+            UITabBarAppearance *scrollAppearance = self.tabBar.scrollEdgeAppearance;
+            scrollAppearance.backgroundImage = appearance.backgroundImage;
+            scrollAppearance.backgroundImageContentMode = appearance.backgroundImageContentMode;
+            scrollAppearance.backgroundColor = appearance.backgroundColor;
+            scrollAppearance.shadowColor = appearance.shadowColor;;
+            scrollAppearance.shadowImage = appearance.shadowImage;
+            [self.tabBar setScrollEdgeAppearance:appearance];
+        }
     } else {
-    }
-    // TabBar背景
-    if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)]) {
-        
-        UIImage *backgroundImage = [self.tabBarDataSource tabBarBackgroundImage:self.myTabBar];
-        self.myTabBar.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
-        [[UITabBar appearance] setBackgroundImage:backgroundImage];
-    }
-    if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
-        
-        UIColor *backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
-        self.myTabBar.backgroundColor = backgroundColor;
-        [[UITabBar appearance] setBackgroundColor:backgroundColor];
-    }
-    // 去掉TabBar上面黑线
-    if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-        [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
-        if (NO == [self.tabBarDataSource tabBarWhetherToshowTopBlackLine]) {
+        // TabBar背景
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundImage:)]) {
             
-            UIImage *clearImg = [UIImage imageWithColor:LZClearColor size:CGSizeMake(1.0, 1.0)];
-            if (@available(iOS 13.0, *)) {
+            UIImage *backgroundImage = [self.tabBarDataSource tabBarBackgroundImage:self.myTabBar];
+            self.myTabBar.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
+            [[UITabBar appearance] setBackgroundImage:backgroundImage];
+        }
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarBackgroundColor:)]) {
+            
+            UIColor *backgroundColor = [self.tabBarDataSource tabBarBackgroundColor:self.myTabBar];
+            self.myTabBar.backgroundColor = backgroundColor;
+            [[UITabBar appearance] setBackgroundColor:backgroundColor];
+        }
+        // 去掉TabBar上面黑线
+        if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+            [self.tabBarDataSource respondsToSelector:@selector(tabBarWhetherToshowTopBlackLine)]) {
+            if (NO == [self.tabBarDataSource tabBarWhetherToshowTopBlackLine]) {
                 
-                UITabBarAppearance *appearance = self.tabBar.standardAppearance;
-                appearance.shadowColor = LZClearColor;
-                appearance.shadowImage = clearImg;
-                [[UITabBar appearance] setStandardAppearance:appearance];
-            } else {
+                UIImage *clearImg = [UIImage imageWithColor:LZClearColor size:CGSizeMake(LZDeviceInfo.screen_width(), 1.0)];
                 [[UITabBar appearance] setShadowImage:clearImg];
-            }
-        } else {
-            
-            UIColor *lineColor = UIColor.lightGrayColor;
-            if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
-                [self.tabBarDataSource respondsToSelector:@selector(tabBarTopBlackLineColor:)]) {
-                lineColor = [self.tabBarDataSource tabBarTopBlackLineColor:self.myTabBar];
-            }
-            UIImage *lineImg = [UIImage imageWithColor:lineColor size:CGSizeMake(1.0, 0.6f)];
-            if (@available(iOS 13.0, *)) {
-            
-                UITabBarAppearance *appearance = self.tabBar.standardAppearance;
-                appearance.shadowColor = lineColor;
-                appearance.shadowImage = lineImg;
-                [[UITabBar appearance] setStandardAppearance:appearance];
             } else {
+                
+                UIColor *lineColor = UIColor.lightGrayColor;
+                if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
+                    [self.tabBarDataSource respondsToSelector:@selector(tabBarTopBlackLineColor:)]) {
+                    lineColor = [self.tabBarDataSource tabBarTopBlackLineColor:self.myTabBar];
+                }
+                UIImage *lineImg = [UIImage imageWithColor:lineColor size:CGSizeMake(LZDeviceInfo.screen_width(), 0.6f)];
                 [[UITabBar appearance] setShadowImage:lineImg];
             }
+            // 添加的图片大小不匹配的话，加上此句，屏蔽掉tabbar多余部分
+            //         [UITabBar appearance].clipsToBounds = YES;
         }
-        // 添加的图片大小不匹配的话，加上此句，屏蔽掉tabbar多余部分
-        //         [UITabBar appearance].clipsToBounds = YES;
     }
     // 加号按钮偏移量
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDataSource)] &&
