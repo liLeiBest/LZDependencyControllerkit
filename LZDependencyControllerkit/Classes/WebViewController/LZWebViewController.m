@@ -636,7 +636,9 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     // 特殊 scheme 处理:打电话、发短信、发邮件
     NSURL *URL = navigationAction.request.URL;
     NSString *scheme = [[URL scheme] lowercaseString];
-    if ([self.allowSchemes containsObject:scheme]) {
+    NSArray *schemeWhiteList = @[@"http", @"https"];
+    if (NO == [schemeWhiteList containsObject:scheme] &&
+        YES == [self.allowSchemes containsObject:scheme]) {
         if (@available(iOS 10, *)) {
             [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
             }];
