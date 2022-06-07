@@ -51,7 +51,7 @@
     return self;
 }
 
-// MARK: -Delegate
+// MARK: - Delegate
 // MARK: <WKScriptMessageHandler>
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
