@@ -64,7 +64,7 @@
 
 NSString * const LZWebEmptyURL = @"about:blank";
 static NSString * const LZWebTitle = @"title";
-static NSString * const LZWebProgress = @"estimatedProgress";
+//static NSString * const LZWebProgress = @"estimatedProgress";
 static NSString * const LZCanGoBack = @"canGoBack";
 static NSString * const LZURLSchemeTel = @"tel";
 static NSString * const LZURLSchemeSms = @"sms";
@@ -114,6 +114,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
             [config.preferences setValue:@(YES) forKey:@"allowFileAccessFromFileURLs"];
         } else {
             [config setValue:@(YES) forKey:@"allowUniversalAccessFromFileURLs"];
+        }
+        if (@available(iOS 15.0, *)) {
+//            config.preferences.elementFullscreenEnabled = YES;
         }
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
     }
@@ -199,40 +202,8 @@ static NSString * const LZURLSchemeMail = @"mailto";
     self.webView.navigationDelegate = nil;
     self.webView.UIDelegate = nil;
     
-    @try {
-        WKUserContentController *userCC = self.webView.configuration.userContentController;
-        [self.scriptMessageContainer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            [userCC removeScriptMessageHandlerForName:key];
-        }];
-    } @catch (NSException *exception) {
-        NSLog(@"移除 WebView Script 崩溃:%@", exception);
-    } @finally {}
-    @try {
-        if (YES == self.isViewLoaded) {
-            [self.webView removeObserver:self forKeyPath:LZWebTitle];
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZWebTitle, exception);
-    } @finally {}
-    @try {
-        if (YES == self.isViewLoaded) {
-            [self.webView removeObserver:self forKeyPath:LZWebProgress];
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZWebProgress, exception);
-    } @finally {}
-    @try {
-        if (YES == self.isViewLoaded) {
-            [self.webView removeObserver:self forKeyPath:LZCanGoBack];
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZCanGoBack, exception);
-    } @finally {}
-    @try {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    } @catch (NSException *exception) {
-        NSLog(@"移除 WebView 通知崩溃:%@", exception);
-    } @finally {}
+    [self removeWebViewObserver];
+    [self removeTargetObserver];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -352,6 +323,15 @@ static NSString * const LZURLSchemeMail = @"mailto";
     }
 }
 
+- (void)resetWebview {
+    
+    [self removeWebViewObserver];
+    [self.webView removeFromSuperview];
+    self.webView = nil;
+    [self initConfig];
+    [self registerWebViewObserver];
+}
+
 // MARK: - UI Action
 - (void)goBackDidClick {
     if (self.webView.canGoBack) {
@@ -412,22 +392,67 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)initConfig {
     
+    NSHTTPCookieStorage *HTTPCookie = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    [HTTPCookie setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
     self.webView.navigationDelegate = self;
     self.webView.UIDelegate = self;
     
-    NSHTTPCookieStorage *HTTPCookie = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    [HTTPCookie setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
-    
     [self configNavigation];
 }
 
 - (void)registerObserver {
+    
+    [self registerWebViewObserver];
+    [self registerTargetObserver];
+}
+
+- (void)registerWebViewObserver {
     @try {
         [self.webView addObserver:self forKeyPath:LZWebTitle options:NSKeyValueObservingOptionNew context:NULL];
-        [self.webView addObserver:self forKeyPath:LZWebProgress options:NSKeyValueObservingOptionNew context:NULL];
+        [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
         [self.webView addObserver:self forKeyPath:LZCanGoBack options:NSKeyValueObservingOptionNew context:NULL];
+    } @catch (NSException *exception) {
+    } @finally {
+    }
+}
+
+- (void)removeWebViewObserver {
+    @try {
+        WKUserContentController *userCC = self.webView.configuration.userContentController;
+        [self.scriptMessageContainer enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [userCC removeScriptMessageHandlerForName:key];
+        }];
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView Script 崩溃:%@", exception);
+    } @finally {}
+    @try {
+        if (YES == self.isViewLoaded) {
+            [self.webView removeObserver:self forKeyPath:LZWebTitle];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZWebTitle, exception);
+    } @finally {}
+    @try {
+        if (YES == self.isViewLoaded) {
+            [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", @"estimatedProgress", exception);
+    } @finally {}
+    @try {
+        if (YES == self.isViewLoaded) {
+            [self.webView removeObserver:self forKeyPath:LZCanGoBack];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", LZCanGoBack, exception);
+    } @finally {}
+}
+
+- (void)registerTargetObserver {
+    @try {
         [[NSNotificationCenter defaultCenter]
          addObserver:self
          selector:@selector(beginFullScreen:)
@@ -441,6 +466,14 @@ static NSString * const LZURLSchemeMail = @"mailto";
     } @catch (NSException *exception) {
     } @finally {
     }
+}
+
+- (void)removeTargetObserver {
+    @try {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView 通知崩溃:%@", exception);
+    } @finally {}
 }
 
 - (void)configRefreshControl {
@@ -556,7 +589,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 self.title = self.webView.title;
             }
         }
-    } else if ([keyPath isEqual:LZWebProgress] && object == self.webView) {
+    } else if ([keyPath isEqual:@"estimatedProgress"] && object == self.webView) {
         LZLog(@"Web load progress:%f", self.webView.estimatedProgress);
         if (self.displayProgress) {
             if (nil == self.progressView) {
@@ -671,7 +704,6 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     decisionHandler(actionPolicy);
 }
 
-#if 0
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction
     preferences:(WKWebpagePreferences *)preferences
@@ -713,7 +745,6 @@ decisionHandler:(void (^)(WKNavigationActionPolicy, WKWebpagePreferences *))deci
     }
     decisionHandler(actionPolicy, preferences);
 }
-#endif
 
 - (void)webView:(WKWebView *)webView
 decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse

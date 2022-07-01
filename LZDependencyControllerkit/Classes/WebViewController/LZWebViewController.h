@@ -151,6 +151,13 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 */
 - (BOOL)shouldAddNavItem;
 
+/**
+@author Lilei
+
+@brief 重置webView
+*/
+- (void)resetWebview;
+
 @end
 
 NS_ASSUME_NONNULL_END

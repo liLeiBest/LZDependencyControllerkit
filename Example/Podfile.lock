@@ -54,7 +54,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LZDependencyControllerkit: 35a86ccf5c854b407ed9ac6f0e8838bde9cb1e80
+  LZDependencyControllerkit: 772f0abbdb52328b677d4473cdb9dcc7b5f462fe
   LZDependencyToolkit: d30f96f9e8df914ba7a89d129f112f2dcd8f2107
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
 
