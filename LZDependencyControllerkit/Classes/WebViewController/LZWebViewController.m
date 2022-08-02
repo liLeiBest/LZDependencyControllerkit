@@ -810,7 +810,13 @@ didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
     }
     if (self.subWeb) return;
     if (self.displayEmptyPage && self.webNavigation == navigation) {
-        [self showEmptyDataSet:self.webView.scrollView];
+        
+        NSString *js = @"document.documentElement.innerHTML";
+        [webView evaluateJavaScript:js completionHandler:^(NSString *_Nullable result, NSError * _Nullable error) {
+            if (result.length < 200) {
+                [self showEmptyDataSet:self.webView.scrollView];
+            }
+        }];
     }
 }
 
