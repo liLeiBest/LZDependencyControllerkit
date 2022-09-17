@@ -905,7 +905,15 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
     [alertController addAction:[UIAlertAction actionWithTitle:@"完成"
                                                         style:UIAlertActionStyleDefault
                                                       handler:^(UIAlertAction * _Nonnull action) {
-        completionHandler(alertController.textFields[0].text?:@"");
+        
+        NSArray *textFields = alertController.textFields;
+        NSMutableArray *textArrM = [NSMutableArray arrayWithCapacity:textFields.count];
+        for (UITextField *textField in textFields) {
+            if (textField.hasText) {
+                [textArrM addObject:textField.text];
+            }
+        }
+        completionHandler([textArrM copy]);
     }]];
     [self presentViewController:alertController animated:YES completion:nil];
 }
