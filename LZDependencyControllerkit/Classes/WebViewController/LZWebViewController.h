@@ -84,78 +84,40 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 // MARK: -
 
 
-/**
- @author Lilei
- 
- @brief 添加附加视图
-
- @param view UIView
- @return LZWebViewController
- @remark 目前只支持添加底部视图
- */
+/// 添加附加视图
+/// @param view UIView
+/// @remark 目前只支持添加底部视图
 - (instancetype)initWithAttachView:(UIView *)view;
 
-/**
- @author Lilei
- 
- @brief 重新加载页面
- */
+/// 重新加载页面
 - (void)reloadPage;
 
-/**
-@author Lilei
-
-@brief 重新加载请求
-*/
+/// 重新加载请求
 - (void)reloadRequest;
 
-/**
- @author Lilei
- 
- @brief JS 调用 OC
-
- @param scriptMessage 消息
- @param handler 回调
- */
+/// JS 调用 Navtive
+/// @param scriptMessage JS 消息
+/// @param completionHandler 完成回调
 - (void)JSInvokeNative:(NSString *)scriptMessage
-    completionCallback:(void (^ _Nullable)(WKScriptMessage *message))handler;
+     completionHandler:(void (^ _Nullable)(id message))completionHandler;
 
-/**
- @author Lilei
- 
- @brief JS 调用 OC
+/// JS 调用 Navtive
+/// @param scriptMessage JS 消息
+/// @param completionHandler 完成回调
+- (void)JSInvokeNative1:(NSString *)scriptMessage
+      completionHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyHandler)( id _Nullable reply, NSString *_Nullable errorMessage)))completionHandler API_AVAILABLE(ios(14.0));
 
- @param scriptMessage 消息
- @param handler 回调
- */
-- (void)JSInvokeNative:(NSString *)scriptMessage
-     completionHandler:(void (^ _Nullable)(id message))handler;
-
-/**
- @author Lilei
- 
- @brief OC 调用 JS
-
- @param script JS 脚本
- @param completionHandler 回调
- */
+/// Native 调用 JS
+/// @param script JS 脚本
+/// @param completionHandler 完成回调
 - (void)nativeInvokeJS:(NSString *)script
      completionHandler:(void (^ _Nullable)(id response, NSError *error))completionHandler;
 
-/**
-@author Lilei
-
-@brief 是否自动添加导航按钮
-
-@attention 可以重写此方法，防止自定义导航按钮被覆盖
-*/
+/// 是否自动添加导航按钮
+/// @attention 可以重写此方法，防止自定义导航按钮被覆盖
 - (BOOL)shouldAddNavItem;
 
-/**
-@author Lilei
-
-@brief 重置webView
-*/
+/// 重置 WebView
 - (void)resetWebview;
 
 @end

@@ -15,13 +15,12 @@
  
  @brief 弱代理
  */
-@interface LZWeakScriptMessageDelegate : NSObject<WKScriptMessageHandler>
+@interface LZWeakScriptMessageDelegate : NSObject<WKScriptMessageHandler, WKScriptMessageHandlerWithReply>
 
 /** 代理 */
 @property (nonatomic, weak) id<WKScriptMessageHandler> delegate;
 /** 保存 JS 回调 Block */
-@property (nonatomic, copy) void (^completionHanderBlock)(WKScriptMessage *message);
-
+@property (nonatomic, copy) void (^completionHanderBlock)(WKScriptMessage *_Nullable message, void (^_Nullable replyCallback)(id  _Nullable reply, NSString * _Nullable errorMessage));
 
 /**
  @author Lilei
@@ -29,24 +28,18 @@
  @brief 实例
  
  @param scriptDelegate 代理
- @param handler 回调
  @return LZWeakScriptMessageDelegate
  */
-- (instancetype)initWithDelegate:(id)scriptDelegate
-               completionHandler:(void (^)(WKScriptMessage *message))handler;
+- (instancetype)initWithDelegate:(id)scriptDelegate;
 
 @end
 
 @implementation LZWeakScriptMessageDelegate
 
 // MARK: - Public
-/** 实例 */
-- (instancetype)initWithDelegate:(id)scriptDelegate
-               completionHandler:(void (^)(WKScriptMessage *))handler {
+- (instancetype)initWithDelegate:(id)scriptDelegate {
     if (self = [super init]) {
-        
-        _delegate = scriptDelegate;
-        _completionHanderBlock = handler;
+        self.delegate = scriptDelegate;
     }
     return self;
 }
@@ -56,7 +49,15 @@
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
     if (self.completionHanderBlock) {
-        self.completionHanderBlock(message);
+        self.completionHanderBlock(message, nil);
+    }
+}
+
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message
+                 replyHandler:(void (^)(id _Nullable reply, NSString *_Nullable errorMessage))replyHandler {
+    if (self.completionHanderBlock) {
+        self.completionHanderBlock(message, replyHandler);
     }
 }
 
@@ -115,7 +116,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         } else {
             [config setValue:@(YES) forKey:@"allowUniversalAccessFromFileURLs"];
         }
-        if (@available(iOS 15.0, *)) {
+        if (@available(iOS 15.4, *)) {
 //            config.preferences.elementFullscreenEnabled = YES;
         }
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
@@ -275,26 +276,17 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
-    completionCallback:(void (^)(WKScriptMessage *))handler {
-    NSAssert(nil != scriptMessage && scriptMessage.length, @"scriptMessage 不能空");
-    if (handler) [self.scriptMessageContainer setObject:handler forKey:scriptMessage];
-    // JS 调用 OC，添加处理脚本
-    WKUserContentController *userCC = self.webView.configuration.userContentController;
-    LZWeakScriptMessageDelegate *scriptMessageDelegate =
-    [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self completionHandler:^(WKScriptMessage *message) {
-        LZLog(@"script<%@>: messageClass:%@ message:%@", scriptMessage, [message.body class], message.body);
-        if (handler) handler(message);
-    }];
-    [userCC addScriptMessageHandler:scriptMessageDelegate name:scriptMessage];
-}
-
-- (void)JSInvokeNative:(NSString *)scriptMessage
-     completionHandler:(void (^)(id))handler {
-    [self JSInvokeNative:scriptMessage completionCallback:^(WKScriptMessage *message) {
-        if (handler) {
-            handler(message.body);
+     completionHandler:(void (^)(id))completionHandler {
+    [self javascriptInvokeNative:scriptMessage completeHandler:^(id message, void (^ _Nullable replyCallback)(id _Nullable, NSString * _Nullable)) {
+        if (completionHandler) {
+            completionHandler(message);
         }
     }];
+}
+
+- (void)JSInvokeNative1:(NSString *)scriptMessage
+      completionHandler:(void (^)(id _Nonnull, void (^ _Nullable)(id _Nullable, NSString * _Nullable)))completionHandler {
+    [self javascriptInvokeNative:scriptMessage completeHandler:completionHandler];
 }
 
 - (void)nativeInvokeJS:(NSString *)script
@@ -572,6 +564,25 @@ static NSString * const LZURLSchemeMail = @"mailto";
         UIInterfaceOrientation val = orientation;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
+    }
+}
+
+- (void)javascriptInvokeNative:(NSString *)scriptMessage
+               completeHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyCallback)( id _Nullable reply, NSString *_Nullable errorMessage)))completeHandler {
+    NSAssert(nil != scriptMessage && scriptMessage.length, @"scriptMessage 不能空");
+    if (completeHandler) [self.scriptMessageContainer setObject:completeHandler forKey:scriptMessage];
+    // JS 调用 OC，添加处理脚本
+    WKUserContentController *userCC = self.webView.configuration.userContentController;
+    LZWeakScriptMessageDelegate *scriptMessageDelegate =
+    [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self];
+    scriptMessageDelegate.completionHanderBlock = ^(WKScriptMessage * _Nullable message, void (^ _Nullable replyCallback)(id _Nullable, NSString * _Nullable)) {
+        LZLog(@"scriptMessage<%@>: messageClass:%@ message:%@ replyCallback:%@", scriptMessage, [message.body class], message.body, replyCallback);
+        if (completeHandler) completeHandler(message, replyCallback);
+    };
+    if (@available(iOS 14.0, *)) {
+        [userCC addScriptMessageHandlerWithReply:scriptMessageDelegate contentWorld:[WKContentWorld defaultClientWorld] name:scriptMessage];
+    } else {
+        [userCC addScriptMessageHandler:scriptMessageDelegate name:scriptMessage];
     }
 }
 
