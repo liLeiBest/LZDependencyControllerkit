@@ -469,9 +469,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)configRefreshControl {
-    __weak typeof(self) weakSelf = self;
+    @lzweakify(self);
     [self.webView.scrollView headerWithRefreshingBlock:^{
-        [weakSelf reloadRequest];
+        @lzstrongify(self);
+        [self reloadRequest];
     }];
 }
 
