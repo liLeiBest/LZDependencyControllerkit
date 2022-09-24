@@ -578,10 +578,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self];
     scriptMessageDelegate.completionHanderBlock = ^(WKScriptMessage * _Nullable message, void (^ _Nullable replyCallback)(id _Nullable, NSString * _Nullable)) {
         LZLog(@"scriptMessage<%@>: messageClass:%@ message:%@ replyCallback:%@", scriptMessage, [message.body class], message.body, replyCallback);
-        if (completeHandler) completeHandler(message, replyCallback);
+        if (completeHandler) completeHandler(message.body, replyCallback);
     };
     if (@available(iOS 14.0, *)) {
-        [userCC addScriptMessageHandlerWithReply:scriptMessageDelegate contentWorld:[WKContentWorld defaultClientWorld] name:scriptMessage];
+        [userCC addScriptMessageHandlerWithReply:scriptMessageDelegate contentWorld:[WKContentWorld pageWorld] name:scriptMessage];
     } else {
         [userCC addScriptMessageHandler:scriptMessageDelegate name:scriptMessage];
     }
