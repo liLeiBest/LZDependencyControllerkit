@@ -72,9 +72,7 @@ static NSString * const LZURLSchemeSms = @"sms";
 static NSString * const LZURLSchemeMail = @"mailto";
 
 @interface LZWebViewController ()
-<WKNavigationDelegate, WKUIDelegate> {
-    IMP _originalIMP;
-}
+<WKNavigationDelegate, WKUIDelegate>
 
 /** WebView */
 @property (nonatomic, strong) WKWebView *webView;
@@ -525,49 +523,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [self.webView.scrollView endHeaderRefresh];
 }
 
-- (void)isNeedRotation:(BOOL)needRotation {
-
-    id appDelegate = [UIApplication sharedApplication].delegate;
-    
-    Class destClass = [appDelegate class];
-    SEL originalSEL = @selector(application:supportedInterfaceOrientationsForWindow:);
-    const char *originalMethodType = method_getTypeEncoding(class_getInstanceMethod(destClass, originalSEL));
-    if (YES == needRotation && nil == _originalIMP) {
-        _originalIMP = method_getImplementation(class_getInstanceMethod(destClass, originalSEL));
-    }
-    __weak typeof(self) weakSelf = self;
-    IMP newIMP = imp_implementationWithBlock(^(id obj, UIApplication *application, UIWindow *window) {
-        if ([NSStringFromClass([[[window subviews] lastObject] class]) isEqualToString:@"UITransitionView"]) {
-            if (needRotation) {
-                if (@available(iOS 11, *)) {
-                    [weakSelf forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
-                }
-            }
-        }
-        return needRotation ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskPortrait;
-    });
-    if (YES == needRotation) {
-        class_replaceMethod(destClass, originalSEL, newIMP, originalMethodType);
-    } else {
-        class_replaceMethod(destClass, originalSEL, _originalIMP, originalMethodType);
-    }
-}
-
-- (void)forceChangeOrientation:(UIInterfaceOrientation)orientation {
-    
-    SEL selector = NSSelectorFromString(@"setOrientation:");
-    if ([[UIDevice currentDevice] respondsToSelector:selector]) {
-        
-        NSInvocation *invocation =
-        [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
-        [invocation setSelector:selector];
-        [invocation setTarget:[UIDevice currentDevice]];
-        UIInterfaceOrientation val = orientation;
-        [invocation setArgument:&val atIndex:2];
-        [invocation invoke];
-    }
-}
-
 - (void)javascriptInvokeNative:(NSString *)scriptMessage
                completeHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyCallback)( id _Nullable reply, NSString *_Nullable errorMessage)))completeHandler {
     NSAssert(nil != scriptMessage && scriptMessage.length, @"scriptMessage 不能空");
@@ -637,7 +592,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)beginFullScreen:(NSNotification *)notifi {
     if (YES == self.rotationLandscape) {
-        [self isNeedRotation:YES];
+        [self setupNeedRotation:YES];
     }
 }
 
@@ -668,7 +623,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 }
             }
         }
-        [self isNeedRotation:NO];
+        [self setupNeedRotation:NO];
         [self forceChangeOrientation:UIInterfaceOrientationPortrait];
     }
 }
