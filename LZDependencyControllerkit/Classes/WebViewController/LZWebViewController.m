@@ -145,7 +145,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 // MARK: - Initialization
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        
         [self setupDefaultValue];
     }
     return self;
@@ -154,7 +153,6 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil
                          bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
         [self setupDefaultValue];
     }
     return self;
@@ -264,13 +262,25 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)reloadPage {
-    [self.webView reloadFromOrigin];
+    if ([NSThread isMainThread]) {
+        [self.webView reloadFromOrigin];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadPage];
+        });
+    }
 }
 
 - (void)reloadRequest {
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
-    self.webNavigation = [self.webView loadRequest:request];
+    if ([NSThread isMainThread]) {
+        
+        NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
+        self.webNavigation = [self.webView loadRequest:request];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadRequest];
+        });
+    }
 }
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
@@ -601,7 +611,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         if (@available(iOS 12, *)) {
             
             UIWindow *window = (UIWindow *)notifi.object;
-            if(window){
+            if (window) {
                 
                 UIViewController *rootViewController = window.rootViewController;
                 NSArray<__kindof UIViewController *> *viewVCArray = rootViewController.childViewControllers;
@@ -678,7 +688,9 @@ decisionHandler:(void (^)(WKNavigationActionPolicy, WKWebpagePreferences *))deci
     // 特殊 scheme 处理:打电话、发短信、发邮件
     NSURL *URL = navigationAction.request.URL;
     NSString *scheme = [[URL scheme] lowercaseString];
-    if ([self.allowSchemes containsObject:scheme]) {
+    NSArray *schemeWhiteList = @[@"http", @"https"];
+    if (NO == [schemeWhiteList containsObject:scheme] &&
+        YES == [self.allowSchemes containsObject:scheme]) {
         if (@available(iOS 10, *)) {
             [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
             }];
@@ -733,7 +745,6 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 
 - (void)webView:(WKWebView *)webView
 didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     if ([self.customUserAgent isValidString]) {
     
         NSString *ua = self.webView.customUserAgent;
@@ -795,7 +806,7 @@ didFailNavigation:(null_unspecified WKNavigation *)navigation
 
 - (void)webView:(WKWebView *)webView
 didReceiveServerRedirectForProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
-    LZLog(@"Web Recirect");
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.subWeb = NO;
 }
 
@@ -807,7 +818,9 @@ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NS
 
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView API_AVAILABLE(macos(10.11), ios(9.0)) {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    [webView reload];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [webView reload];
+    });
 }
 
 - (void)webView:(WKWebView *)webView
@@ -892,7 +905,9 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler {
     
     WKFrameInfo *frameInfo = navigationAction.targetFrame;
     if (![frameInfo isMainFrame]) {
-        [webView loadRequest:navigationAction.request];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [webView loadRequest:navigationAction.request];
+        });
     }
     return nil;
 }
@@ -931,6 +946,21 @@ willCommitWithAnimator:(id <UIContextMenuInteractionCommitAnimating>)animator AP
 - (void)webView:(WKWebView *)webView
 contextMenuDidEndForElement:(WKContextMenuElementInfo *)elementInfo API_AVAILABLE(ios(13.0)) {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)webView:(WKWebView *)webView
+requestMediaCapturePermissionForOrigin:(nonnull WKSecurityOrigin *)origin
+initiatedByFrame:(nonnull WKFrameInfo *)frame
+           type:(WKMediaCaptureType)type
+decisionHandler:(nonnull void (^)(WKPermissionDecision))decisionHandler WK_SWIFT_ASYNC(5) API_AVAILABLE(macos(12.0), ios(15.0)) {
+    decisionHandler(WKPermissionDecisionPrompt);
+}
+
+- (void)webView:(WKWebView *)webView
+requestDeviceOrientationAndMotionPermissionForOrigin:(WKSecurityOrigin *)origin
+initiatedByFrame:(WKFrameInfo *)frame
+decisionHandler:(void (^)(WKPermissionDecision decision))decisionHandler API_AVAILABLE(ios(15.0)) API_UNAVAILABLE(macos) {
+    decisionHandler(WKPermissionDecisionPrompt);
 }
 
 @end
