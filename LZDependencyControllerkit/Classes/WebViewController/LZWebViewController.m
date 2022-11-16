@@ -602,7 +602,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)beginFullScreen:(NSNotification *)notifi {
     if (YES == self.rotationLandscape) {
+        
         [self setupNeedRotation:YES];
+        [self forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
     }
 }
 
