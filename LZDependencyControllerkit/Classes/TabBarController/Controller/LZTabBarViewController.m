@@ -54,7 +54,7 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     [self _setupTabBar];
 }
 
-#pragma mark - Public
+// MARK: - Public
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
     [super setSelectedIndex:selectedIndex];
     
@@ -95,6 +95,10 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
     UIViewController *childViewController = self.viewControllers[index];
     UIViewController *viewController = [self _configChildViewController:childViewController title:title normalImg:normalImg selectedImg:selectedImg];
     [self.myTabBar updateTabBarBtn:viewController.tabBarItem index:index];
+    [self _removeSysTabarButton];
+}
+
+- (void)removeSysTabarButton {
     [self _removeSysTabarButton];
 }
 
