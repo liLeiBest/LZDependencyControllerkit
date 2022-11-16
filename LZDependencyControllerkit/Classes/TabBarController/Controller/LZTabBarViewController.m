@@ -237,6 +237,7 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
             [self.tabBarDelegate respondsToSelector:@selector(tabBarBtnDidClick:from:to:)]) {
             [self.tabBarDelegate tabBarBtnDidClick:myTabBar from:from to:to];
         }
+        [self _removeSysTabarButton];
     };
     // 加号按钮点击事件
     self.myTabBar.tabBarPulsBtnDidClickBlock = ^(LZTabBar *myTabBar) {
@@ -245,6 +246,7 @@ NSString * const LZTabBarTitleFont = @"LZTabBarTitleFont";
             [self.tabBarDelegate respondsToSelector:@selector(plusBtnDidCilck:)]) {
             [self.tabBarDelegate plusBtnDidCilck:myTabBar];
         }
+        [self _removeSysTabarButton];
     };
     // TabBar 默认选中
     if ([self conformsToProtocol:@protocol(LZTabBarControllerDelegate)] &&
