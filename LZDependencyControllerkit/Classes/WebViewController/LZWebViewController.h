@@ -73,10 +73,12 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 是否允许横屏，默认 NO，不允许 */
 @property (nonatomic, assign) BOOL rotationLandscape;
 
+/** 开始加载回调 */
+@property (nonatomic, copy) void (^ __nullable startLoadCallback)(void);
 /** 完成加载回调 */
 @property (nonatomic, copy) void (^ __nullable finishLoadCallback)(void);
 /** 加载失败回调 */
-@property (nonatomic, copy) void (^ __nullable failedLoadCallback)(void);
+@property (nonatomic, copy) void (^ __nullable failedLoadCallback)(NSError *error);
 /** Go back 回调 */
 @property (nonatomic, copy) void (^ __nullable gobackCallback)(WKBackForwardListItem *backForwardItem);
 /** 页面关闭回调 */

@@ -747,6 +747,9 @@ decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
 
 - (void)webView:(WKWebView *)webView
 didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
+    if (self.startLoadCallback) {
+        self.startLoadCallback();
+    }
     if ([self.customUserAgent isValidString]) {
     
         NSString *ua = self.webView.customUserAgent;
@@ -783,7 +786,7 @@ didFinishNavigation:(null_unspecified WKNavigation *)navigation {
 didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
       withError:(NSError *)error {
     if (self.failedLoadCallback) {
-        self.failedLoadCallback();
+        self.failedLoadCallback(error);
     }
     if (self.displayRefresh) {
         [self stopRefresh];
