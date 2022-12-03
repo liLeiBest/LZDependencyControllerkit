@@ -8,6 +8,7 @@
 
 #import "LZWebViewController.h"
 #import <objc/runtime.h>
+#import <AVKit/AVKit.h>
 #import "LZMarqueeLabel.h"
 
 /**
@@ -603,6 +604,14 @@ static NSString * const LZURLSchemeMail = @"mailto";
 - (void)beginFullScreen:(NSNotification *)notifi {
     if (YES == self.rotationLandscape) {
         
+        UIWindow *window = (UIWindow *)notifi.object;
+        if (window) {
+            
+            UIViewController *rootViewController = window.rootViewController;
+            if (0 == [[[rootViewController view] subviews] count]) {
+                return;
+            }
+        }
         [self setupNeedRotation:YES];
         [self forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
     }
@@ -617,7 +626,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 
                 UIViewController *rootViewController = window.rootViewController;
                 NSArray<__kindof UIViewController *> *viewVCArray = rootViewController.childViewControllers;
-                if ([viewVCArray.firstObject isKindOfClass:NSClassFromString(@"AVPlayerViewController")]) {
+                if ([viewVCArray.firstObject isKindOfClass:[AVPlayerViewController  class]]) {
                     
                     SEL selector = @selector(setStatusBarHidden:withAnimation:);
                     if ([[UIApplication sharedApplication] respondsToSelector:selector]) {
