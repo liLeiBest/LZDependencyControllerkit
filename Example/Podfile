@@ -8,6 +8,8 @@ platform :ios, '9.0'
 target 'LZDependencyControllerkit_Example' do
   pod 'LZDependencyControllerkit', :path => '../'
 
+  pod 'LZDependencyToolkit', :path => '../../LZDependencyToolkit'
+  
   target 'LZDependencyControllerkit_Tests' do
     inherit! :search_paths
   end

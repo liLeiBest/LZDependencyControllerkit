@@ -660,12 +660,8 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSArray *schemeWhiteList = @[@"http", @"https"];
     if (NO == [schemeWhiteList containsObject:scheme] &&
         YES == [self.allowSchemes containsObject:scheme]) {
-        if (@available(iOS 10, *)) {
-            [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
-            }];
-        } else {
-            [[UIApplication sharedApplication] openURL:URL];
-        }
+        
+        LZAppUnit.openURL(URL);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
@@ -702,12 +698,8 @@ decisionHandler:(void (^)(WKNavigationActionPolicy, WKWebpagePreferences *))deci
     NSArray *schemeWhiteList = @[@"http", @"https"];
     if (NO == [schemeWhiteList containsObject:scheme] &&
         YES == [self.allowSchemes containsObject:scheme]) {
-        if (@available(iOS 10, *)) {
-            [[UIApplication sharedApplication] openURL:URL options:@{UIApplicationOpenURLOptionUniversalLinksOnly : @(NO)} completionHandler:^(BOOL success) {
-            }];
-        } else {
-            [[UIApplication sharedApplication] openURL:URL];
-        }
+        
+        LZAppUnit.openURL(URL);
         decisionHandler(WKNavigationActionPolicyCancel, preferences);
         return;
     }

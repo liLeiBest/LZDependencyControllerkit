@@ -13,51 +13,55 @@ PODS:
     - LZDependencyToolkit
   - LZDependencyControllerkit/WebViewController (1.2.1):
     - LZDependencyToolkit
-  - LZDependencyToolkit (2.6.0):
-    - LZDependencyToolkit/Category (= 2.6.0)
-    - LZDependencyToolkit/Define (= 2.6.0)
-    - LZDependencyToolkit/Object (= 2.6.0)
-    - LZDependencyToolkit/Struct (= 2.6.0)
-  - LZDependencyToolkit/Category (2.6.0):
+  - LZDependencyToolkit (3.0.1):
+    - LZDependencyToolkit/Category (= 3.0.1)
+    - LZDependencyToolkit/Define (= 3.0.1)
+    - LZDependencyToolkit/Object (= 3.0.1)
+    - LZDependencyToolkit/Struct (= 3.0.1)
+  - LZDependencyToolkit/Category (3.0.1):
     - MJRefresh
-  - LZDependencyToolkit/Define (2.6.0)
-  - LZDependencyToolkit/Object (2.6.0):
-    - LZDependencyToolkit/Object/Proxy (= 2.6.0)
-    - LZDependencyToolkit/Object/Thread (= 2.6.0)
-    - LZDependencyToolkit/Object/Timer (= 2.6.0)
-    - LZDependencyToolkit/Object/Transitioning (= 2.6.0)
-  - LZDependencyToolkit/Object/Proxy (2.6.0)
-  - LZDependencyToolkit/Object/Thread (2.6.0)
-  - LZDependencyToolkit/Object/Timer (2.6.0)
-  - LZDependencyToolkit/Object/Transitioning (2.6.0)
-  - LZDependencyToolkit/Struct (2.6.0):
-    - LZDependencyToolkit/Struct/AppUnit (= 2.6.0)
-    - LZDependencyToolkit/Struct/CryptoUnit (= 2.6.0)
-    - LZDependencyToolkit/Struct/DeviceUnit (= 2.6.0)
-    - LZDependencyToolkit/Struct/QuickUnit (= 2.6.0)
-  - LZDependencyToolkit/Struct/AppUnit (2.6.0)
-  - LZDependencyToolkit/Struct/CryptoUnit (2.6.0)
-  - LZDependencyToolkit/Struct/DeviceUnit (2.6.0)
-  - LZDependencyToolkit/Struct/QuickUnit (2.6.0)
+  - LZDependencyToolkit/Define (3.0.1)
+  - LZDependencyToolkit/Object (3.0.1):
+    - LZDependencyToolkit/Object/Proxy (= 3.0.1)
+    - LZDependencyToolkit/Object/Thread (= 3.0.1)
+    - LZDependencyToolkit/Object/Timer (= 3.0.1)
+    - LZDependencyToolkit/Object/Transitioning (= 3.0.1)
+  - LZDependencyToolkit/Object/Proxy (3.0.1)
+  - LZDependencyToolkit/Object/Thread (3.0.1)
+  - LZDependencyToolkit/Object/Timer (3.0.1)
+  - LZDependencyToolkit/Object/Transitioning (3.0.1)
+  - LZDependencyToolkit/Struct (3.0.1):
+    - LZDependencyToolkit/Struct/AppUnit (= 3.0.1)
+    - LZDependencyToolkit/Struct/CryptoUnit (= 3.0.1)
+    - LZDependencyToolkit/Struct/DeviceUnit (= 3.0.1)
+    - LZDependencyToolkit/Struct/QuickUnit (= 3.0.1)
+  - LZDependencyToolkit/Struct/AppUnit (3.0.1)
+  - LZDependencyToolkit/Struct/CryptoUnit (3.0.1)
+  - LZDependencyToolkit/Struct/DeviceUnit (3.0.1):
+    - LZDependencyToolkit/Struct/AppUnit
+  - LZDependencyToolkit/Struct/QuickUnit (3.0.1):
+    - LZDependencyToolkit/Struct/AppUnit
   - MJRefresh (3.7.5)
 
 DEPENDENCIES:
   - LZDependencyControllerkit (from `../`)
+  - LZDependencyToolkit (from `../../LZDependencyToolkit`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - LZDependencyToolkit
     - MJRefresh
 
 EXTERNAL SOURCES:
   LZDependencyControllerkit:
     :path: "../"
+  LZDependencyToolkit:
+    :path: "../../LZDependencyToolkit"
 
 SPEC CHECKSUMS:
   LZDependencyControllerkit: 163a4e482825c6a3077611571ac2216497c9cf76
-  LZDependencyToolkit: 25364f8746bbc9e51c6cedb43bba39bd2025be05
+  LZDependencyToolkit: b1482f0f9673bdc9fe0e5ad4679c630d2df246af
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
 
-PODFILE CHECKSUM: 27e735c86f5e0f850b26eefcd3601fe8d0474c47
+PODFILE CHECKSUM: e04c1804827b992efedaca50c1329af61586f622
 
 COCOAPODS: 1.11.3
