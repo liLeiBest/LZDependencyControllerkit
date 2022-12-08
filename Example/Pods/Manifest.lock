@@ -1,17 +1,17 @@
 PODS:
-  - LZDependencyControllerkit (1.2.1):
-    - LZDependencyControllerkit/PickerViewController (= 1.2.1)
-    - LZDependencyControllerkit/StartPageController (= 1.2.1)
-    - LZDependencyControllerkit/TabBarController (= 1.2.1)
-    - LZDependencyControllerkit/WebViewController (= 1.2.1)
+  - LZDependencyControllerkit (1.2.2):
+    - LZDependencyControllerkit/PickerViewController (= 1.2.2)
+    - LZDependencyControllerkit/StartPageController (= 1.2.2)
+    - LZDependencyControllerkit/TabBarController (= 1.2.2)
+    - LZDependencyControllerkit/WebViewController (= 1.2.2)
     - LZDependencyToolkit
-  - LZDependencyControllerkit/PickerViewController (1.2.1):
+  - LZDependencyControllerkit/PickerViewController (1.2.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/StartPageController (1.2.1):
+  - LZDependencyControllerkit/StartPageController (1.2.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/TabBarController (1.2.1):
+  - LZDependencyControllerkit/TabBarController (1.2.2):
     - LZDependencyToolkit
-  - LZDependencyControllerkit/WebViewController (1.2.1):
+  - LZDependencyControllerkit/WebViewController (1.2.2):
     - LZDependencyToolkit
   - LZDependencyToolkit (3.0.1):
     - LZDependencyToolkit/Category (= 3.0.1)
@@ -58,7 +58,7 @@ EXTERNAL SOURCES:
     :path: "../../LZDependencyToolkit"
 
 SPEC CHECKSUMS:
-  LZDependencyControllerkit: 163a4e482825c6a3077611571ac2216497c9cf76
+  LZDependencyControllerkit: baf7f01b908474fdb80fae5e6f157d1950246996
   LZDependencyToolkit: b1482f0f9673bdc9fe0e5ad4679c630d2df246af
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
 
