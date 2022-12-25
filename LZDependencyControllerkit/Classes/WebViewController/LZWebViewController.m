@@ -400,7 +400,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [self.view addSubview:self.webView];
     self.webView.navigationDelegate = self;
     self.webView.UIDelegate = self;
-    
+    self.webView.translatesAutoresizingMaskIntoConstraints = YES;
+    self.webView.autoresizesSubviews = YES;
+    self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self configNavigation];
 }
 
@@ -415,6 +417,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
         [self.webView addObserver:self forKeyPath:LZWebTitle options:NSKeyValueObservingOptionNew context:NULL];
         [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
         [self.webView addObserver:self forKeyPath:LZCanGoBack options:NSKeyValueObservingOptionNew context:NULL];
+        if (@available(iOS 16, *)) {
+            [self.webView addObserver:self forKeyPath:@"fullscreenState" options:NSKeyValueObservingOptionNew context:NULL];
+        }
     } @catch (NSException *exception) {
     } @finally {
     }
@@ -449,6 +454,13 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView %@ 通知崩溃:%@", LZCanGoBack, exception);
+    } @finally {}
+    @try {
+        if (@available(iOS 16, *)) {
+            [self.webView removeObserver:self forKeyPath:@"fullscreenState"];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 WebView %@ 通知崩溃:%@", @"fullscreenState", exception);
     } @finally {}
 }
 
@@ -596,6 +608,8 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }
     } else if ([keyPath isEqualToString:LZCanGoBack] && object == self.webView) {
         [self correctNavigationButton];
+    } else if ([keyPath isEqualToString:@"fullscreenState"]) {
+        
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -605,12 +619,8 @@ static NSString * const LZURLSchemeMail = @"mailto";
     if (YES == self.rotationLandscape) {
         
         UIWindow *window = (UIWindow *)notifi.object;
-        if (window) {
-            
-            UIViewController *rootViewController = window.rootViewController;
-            if (0 == [[[rootViewController view] subviews] count]) {
-                return;
-            }
+        if ([window isKindOfClass:NSClassFromString(@"UIRemoteKeyboardWindow")]) {
+            return;
         }
         [self setupNeedRotation:YES];
         [self forceChangeOrientation:UIInterfaceOrientationLandscapeRight];
