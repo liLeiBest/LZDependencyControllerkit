@@ -626,7 +626,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 
                 UIViewController *rootViewController = window.rootViewController;
                 NSArray<__kindof UIViewController *> *viewVCArray = rootViewController.childViewControllers;
-                if ([viewVCArray.firstObject isKindOfClass:[AVPlayerViewController  class]]) {
+                if ([viewVCArray.firstObject isKindOfClass:[AVPlayerViewController class]]) {
                     
                     SEL selector = @selector(setStatusBarHidden:withAnimation:);
                     if ([[UIApplication sharedApplication] respondsToSelector:selector]) {
