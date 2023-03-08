@@ -69,6 +69,8 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, assign) BOOL allowsInlineMediaPlayback;
 /** HTML5 音视频需要用户去触发播放还是自动播放，默认为 NO 自动播放；YES，手动播放 */
 @property (nonatomic, assign) BOOL mediaPlaybackRequiresUserAction;
+/** 跨域访问，默认为 NO。存在的安全漏洞，不建议开启 */
+@property (nonatomic, assign) BOOL accessFromFileURLs;
 
 /** 是否允许横屏，默认 NO，不允许 */
 @property (nonatomic, assign) BOOL rotationLandscape;

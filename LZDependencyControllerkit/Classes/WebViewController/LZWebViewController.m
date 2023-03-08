@@ -110,10 +110,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
 #endif
         }
         config.allowsAirPlayForMediaPlayback = YES;
+        [config.preferences setValue:@(self.accessFromFileURLs) forKey:@"allowFileAccessFromFileURLs"];
         if (@available(iOS 10.0, *)) {
-            [config.preferences setValue:@(YES) forKey:@"allowFileAccessFromFileURLs"];
-        } else {
-            [config setValue:@(YES) forKey:@"allowUniversalAccessFromFileURLs"];
+            [config setValue:@(self.accessFromFileURLs) forKey:@"allowUniversalAccessFromFileURLs"];
         }
         if (@available(iOS 15.4, *)) {
 //            config.preferences.elementFullscreenEnabled = YES;
@@ -385,6 +384,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     
     self.allowsInlineMediaPlayback = NO;
     self.mediaPlaybackRequiresUserAction = NO;
+    self.accessFromFileURLs = NO;
     
     self.rotationLandscape = NO;
     
