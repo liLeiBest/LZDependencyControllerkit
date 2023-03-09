@@ -9,6 +9,7 @@
 #import "LZWebViewController.h"
 #import <objc/runtime.h>
 #import <AVKit/AVKit.h>
+#import <LZDependencyToolkit/UIViewController+LZForceRotation.h>
 #import "LZMarqueeLabel.h"
 
 /**
