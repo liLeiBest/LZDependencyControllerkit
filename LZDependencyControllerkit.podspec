@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
 	  webViewController.source_files		= 'LZDependencyControllerkit/Classes/WebViewController/**/*.{h,m}'
 	  webViewController.public_header_files = 'LZDependencyControllerkit/Classes/WebViewController/**/*.h'
 	  webViewController.frameworks = 'WebKit'
+      webViewController.dependency 'LZDependencyToolkit'
   end
 
   s.subspec 'StartPageController' do |startPageController|
