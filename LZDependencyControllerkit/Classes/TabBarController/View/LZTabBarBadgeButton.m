@@ -6,6 +6,7 @@
 //
 
 #import "LZTabBarBadgeButton.h"
+#import <LZDependencyToolkit/LZDependencyToolkit.h>
 
 @interface LZTabBarBadgeButton()
 

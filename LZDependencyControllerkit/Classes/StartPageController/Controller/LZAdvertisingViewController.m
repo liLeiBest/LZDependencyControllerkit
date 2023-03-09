@@ -6,6 +6,7 @@
 //
 
 #import "LZAdvertisingViewController.h"
+#import <LZDependencyToolkit/LZDependencyToolkit.h>
 
 @interface LZAdvertisingViewController () {
     

@@ -6,6 +6,7 @@
 //
 
 #import "LZGuideViewController.h"
+#import <LZDependencyToolkit/LZDependencyToolkit.h>
 
 NSNotificationName const LZStartPageDidCloseNotification = @"LZStartPageDidCloseNotification";
 LZStartPageNotificationKey const LZStartPageCloseNotificationTriggerKey = @"LZStartPageCloseNotificationTriggerKey";

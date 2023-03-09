@@ -34,7 +34,12 @@
     {
       "name": "TabBarController",
       "source_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.{h,m}",
-      "public_header_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.h"
+      "public_header_files": "LZDependencyControllerkit/Classes/TabBarController/**/*.h",
+      "dependencies": {
+        "LZDependencyToolkit": [
+
+        ]
+      }
     },
     {
       "name": "WebViewController",
@@ -54,7 +59,12 @@
         ""
       ],
       "public_header_files": "LZDependencyControllerkit/Classes/StartPageController/**/*.h",
-      "resources": "LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle"
+      "resources": "LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle",
+      "dependencies": {
+        "LZDependencyToolkit": [
+
+        ]
+      }
     },
     {
       "name": "PickerViewController",
@@ -63,7 +73,12 @@
         ""
       ],
       "public_header_files": "LZDependencyControllerkit/Classes/PickerViewController/**/*.h",
-      "resources": "LZDependencyControllerkit/Classes/PickerViewController/Resources/LZPickerViewController.bundle"
+      "resources": "LZDependencyControllerkit/Classes/PickerViewController/Resources/LZPickerViewController.bundle",
+      "dependencies": {
+        "LZDependencyToolkit": [
+
+        ]
+      }
     }
   ]
 }

@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
   s.subspec 'TabBarController' do |tabBarController|
 	  tabBarController.source_files			= 'LZDependencyControllerkit/Classes/TabBarController/**/*.{h,m}'
 	  tabBarController.public_header_files 	= 'LZDependencyControllerkit/Classes/TabBarController/**/*.h'
+      tabBarController.dependency 'LZDependencyToolkit'
   end
   
   s.subspec 'WebViewController' do |webViewController|
@@ -41,6 +42,7 @@ Pod::Spec.new do |s|
       ''
       startPageController.public_header_files = 'LZDependencyControllerkit/Classes/StartPageController/**/*.h'
       startPageController.resource            = 'LZDependencyControllerkit/Classes/StartPageController/Resources/LZStartPageController.bundle'
+      startPageController.dependency 'LZDependencyToolkit'
   end
   
   s.subspec 'PickerViewController' do |pickerViewController|
@@ -50,6 +52,7 @@ Pod::Spec.new do |s|
       ''
       pickerViewController.public_header_files  = 'LZDependencyControllerkit/Classes/PickerViewController/**/*.h'
       pickerViewController.resource             = 'LZDependencyControllerkit/Classes/PickerViewController/Resources/LZPickerViewController.bundle'
+      pickerViewController.dependency 'LZDependencyToolkit'
   end
   
   pch_AF = <<-EOS

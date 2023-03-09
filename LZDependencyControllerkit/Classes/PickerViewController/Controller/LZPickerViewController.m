@@ -6,6 +6,7 @@
 //
 
 #import "LZPickerViewController.h"
+#import <LZDependencyToolkit/LZDependencyToolkit.h>
 
 @interface LZPickerViewController ()
 <LZModalPresentationTranslucentTransitioningDelegate, UIViewControllerTransitioningDelegate, UIPickerViewDataSource, UIPickerViewDelegate>

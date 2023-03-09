@@ -8,6 +8,7 @@
 
 #import "LZTabBarViewController.h"
 #import <objc/runtime.h>
+#import <LZDependencyToolkit/LZDependencyToolkit.h>
 #import "LZTabBar.h"
 
 NSString * const LZTabBarPlusBtnImage = @"LZTabBarPlusBtnImage";

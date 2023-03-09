@@ -7,6 +7,7 @@
 //
 
 #import "LZTabBarButton.h"
+#import <LZDependencyToolkit/LZDependencyToolkit.h>
 #import "LZTabBarBadgeButton.h"
 
 static NSString *kBadgeNumber = @"badgeValue";
