@@ -284,6 +284,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
     }
 }
 
+- (void)goback {
+    [self goBackDidClick];
+}
+
 - (void)JSInvokeNative:(NSString *)scriptMessage
      completionHandler:(void (^)(id))completionHandler {
     [self javascriptInvokeNative:scriptMessage completeHandler:^(id message, void (^ _Nullable replyCallback)(id _Nullable, NSString * _Nullable)) {

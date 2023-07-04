@@ -99,6 +99,9 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /// 重新加载请求
 - (void)reloadRequest;
 
+/// 返回上一级页面
+- (void)goback;
+
 /// JS 调用 Navtive
 /// @param scriptMessage JS 消息
 /// @param completionHandler 完成回调
