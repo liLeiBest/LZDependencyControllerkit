@@ -74,6 +74,10 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 
 /** 是否允许横屏，默认 NO，不允许 */
 @property (nonatomic, assign) BOOL rotationLandscape;
+// MARK: -
+
+/** GoBack忽略列表 */
+@property (nonatomic, strong) NSArray *gobackIgnoreList;
 
 /** 开始加载回调 */
 @property (nonatomic, copy) void (^ __nullable startLoadCallback)(void);
@@ -85,7 +89,6 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, copy) void (^ __nullable gobackCallback)(WKBackForwardListItem *backForwardItem);
 /** 页面关闭回调 */
 @property (nonatomic, copy) void (^ __nullable closeCompletionCallback)(void);
-// MARK: -
 
 
 /// 添加附加视图

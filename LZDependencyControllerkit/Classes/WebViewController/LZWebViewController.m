@@ -285,7 +285,26 @@ static NSString * const LZURLSchemeMail = @"mailto";
 }
 
 - (void)goback {
-    [self goBackDidClick];
+    
+    WKBackForwardList *backForwardList = [self.webView backForwardList];
+    NSMutableArray *backList = [NSMutableArray arrayWithArray:backForwardList.backList];
+    [backList enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WKBackForwardListItem *backItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (NSString *urlStr in self.gobackIgnoreList) {
+            if (NSNotFound != [backItem.URL.absoluteString rangeOfString:urlStr].location) {
+                [backList removeObject:backItem];
+            }
+        }
+    }];
+    WKBackForwardListItem *backItem = [backList lastObject];
+    if (nil != backItem) {
+        
+        [self.webView goToBackForwardListItem:backItem];
+        if (self.gobackCallback) {
+            self.gobackCallback(backItem);
+        }
+    } else {
+        [self closeDidClick];
+    }
 }
 
 - (void)JSInvokeNative:(NSString *)scriptMessage
@@ -339,17 +358,11 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 // MARK: - UI Action
 - (void)goBackDidClick {
-    if (self.webView.canGoBack) {
-        
-        WKBackForwardList *backForwardList = [self.webView backForwardList];
-        WKBackForwardListItem *backForwardItem = [[backForwardList backList] lastObject];
-        if (self.gobackCallback) {
-            self.gobackCallback(backForwardItem);
-        }
-        [self.webView goToBackForwardListItem:backForwardItem];
-        return;
+    if ([self canGoback]) {
+        [self goback];
+    } else {
+        [self closeDidClick];
     }
-    [self closeDidClick];
 }
 
 - (void)closeDidClick {
@@ -531,12 +544,16 @@ static NSString * const LZURLSchemeMail = @"mailto";
                                                          target:self
                                                          action:@selector(closeDidClick)];
         if (self.navAutoAddClose) {
-            if ([self.webView canGoBack]) self.navigationItem.leftBarButtonItems = @[back, close];
+            if ([self canGoback]) self.navigationItem.leftBarButtonItems = @[back, close];
             else self.navigationItem.leftBarButtonItems = @[back];
         } else {
             self.navigationItem.leftBarButtonItems = @[back, close];
         }
     }
+}
+
+- (BOOL)canGoback {
+    return [self.webView canGoBack];
 }
 
 - (BOOL)isPush {
