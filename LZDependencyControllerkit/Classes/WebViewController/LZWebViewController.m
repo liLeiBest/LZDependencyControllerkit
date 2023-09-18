@@ -641,7 +641,8 @@ static NSString * const LZURLSchemeMail = @"mailto";
     if (YES == self.rotationLandscape) {
         
         UIWindow *window = (UIWindow *)notifi.object;
-        if ([window isKindOfClass:NSClassFromString(@"UIRemoteKeyboardWindow")]) {
+        if ([window isKindOfClass:NSClassFromString(@"UIRemoteKeyboardWindow")]
+            || [window isKindOfClass:NSClassFromString(@"UITextEffectsWindow")]) {
             return;
         }
         [self setupNeedRotation:YES];
