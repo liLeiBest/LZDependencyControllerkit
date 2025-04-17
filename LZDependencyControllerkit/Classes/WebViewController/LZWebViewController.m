@@ -789,10 +789,10 @@ didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation {
         NSString *ua = self.webView.customUserAgent;
         if (nil == ua || 0 == ua.length || [ua rangeOfString:self.customUserAgent].location == NSNotFound) {
             @lzweakify(self);
-            [self.webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(NSString * _Nullable result, NSError * _Nullable error) {
+            [self nativeInvokeJS:@"navigator.userAgent" completionHandler:^(NSString * _Nonnull response, NSError * _Nonnull error) {
                 @lzstrongify(self);
-                self.webView.customUserAgent = [result stringByAppendingFormat:@" %@", self.customUserAgent];
-                LZLog(@"\nUserAgent:%@\ncustomUserAgent:%@", result, self.webView.customUserAgent);
+                self.webView.customUserAgent = [response stringByAppendingFormat:@" %@", self.customUserAgent];
+                LZLog(@"\nUserAgent:%@\ncustomUserAgent:%@", response, self.webView.customUserAgent);
             }];
         }
     }
@@ -829,7 +829,7 @@ didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
     if (self.displayEmptyPage && self.webNavigation == navigation) {
         
         NSString *js = @"document.documentElement.innerHTML";
-        [webView evaluateJavaScript:js completionHandler:^(NSString *_Nullable result, NSError * _Nullable error) {
+        [self nativeInvokeJS:js completionHandler:^(NSString * _Nonnull result, NSError * _Nonnull error) {
             if (result.length < 200) {
                 [self showEmptyDataSet:self.webView.scrollView];
             }
