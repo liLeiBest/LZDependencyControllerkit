@@ -307,30 +307,53 @@ static NSString * const LZURLSchemeMail = @"mailto";
     }
 }
 
-- (void)JSInvokeNative:(NSString *)scriptMessage
+- (void)JSInvokeNative:(NSString *)funcName
      completionHandler:(void (^)(id))completionHandler {
-    [self javascriptInvokeNative:scriptMessage completeHandler:^(id message, void (^ _Nullable replyCallback)(id _Nullable, NSString * _Nullable)) {
+    [self JSInvokeNative1:funcName completionHandler:^(id  _Nonnull message, void (^ _Nullable replyHandler)(id _Nullable, NSString * _Nullable)) {
         if (completionHandler) {
             completionHandler(message);
         }
     }];
 }
 
-- (void)JSInvokeNative1:(NSString *)scriptMessage
+- (void)JSInvokeNative1:(NSString *)funcName
       completionHandler:(void (^)(id _Nonnull, void (^ _Nullable)(id _Nullable, NSString * _Nullable)))completionHandler {
-    [self javascriptInvokeNative:scriptMessage completeHandler:completionHandler];
+    [self javascriptInvokeNative:funcName completeHandler:completionHandler];
 }
 
-- (void)nativeInvokeJS:(NSString *)script
+- (void)nativeInvokeJS:(NSString *)jsScript
      completionHandler:(void (^)(id, NSError *))completionHandler {
-    NSAssert(nil != script && script.length, @"script 不能为空");
-    if (nil == script || !script.length) return;
-    [self.webView evaluateJavaScript:script completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        LZLog(@"script<%@>: result:%@ error:%@", script, result, error);
+    NSAssert(nil != jsScript && jsScript.length, @"script 不能为空");
+    if (nil == jsScript || !jsScript.length) return;
+    [self.webView evaluateJavaScript:jsScript completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        LZLog(@"script<%@>: result:%@ error:%@", jsScript, result, error);
         if (completionHandler) {
             completionHandler(result, error);
         }
     }];
+}
+
+- (void)invokeUserScript:(NSString *)source
+                 message:(NSString *)funcName
+           injectionTime:(WKUserScriptInjectionTime)injectionTime
+       completionHandler:(void (^)(id _Nonnull))completionHandler {
+    [self invokeUserScript1:source message:funcName injectionTime:injectionTime completionHandler:^(id  _Nonnull message, void (^ _Nullable replyHandler)(id _Nullable, NSString * _Nullable)) {
+        if (completionHandler) {
+            completionHandler(message);
+        }
+    }];
+}
+
+- (void)invokeUserScript1:(NSString *)source
+                  message:(NSString *)funcName
+            injectionTime:(WKUserScriptInjectionTime)injectionTime
+        completionHandler:(void (^)(id _Nonnull, void (^ _Nullable)(id _Nullable, NSString * _Nullable)))completionHandler {
+    
+    WKUserScript *userScript = [[WKUserScript alloc] initWithSource:source
+                                                      injectionTime:injectionTime
+                                                   forMainFrameOnly:YES];
+    [self.webView.configuration.userContentController addUserScript:userScript];
+    [self javascriptInvokeNative:funcName completeHandler:completionHandler];
 }
 
 - (BOOL)shouldAddNavItem {
@@ -441,6 +464,25 @@ static NSString * const LZURLSchemeMail = @"mailto";
     } @catch (NSException *exception) {
     } @finally {
     }
+    // 监听URL变化
+    NSString *urlSource = @"window.addEventListener('popstate', function(event) { \
+        var newURL = window.location.href; \
+        webkit.messageHandlers.lz_urlChangeHandler.postMessage(newURL); \
+    });";
+    [self invokeUserScript:urlSource message:@"lz_urlChangeHandler" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id  _Nonnull message) {
+        if (self.urlChangeCallback) {
+            self.urlChangeCallback(message);
+        }
+    }];
+    // 监听DOM加载完成
+    NSString *domSource = @"document.addEventListener('DOMContentLoaded', function() { \
+        webkit.messageHandlers.lz_DOMLoaded.postMessage('ready'); \
+    });";
+    [self invokeUserScript:domSource message:@"lz_DOMLoaded" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id  _Nonnull message) {
+        if (self.DOMLoadedCallback) {
+            self.DOMLoadedCallback();
+        }
+    }];
 }
 
 - (void)removeWebViewObserver {
@@ -568,22 +610,21 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [self.webView.scrollView endHeaderRefresh];
 }
 
-- (void)javascriptInvokeNative:(NSString *)scriptMessage
+- (void)javascriptInvokeNative:(NSString *)funcName
                completeHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyCallback)( id _Nullable reply, NSString *_Nullable errorMessage)))completeHandler {
-    NSAssert(nil != scriptMessage && scriptMessage.length, @"scriptMessage 不能空");
-    if (completeHandler) [self.scriptMessageContainer setObject:completeHandler forKey:scriptMessage];
+    NSAssert(nil != funcName && funcName.length, @"funcName 不能空");
+    if (completeHandler) [self.scriptMessageContainer setObject:completeHandler forKey:funcName];
     // JS 调用 OC，添加处理脚本
-    WKUserContentController *userCC = self.webView.configuration.userContentController;
-    LZWeakScriptMessageDelegate *scriptMessageDelegate =
-    [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self];
+    LZWeakScriptMessageDelegate *scriptMessageDelegate = [[LZWeakScriptMessageDelegate alloc] initWithDelegate:self];
     scriptMessageDelegate.completionHanderBlock = ^(WKScriptMessage * _Nullable message, void (^ _Nullable replyCallback)(id _Nullable, NSString * _Nullable)) {
-        LZLog(@"scriptMessage<%@>: messageClass:%@ message:%@ replyCallback:%@", scriptMessage, [message.body class], message.body, replyCallback);
+        LZLog(@"MessageHandlerName<%@>: messageClass:%@ message:%@ replyCallback:%@", funcName, [message.body class], message.body, replyCallback);
         if (completeHandler) completeHandler(message.body, replyCallback);
     };
+    
     if (@available(iOS 14.0, *)) {
-        [userCC addScriptMessageHandlerWithReply:scriptMessageDelegate contentWorld:[WKContentWorld pageWorld] name:scriptMessage];
+        [self.webView.configuration.userContentController addScriptMessageHandlerWithReply:scriptMessageDelegate contentWorld:[WKContentWorld pageWorld] name:funcName];
     } else {
-        [userCC addScriptMessageHandler:scriptMessageDelegate name:scriptMessage];
+        [self.webView.configuration.userContentController addScriptMessageHandler:scriptMessageDelegate name:funcName];
     }
 }
 

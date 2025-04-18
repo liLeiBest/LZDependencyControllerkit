@@ -89,6 +89,10 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 @property (nonatomic, copy) void (^ __nullable gobackCallback)(WKBackForwardListItem *backForwardItem);
 /** 页面关闭回调 */
 @property (nonatomic, copy) void (^ __nullable closeCompletionCallback)(void);
+/** URL变化回调 */
+@property (nonatomic, copy) void (^ __nullable urlChangeCallback)(NSString *url);
+/** DOM加载完成回调 */
+@property (nonatomic, copy) void (^ __nullable DOMLoadedCallback)(void);
 
 
 /// 添加附加视图
@@ -106,22 +110,45 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 - (void)goback;
 
 /// JS 调用 Navtive
-/// @param scriptMessage JS 消息
+/// @param funcName JS 调用的函数名
 /// @param completionHandler 完成回调
-- (void)JSInvokeNative:(NSString *)scriptMessage
+- (void)JSInvokeNative:(NSString *)funcName
      completionHandler:(void (^ _Nullable)(id message))completionHandler;
 
 /// JS 调用 Navtive
-/// @param scriptMessage JS 消息
+/// @param funcName JS 调用的函数名
 /// @param completionHandler 完成回调
-- (void)JSInvokeNative1:(NSString *)scriptMessage
-      completionHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyHandler)( id _Nullable reply, NSString *_Nullable errorMessage)))completionHandler API_AVAILABLE(ios(14.0));
+/// @remark API_AVAILABLE(ios(14.0))
+- (void)JSInvokeNative1:(NSString *)funcName
+      completionHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyHandler)( id _Nullable reply, NSString *_Nullable errorMessage)))completionHandler;
 
 /// Native 调用 JS
-/// @param script JS 脚本
+/// @param jsScript JS 脚本
 /// @param completionHandler 完成回调
-- (void)nativeInvokeJS:(NSString *)script
+- (void)nativeInvokeJS:(NSString *)jsScript
      completionHandler:(void (^ _Nullable)(id response, NSError *error))completionHandler;
+
+
+/// 调用 UserScript
+/// @param source JS 脚本
+/// @param funcName JS 调用的函数名
+/// @param injectionTime WKUserScriptInjectionTime
+/// @param completionHandler 完成回调
+- (void)invokeUserScript:(NSString *)source
+                 message:(NSString *)funcName
+           injectionTime:(WKUserScriptInjectionTime)injectionTime
+       completionHandler:(void (^ _Nullable)(id message))completionHandler;
+
+/// 调用 UserScript
+/// @param source JS 脚本
+/// @param funcName JS 调用的函数名
+/// @param injectionTime WKUserScriptInjectionTime
+/// @param completionHandler 完成回调
+/// @remark API_AVAILABLE(ios(14.0))
+- (void)invokeUserScript1:(NSString *)source
+                  message:(NSString *)funcName
+            injectionTime:(WKUserScriptInjectionTime)injectionTime
+        completionHandler:(void (^ _Nullable)(id message, void (^ _Nullable replyHandler)( id _Nullable reply, NSString *_Nullable errorMessage)))completionHandler;
 
 /// 是否自动添加导航按钮
 /// @attention 可以重写此方法，防止自定义导航按钮被覆盖
