@@ -476,7 +476,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     } @finally {
     }
     // 监听URL变化
-    NSString *urlSource = @"window.addEventListener('popstate', function(event) { \
+    NSString *urlSource = @"window.addEventListener('popstate', () => { \
         var newURL = window.location.href; \
         webkit.messageHandlers.lz_urlChangeHandler.postMessage(newURL); \
     });";
@@ -488,7 +488,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }
     }];
     // 监听DOM加载完成
-    NSString *domSource = @"document.addEventListener('DOMContentLoaded', function() { \
+    NSString *domSource = @"document.addEventListener('DOMContentLoaded', () => { \
         webkit.messageHandlers.lz_DOMLoaded.postMessage('ready'); \
     });";
     [self invokeUserScript:domSource message:@"lz_DOMLoaded" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id _Nonnull message) {
