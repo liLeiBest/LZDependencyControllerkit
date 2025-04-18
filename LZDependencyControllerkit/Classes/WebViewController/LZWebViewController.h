@@ -98,9 +98,11 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
  @discussion 在Vue Router的全局后置钩子afterEach中捕获路由变化，并主动触发原生通知‌。
  @code
  router.afterEach((to) => {
-    // 通过自定义事件或JS Bridge通知原生层
+    // 1.通过自定义事件
+    window.webkit.messageHandlers.routeChange.postMessage(to.fullPath);
+    // 2.通过JS Bridge通知原生层
     if (window.NativeBridge) {
-    // 调用原生接口‌
+        // 调用原生接口‌
         window.NativeBridge.postMessage(to.fullPath);
     }
  });

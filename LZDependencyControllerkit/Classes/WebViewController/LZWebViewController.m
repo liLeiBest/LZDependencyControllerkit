@@ -498,7 +498,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }
     }];
     // 被动触发Router变化
-    [self JSInvokeNative:@"routeChange" completionHandler:^(id  _Nonnull message) {
+    [self JSInvokeNative:@"routeChange" completionHandler:^(id _Nonnull message) {
         @lzstrongify(self);
         if (self.routerChangeCallback) {
             self.routerChangeCallback(message);
