@@ -200,8 +200,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     self.webView.navigationDelegate = nil;
     self.webView.UIDelegate = nil;
     
-    [self removeWebViewObserver];
-    [self removeTargetObserver];
+    [self removeObserver];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -457,6 +456,12 @@ static NSString * const LZURLSchemeMail = @"mailto";
     
     [self registerWebViewObserver];
     [self registerTargetObserver];
+}
+
+- (void)removeObserver {
+    
+    [self removeWebViewObserver];
+    [self removeTargetObserver];
 }
 
 - (void)registerWebViewObserver {
