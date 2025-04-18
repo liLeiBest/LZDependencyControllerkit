@@ -208,7 +208,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
     [super didReceiveMemoryWarning];
     NSLog(@"Web页面内存警告!:%@", NSStringFromClass([self class]));
     [self.webView stopLoading];
+    @lzweakify(self);
     dispatch_after(0.25, dispatch_get_main_queue(), ^{
+        @lzstrongify(self);
         [self.webView reload];
         [self reloadRequest];
     });
@@ -266,7 +268,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
     if ([NSThread isMainThread]) {
         [self.webView reloadFromOrigin];
     } else {
+        @lzweakify(self);
         dispatch_async(dispatch_get_main_queue(), ^{
+            @lzstrongify(self);
             [self reloadPage];
         });
     }
@@ -278,7 +282,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
         NSURLRequest *request = [NSURLRequest requestWithURL:self.URL];
         self.webNavigation = [self.webView loadRequest:request];
     } else {
+        @lzweakify(self);
         dispatch_async(dispatch_get_main_queue(), ^{
+            @lzstrongify(self);
             [self reloadRequest];
         });
     }
@@ -309,7 +315,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)JSInvokeNative:(NSString *)funcName
      completionHandler:(void (^)(id))completionHandler {
-    [self JSInvokeNative1:funcName completionHandler:^(id  _Nonnull message, void (^ _Nullable replyHandler)(id _Nullable, NSString * _Nullable)) {
+    [self JSInvokeNative1:funcName completionHandler:^(id _Nonnull message, void (^ _Nullable replyHandler)(id _Nullable, NSString * _Nullable)) {
         if (completionHandler) {
             completionHandler(message);
         }
@@ -323,7 +329,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
 
 - (void)nativeInvokeJS:(NSString *)jsScript
      completionHandler:(void (^)(id, NSError *))completionHandler {
-    NSAssert(nil != jsScript && jsScript.length, @"script 不能为空");
+    NSAssert(nil != jsScript && jsScript.length, @"Java Script 不能为空");
     if (nil == jsScript || !jsScript.length) return;
     [self.webView evaluateJavaScript:jsScript completionHandler:^(id _Nullable result, NSError * _Nullable error) {
         LZLog(@"Java Script<%@>: result:%@ error:%@", jsScript, result, error);
@@ -469,7 +475,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
         var newURL = window.location.href; \
         webkit.messageHandlers.lz_urlChangeHandler.postMessage(newURL); \
     });";
+    @lzweakify(self);
     [self invokeUserScript:urlSource message:@"lz_urlChangeHandler" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id  _Nonnull message) {
+        @lzstrongify(self);
         if (self.urlChangeCallback) {
             self.urlChangeCallback(message);
         }
@@ -479,6 +487,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         webkit.messageHandlers.lz_DOMLoaded.postMessage('ready'); \
     });";
     [self invokeUserScript:domSource message:@"lz_DOMLoaded" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id  _Nonnull message) {
+        @lzstrongify(self);
         if (self.DOMLoadedCallback) {
             self.DOMLoadedCallback();
         }
@@ -664,7 +673,9 @@ static NSString * const LZURLSchemeMail = @"mailto";
                 [self.view addSubview:self.progressView];
             }
             [self.progressView setAlpha:1.0f];
+            @lzweakify(self);
             [UIView animateWithDuration:0.25 animations:^{
+                @lzstrongify(self);
                 [self.progressView setProgress:self.webView.estimatedProgress animated:YES];
             }];
             if (self.progressHandler) {
@@ -672,8 +683,10 @@ static NSString * const LZURLSchemeMail = @"mailto";
             }
             if (self.webView.estimatedProgress >= 1.0f) {
                 [UIView animateWithDuration:0.25 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    @lzstrongify(self);
                     [self.progressView setAlpha:0.0f];
                 } completion:^(BOOL finished) {
+                    @lzstrongify(self);
                     [self.progressView setProgress:0.0f animated:NO];
                 }];
             }
