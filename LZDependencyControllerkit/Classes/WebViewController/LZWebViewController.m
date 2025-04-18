@@ -326,7 +326,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
     NSAssert(nil != jsScript && jsScript.length, @"script 不能为空");
     if (nil == jsScript || !jsScript.length) return;
     [self.webView evaluateJavaScript:jsScript completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        LZLog(@"script<%@>: result:%@ error:%@", jsScript, result, error);
+        LZLog(@"Java Script<%@>: result:%@ error:%@", jsScript, result, error);
         if (completionHandler) {
             completionHandler(result, error);
         }
@@ -493,6 +493,15 @@ static NSString * const LZURLSchemeMail = @"mailto";
         }];
     } @catch (NSException *exception) {
         NSLog(@"移除 WebView Script 崩溃:%@", exception);
+    } @finally {}
+    @try {
+        WKUserContentController *userCC = self.webView.configuration.userContentController;
+        [userCC removeAllUserScripts];
+        if (@available(iOS 14, *)) {
+            [userCC removeAllScriptMessageHandlers];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"移除 UserScript 崩溃:%@", exception);
     } @finally {}
     @try {
         if (YES == self.isViewLoaded) {
@@ -870,7 +879,9 @@ didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
     if (self.displayEmptyPage && self.webNavigation == navigation) {
         
         NSString *js = @"document.documentElement.innerHTML";
+        @lzweakify(self);
         [self nativeInvokeJS:js completionHandler:^(NSString * _Nonnull result, NSError * _Nonnull error) {
+            @lzstrongify(self);
             if (result.length < 200) {
                 [self showEmptyDataSet:self.webView.scrollView];
             }
