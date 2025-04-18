@@ -90,9 +90,24 @@ UIKIT_EXTERN NSString * const LZWebEmptyURL;
 /** 页面关闭回调 */
 @property (nonatomic, copy) void (^ __nullable closeCompletionCallback)(void);
 /** URL变化回调 */
-@property (nonatomic, copy) void (^ __nullable urlChangeCallback)(NSString *url);
+@property (nonatomic, copy) void (^ __nullable urlChangeCallback)(id __nullable message);
 /** DOM加载完成回调 */
-@property (nonatomic, copy) void (^ __nullable DOMLoadedCallback)(void);
+@property (nonatomic, copy) void (^ __nullable DOMLoadedCallback)(id __nullable message);
+/**
+ @brief Router变化回调
+ @discussion 在Vue Router的全局后置钩子afterEach中捕获路由变化，并主动触发原生通知‌。
+ @code
+ router.afterEach((to) => {
+    // 通过自定义事件或JS Bridge通知原生层
+    if (window.NativeBridge) {
+    // 调用原生接口‌
+        window.NativeBridge.postMessage(to.fullPath);
+    }
+ });
+ @endcode
+});
+ */
+@property (nonatomic, copy) void (^ __nullable routerChangeCallback)(id __nullable message);
 
 
 /// 添加附加视图

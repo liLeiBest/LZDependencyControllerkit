@@ -481,7 +481,7 @@ static NSString * const LZURLSchemeMail = @"mailto";
         webkit.messageHandlers.lz_urlChangeHandler.postMessage(newURL); \
     });";
     @lzweakify(self);
-    [self invokeUserScript:urlSource message:@"lz_urlChangeHandler" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id  _Nonnull message) {
+    [self invokeUserScript:urlSource message:@"lz_urlChangeHandler" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id _Nonnull message) {
         @lzstrongify(self);
         if (self.urlChangeCallback) {
             self.urlChangeCallback(message);
@@ -491,10 +491,17 @@ static NSString * const LZURLSchemeMail = @"mailto";
     NSString *domSource = @"document.addEventListener('DOMContentLoaded', function() { \
         webkit.messageHandlers.lz_DOMLoaded.postMessage('ready'); \
     });";
-    [self invokeUserScript:domSource message:@"lz_DOMLoaded" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id  _Nonnull message) {
+    [self invokeUserScript:domSource message:@"lz_DOMLoaded" injectionTime:WKUserScriptInjectionTimeAtDocumentStart completionHandler:^(id _Nonnull message) {
         @lzstrongify(self);
         if (self.DOMLoadedCallback) {
-            self.DOMLoadedCallback();
+            self.DOMLoadedCallback(message);
+        }
+    }];
+    // 被动触发Router变化
+    [self JSInvokeNative:@"routeChange" completionHandler:^(id  _Nonnull message) {
+        @lzstrongify(self);
+        if (self.routerChangeCallback) {
+            self.routerChangeCallback(message);
         }
     }];
 }
