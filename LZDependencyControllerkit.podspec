@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LZDependencyControllerkit'
-  s.version          = '1.3.0'
+  s.version          = '2.0.0'
   s.summary          = 'LZDependencyControllerkit.'
   s.description      = <<-DESC
   控制器控件：
